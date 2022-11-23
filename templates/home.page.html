@@ -1,0 +1,21 @@
+{{ template "base" .}}
+
+{{ define "title" }}
+Welcome | Go first project
+{{ end }}
+
+{{ define "content" }}
+<div class="container">
+    <h1>This is the home page</h1>
+    <p>The is the second paragraph from data: {{index .StringMap "test"}}</p>
+
+    <p>
+        <!-- Check if the remoteIP is not empty. ne - Not Equal to -->
+        {{if ne (index .StringMap "remote_ip") ""}}
+        Your remote IP address is {{index .StringMap "remote_ip"}}
+        {{else}}
+        Your IP address is not known. Please visit the <a href="/">Home page</a> to set your IP address
+        {{end}}
+    </p>
+</div>
+{{ end }}
