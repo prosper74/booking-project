@@ -58,6 +58,8 @@ This is where we use our scs package and all it's features. We want to collect t
 ### The routes.go file
 This is where we handle routes, multiplexers and middlewares 
 
+- `mux := chi.NewRouter()` Creates a multiplexer
 Make the templates recognize the static folder to use its contents (eg images)
 - Create a file server for the static directory `fileServer := http.FileServer(http.Dir("./static/"))`
 - Create a multiplexer to handle the fileServer. "http.StripePrefix" takes the url and modifies it to something it can handle. `mux.Handle("/static/*", http.StripPrefix("/static", fileServer))`
+- 'Recoverer' middleware from chi package. It helps for panic control `mux.Use(middleware.Recoverer)`

@@ -9,12 +9,10 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func routes(app *config.AppConfig) http.Handler {
-	// Create a multiplexer 'mux'
+func routes(app *config.AppConfig) http.Handler { 
 	mux := chi.NewRouter()
 
 	// Add all our middlewares here
-	// Adding a 'Recoverer' middleware from chi package. It helps for panic
 	mux.Use(middleware.Recoverer)
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)

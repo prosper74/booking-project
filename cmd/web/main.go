@@ -13,10 +13,10 @@ import (
 )
 
 const port = ":8080"
+
 var app config.AppConfig
 var session *scs.SessionManager
 
-// Building a web app
 func main() {
 	app.InPrduction = false
 
@@ -27,7 +27,6 @@ func main() {
 	session.Cookie.Secure = app.InPrduction
 
 	app.Session = session
-
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
@@ -46,11 +45,7 @@ func main() {
 	// Render the NewTemplates and add a reference to the AppConfig
 	render.NewTemplates(&app)
 
-	// http.HandleFunc("/", handlers.Repo.Home)
-	// http.HandleFunc("/about", handlers.Repo.About)
-
 	fmt.Println(fmt.Sprintf("Server started at port %s", port))
-	// http.ListenAndServe(port, nil)
 	// Create a variable to serve the routes
 	srv := &http.Server{
 		Addr:    port,
