@@ -59,13 +59,22 @@
       .rooms-showcase-container {
         min-height: 100vh;
         padding: 20px 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        justify-items: center;
       }
 
-      p {
-        margin: 0px;
+      @media screen and (min-width: 650px) {
+        .rooms-showcase-container {
+          gap: 15px;
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media screen and (min-width: 960px) {
+        .rooms-showcase-container {
+          grid-template-columns: repeat(3, 1fr);
+        }
       }
 
       .card {
@@ -384,7 +393,7 @@
 
     <!-- Rooms Showcase  -->
     <section class="container rooms-showcase">
-      <div class="d-lg-flex rooms-showcase-container">
+      <div class="rooms-showcase-container">
         <div class="card border-0 me-lg-4 mb-lg-0 mb-4">
           <div class="backgroundEffect"></div>
           <div class="pic">
