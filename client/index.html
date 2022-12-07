@@ -52,6 +52,7 @@
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
       }
 
+      /* Showcase section starts  */
       .rooms-showcase {
         margin: 8rem auto;
       }
@@ -139,7 +140,7 @@
 
       .card .pic img {
         width: 100%;
-        height: 280px;
+        height: 180px;
         object-fit: cover;
       }
 
@@ -215,6 +216,8 @@
         font-size: 12px;
       }
 
+      /* Showcase section ends  */
+
       .footer {
         position: fixed;
         left: 0;
@@ -231,7 +234,7 @@
       style="background-color: #7431f8"
     >
       <div class="container container-fluid">
-        <a class="navbar-brand" href="#">Hotel</a>
+        <a class="navbar-brand" href="index.html">Hotel</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -246,15 +249,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
+              <a class="nav-link active" aria-current="page" href="index.html"
+                >Home</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/book-now">Book Now</a>
+              <a class="nav-link" href="book-now.html">Book Now</a>
             </li>
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
-                href="/rooms"
+                href="#"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -262,19 +267,23 @@
                 Rooms
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/rooms/suits">Suits</a></li>
                 <li>
-                  <a class="dropdown-item" href="/rooms/alpine-luxery"
+                  <a class="dropdown-item" href="generals-suits.html"
+                    >Generals Suits</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="alpine-suits.html"
                     >Alpine Luxery</a
                   >
                 </li>
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/about">About us</a>
+              <a class="nav-link" href="about.html">About us</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/contact">Contact us</a>
+              <a class="nav-link" href="contact.html">Contact us</a>
             </li>
           </ul>
           <form class="d-flex" role="search">
@@ -293,7 +302,7 @@
     <!-- carousel Section -->
     <section
       id="carouselExampleCaptions"
-      class="carousel slide"
+      class="carousel slide carousel-fade"
       data-bs-ride="false"
     >
       <!-- Add background images source for the carousel /static/images... remove the / before static, if you are serving the images locally -->
@@ -385,7 +394,9 @@
         dignissimos. Veniam dolore dolorum est delectus error dolor porro magni
         praesentium quae unde?
       </p>
-      <a class="btn call-to-action-button" href="#" role="button">Book Now</a>
+      <a class="btn call-to-action-button" href="book-now.html" role="button"
+        >Book Now</a
+      >
     </section>
 
     <!-- Rooms Showcase  -->
@@ -601,5 +612,3 @@
     ></script>
   </body>
 </html>
-
-<!-- add bootstrap extension to vscode -->
