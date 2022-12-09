@@ -13,7 +13,7 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
-    <title>About Us</title>
+    <title>Contact Us</title>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
@@ -30,7 +30,7 @@
         z-index: 10;
       }
 
-      .about-us {
+      .contact-us {
         margin: 8rem auto;
       }
 
@@ -126,120 +126,99 @@
       </div>
     </nav>
 
-    <!-- carousel Section -->
-    <section
-      id="carouselExampleCaptions"
-      class="carousel slide carousel-fade"
-      data-bs-ride="false"
-    >
-      <!-- Add background images source for the carousel /static/images... remove the / before static, if you are serving the images locally -->
-      <div class="carousel-indicators">
-        <button
-          type="button"
-          data-bs-target="#carouselExampleCaptions"
-          data-bs-slide-to="0"
-          class="active"
-          aria-current="true"
-          aria-label="Slide 1"
-        ></button>
-        <button
-          type="button"
-          data-bs-target="#carouselExampleCaptions"
-          data-bs-slide-to="1"
-          aria-label="Slide 2"
-        ></button>
-        <button
-          type="button"
-          data-bs-target="#carouselExampleCaptions"
-          data-bs-slide-to="2"
-          aria-label="Slide 3"
-        ></button>
-      </div>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img
-            src="static/images/outside.png"
-            class="d-block w-100"
-            alt="..."
-          />
-          <div class="carousel-caption d-none d-md-block">
-            <h5>First slide label</h5>
-            <p>Some representative placeholder content for the first slide.</p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img
-            src="static/images/woman-laptop.png"
-            class="d-block w-100"
-            alt="..."
-          />
-          <div class="carousel-caption d-none d-md-block">
-            <h5>Second slide label</h5>
-            <p>Some representative placeholder content for the second slide.</p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <img src="static/images/tray.png" class="d-block w-100" alt="..." />
-          <div class="carousel-caption d-none d-md-block">
-            <h5>Third slide label</h5>
-            <p>Some representative placeholder content for the third slide.</p>
-          </div>
-        </div>
-      </div>
-      <button
-        class="carousel-control-prev"
-        type="button"
-        data-bs-target="#carouselExampleCaptions"
-        data-bs-slide="prev"
-      >
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button
-        class="carousel-control-next"
-        type="button"
-        data-bs-target="#carouselExampleCaptions"
-        data-bs-slide="next"
-      >
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </section>
+    <!--Section: Contact v.2-->
+    <section class="container contact-us">
+      <!--Section heading-->
+      <h2 class="h1-responsive font-weight-bold text-center my-4">
+        Make Reservation
+      </h2>
 
-    <!-- About us section  -->
-    <section class="container text-center about-us">
-      <h2 class="">About our Hotel</h2>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Non laborum
-        consequatur, unde nemo mollitia laboriosam? Fugiat, possimus
-        dignissimos. Veniam dolore dolorum est delectus error dolor porro magni
-        praesentium quae unde?
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Non laborum
-        consequatur, unde nemo mollitia laboriosam? Fugiat, possimus
-        dignissimos. Veniam dolore dolorum est delectus error dolor porro magni
-        praesentium quae unde?
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Non laborum
-        consequatur, unde nemo mollitia laboriosam? Fugiat, possimus
-        dignissimos. Veniam dolore dolorum est delectus error dolor porro magni
-        praesentium quae unde?
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Non laborum
-        consequatur, unde nemo mollitia laboriosam? Fugiat, possimus
-        dignissimos. Veniam dolore dolorum est delectus error dolor porro magni
-        praesentium quae unde?
-      </p>
-      <a
-        class="btn call-to-action-button"
-        href="reservations.html"
-        role="button"
-        >Book Now</a
-      >
+      <div class="row">
+        <!--Grid column-->
+        <div class="col-md-2 text-center"></div>
+
+        <div class="col-md-8 mb-md-0 mb-5">
+          <form
+            id="contact-form"
+            name="contact-form"
+            action="mail.php"
+            method="POST"
+          >
+            <!--Grid row-->
+            <div class="row">
+              <!--Grid column-->
+              <div class="col-md-6">
+                <div class="md-form mb-0">
+                  <input
+                    required
+                    type="text"
+                    id="first-name"
+                    name="first-name"
+                    class="form-control"
+                  />
+                  <label for="name" class="">First Name</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="md-form mb-0">
+                  <input
+                    required
+                    type="text"
+                    id="last-name"
+                    name="last-name"
+                    class="form-control"
+                  />
+                  <label for="email" class="">Last Name</label>
+                </div>
+              </div>
+              <!--Grid column-->
+            </div>
+
+            <!--Grid row-->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="md-form mb-0">
+                  <input
+                    required
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-control"
+                  />
+                  <label for="name" class="">Your Email</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="md-form mb-0">
+                  <input
+                    required
+                    type="number"
+                    id="phone"
+                    name="phone"
+                    class="form-control"
+                  />
+                  <label for="email" class="">Your Phone Number</label>
+                </div>
+              </div>
+              <!--Grid column-->
+            </div>
+            <!--Grid row-->
+          </form>
+
+          <div class="text-md-left">
+            <a
+              class="btn btn-primary call-to-action-button mt-3"
+              onclick="document.getElementById('contact-form').submit();"
+              >Submit</a
+            >
+          </div>
+          <div class="status"></div>
+        </div>
+
+        <div class="col-md-2 text-center"></div>
+      </div>
     </section>
+    <!--Section: Contact v.2-->
 
     <!-- footer Section -->
     <footer class="text-center text-white" style="background-color: #7431f8">
