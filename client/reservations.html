@@ -43,10 +43,8 @@
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
       }
 
-      .img-fluid {
-        object-fit: cover;
-        height: 400px;
-        margin-bottom: 1.5rem;
+      .input-description {
+        font-size: 12px;
       }
 
       .footer {
@@ -130,9 +128,73 @@
       </div>
     </nav>
 
+    <!-- Use bootstrap form validation here -->
+
     <!-- Check availability section  -->
     <section class="container text-center about-us">
-      <h2 class="">Check Available</h2>
+      <h2 class="mb-5">Check Available</h2>
+
+      <div class="row">
+        <!--Grid column-->
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8 mb-md-0 mb-5">
+          <form
+            id="contact-form"
+            name="contact-form"
+            action="reservations.html"
+            method="POST"
+          >
+            <!--Grid row-->
+            <div class="row">
+              <!--Grid column-->
+              <div class="col-md-6">
+                <div class="md-form mb-0">
+                  <label for="start-date" class="">Start Date</label>
+                  <input
+                    required
+                    type="date"
+                    id="start-date"
+                    name="start-date"
+                    class="form-control"
+                  />
+                  <p class="input-description">
+                    <i>Select the date you which to arrive</i>
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="md-form mb-0">
+                  <label for="end-date" class="">End Date</label>
+                  <input
+                    required
+                    type="date"
+                    id="end-date"
+                    name="end-date"
+                    class="form-control"
+                  />
+                  <p class="text-left input-description">
+                    <i>Select date of departure</i>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-md-left">
+              <button
+                type="submit"
+                class="btn btn-primary call-to-action-button mt-3"
+                onclick="document.getElementById('contact-form').submit(); console.log('I was clicked')"
+              >
+                Search Availability
+              </button>
+            </div>
+            <div class="status"></div>
+          </form>
+        </div>
+
+        <div class="col-md-2"></div>
+      </div>
     </section>
 
     <!-- footer Section -->

@@ -135,87 +135,77 @@
 
       <div class="row">
         <!--Grid column-->
-        <div class="col-md-2 text-center"></div>
+        <div class="col-md-2"></div>
 
         <div class="col-md-8 mb-md-0 mb-5">
-          <form
-            id="contact-form"
-            name="contact-form"
-            action="mail.php"
-            method="POST"
-          >
-            <!--Grid row-->
-            <div class="row">
-              <!--Grid column-->
-              <div class="col-md-6">
-                <div class="md-form mb-0">
-                  <input
-                    required
-                    type="text"
-                    id="first-name"
-                    name="first-name"
-                    class="form-control"
-                  />
-                  <label for="name" class="">First Name</label>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="md-form mb-0">
-                  <input
-                    required
-                    type="text"
-                    id="last-name"
-                    name="last-name"
-                    class="form-control"
-                  />
-                  <label for="email" class="">Last Name</label>
-                </div>
-              </div>
-              <!--Grid column-->
+          <form class="row g-3 needs-validation" novalidate>
+            <div class="col-md-6">
+              <label for="first-name" class="form-label">First name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="first-name"
+                required
+              />
+              <div class="valid-feedback">Looks good!</div>
+              <div class="invalid-feedback">First name is required.</div>
             </div>
-
-            <!--Grid row-->
-            <div class="row">
-              <div class="col-md-6">
-                <div class="md-form mb-0">
-                  <input
-                    required
-                    type="email"
-                    id="email"
-                    name="email"
-                    class="form-control"
-                  />
-                  <label for="name" class="">Your Email</label>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="md-form mb-0">
-                  <input
-                    required
-                    type="number"
-                    id="phone"
-                    name="phone"
-                    class="form-control"
-                  />
-                  <label for="email" class="">Your Phone Number</label>
-                </div>
-              </div>
-              <!--Grid column-->
+            <div class="col-md-6">
+              <label for="last-name" class="form-label">Last name</label>
+              <input type="text" class="form-control" id="last-name" required />
+              <div class="valid-feedback">Looks good!</div>
+              <div class="invalid-feedback">Last name is required.</div>
             </div>
-            <!--Grid row-->
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text" id="inputGroupPrepend">📧</span>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  aria-describedby="inputGroupPrepend"
+                  required
+                />
+                <div class="invalid-feedback">Please input a valid email.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input type="number" class="form-control" id="phone" required />
+              <div class="invalid-feedback">
+                Please provide a valid phone number.
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="invalidCheck"
+                  required
+                />
+                <label class="form-check-label" for="invalidCheck">
+                  Agree to terms and conditions
+                </label>
+                <div class="invalid-feedback">
+                  You must agree before submitting.
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <button
+                class="btn btn-primary call-to-action-button mt-3"
+                type="submit"
+              >
+                Make Reservation
+              </button>
+            </div>
           </form>
-
-          <div class="text-md-left">
-            <a
-              class="btn btn-primary call-to-action-button mt-3"
-              onclick="document.getElementById('contact-form').submit();"
-              >Submit</a
-            >
-          </div>
-          <div class="status"></div>
         </div>
 
-        <div class="col-md-2 text-center"></div>
+        <div class="col-md-2"></div>
       </div>
     </section>
     <!--Section: Contact v.2-->
@@ -328,5 +318,30 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
+    <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (() => {
+        "use strict";
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll(".needs-validation");
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach((form) => {
+          form.addEventListener(
+            "submit",
+            (event) => {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+    </script>
   </body>
 </html>
