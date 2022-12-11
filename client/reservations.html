@@ -38,8 +38,8 @@
         z-index: 2;
       }
 
-      .notie-container {
-        z-index: 10;
+      .datepicker {
+        z-index: 100000;
       }
 
       .about-us {
@@ -313,9 +313,6 @@
     <!-- date picker script  -->
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js"></script>
 
-    <!-- notie script for alert -->
-    <script src="https://unpkg.com/notie"></script>
-
     <!-- Sweet Alert script -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -343,6 +340,47 @@
           );
         });
       })();
+
+      const html = `
+        <form
+          id="availability-form"
+          action=""
+          method="POST"
+          class="needs-validation"
+          novalidate
+        >
+          <div class="form-row">
+            <div class="col">
+              <div class="form-row" id="reservation-dates-modal">
+                <div class="col mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="start"
+                    id="start"
+                    placeholder="Arrival date"
+                    autocomplete="off"
+                    required
+                    disabled
+                  />
+                </div>
+                <div class="col">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="end"
+                    id="end"
+                    placeholder="Depature date"
+                    autocomplete="off"
+                    required
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      `;
 
       const Prompt = () => {
         const toast = (c) => {
@@ -372,26 +410,44 @@
           Toast.fire({});
         };
 
-        const notifyModal = (title, html, icon, confirmButtonText) => {
-          swal.fire({
+        const alertModal = (c) => {
+          const { icon = "success", title = "", text = "", footer = "" } = c;
+          Swal.fire({ icon, title, text, footer });
+        };
+
+        const customModal = async (c) => {
+          const { title = "", html = "" } = c;
+
+          const { value: formValues } = await Swal.fire({
             title,
             html,
-            icon,
-            confirmButtonText,
+            focusConfirm: false,
+            showCancelButton: true,
+            willOpen: () => {
+              const elem = document.getElementById("reservation-dates-modal");
+              const datepicker = new DateRangePicker(elem, {
+                format: "dd-mm-yyyy",
+                showOnFicus: true,
+              });
+            },
+            didOpen: () => {
+              document.getElementById("start").removeAttribute("disabled");
+              document.getElementById("end").removeAttribute("disabled");
+            },
+            preConfirm: () => {
+              return [
+                document.getElementById("start").value,
+                document.getElementById("end").value,
+              ];
+            },
           });
+
+          if (formValues) {
+            Swal.fire(JSON.stringify(formValues));
+          }
         };
 
-        const success = (c) => {
-          const { title = "", text = "", footer = "" } = c;
-          Swal.fire({
-            icon: "success",
-            title,
-            text,
-            footer,
-          });
-        };
-
-        return { toast, notifyModal, success };
+        return { toast, alertModal, customModal };
       };
 
       // date picker
@@ -404,7 +460,7 @@
       document
         .getElementById("testButton")
         .addEventListener("click", function () {
-          Prompt().success({ title: "Successful" });
+          Prompt().customModal({ title: "Check Availability", html });
         });
     </script>
   </body>
