@@ -22,6 +22,7 @@
       type="text/css"
       href="https://unpkg.com/notie/dist/notie.min.css"
     />
+
     <title>Book A Room</title>
 
     <style>
@@ -308,10 +309,15 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
+
     <!-- date picker script  -->
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js"></script>
+
     <!-- notie script for alert -->
     <script src="https://unpkg.com/notie"></script>
+
+    <!-- Sweet Alert script -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- general js functions -->
     <script>
@@ -338,26 +344,67 @@
         });
       })();
 
+      const Prompt = () => {
+        const toast = (c) => {
+          const {
+            title = "",
+            icon = "success",
+            position = "top-end",
+            timer = 4000,
+            showConfirmButton = false,
+            confirmButtonText = "Got it",
+          } = c;
+          const Toast = Swal.mixin({
+            toast: true,
+            title,
+            icon,
+            position,
+            showConfirmButton,
+            confirmButtonText,
+            timer,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener("mouseenter", Swal.stopTimer);
+              toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({});
+        };
+
+        const notifyModal = (title, html, icon, confirmButtonText) => {
+          swal.fire({
+            title,
+            html,
+            icon,
+            confirmButtonText,
+          });
+        };
+
+        const success = (c) => {
+          const { title = "", text = "", footer = "" } = c;
+          Swal.fire({
+            icon: "success",
+            title,
+            text,
+            footer,
+          });
+        };
+
+        return { toast, notifyModal, success };
+      };
+
       // date picker
       const elem = document.getElementById("availability-form");
       const datepicker = new DateRangePicker(elem, {
         format: "dd-mm-yyyy",
       });
 
-      // notie alert function here
-      function notify(message, messageType) {
-        notie.alert({
-          type: messageType,
-          text: message,
-          time: 5,
-        });
-      }
-
       // Test button
       document
         .getElementById("testButton")
         .addEventListener("click", function () {
-          notify("My message to test", "success");
+          Prompt().success({ title: "Successful" });
         });
     </script>
   </body>
