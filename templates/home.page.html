@@ -1,21 +1,197 @@
-{{ template "base" .}}
+{{ template "base" .}} {{ define "title" }} Welcome | We give you a home away
+from home {{ end }} {{ define "css" }}
+<link href="/static/css/index.css" rel="stylesheet" type="text/css" />
+{{ end }} {{ define "content" }}
+<!-- carousel Section -->
+<section
+  id="carouselExampleCaptions"
+  class="carousel slide carousel-fade"
+  data-bs-ride="false"
+>
+  <!-- Add background images source for the carousel /static/images... remove the / before static, if you are serving the images locally -->
+  <div class="carousel-indicators">
+    <button
+      type="button"
+      data-bs-target="#carouselExampleCaptions"
+      data-bs-slide-to="0"
+      class="active"
+      aria-current="true"
+      aria-label="Slide 1"
+    ></button>
+    <button
+      type="button"
+      data-bs-target="#carouselExampleCaptions"
+      data-bs-slide-to="1"
+      aria-label="Slide 2"
+    ></button>
+    <button
+      type="button"
+      data-bs-target="#carouselExampleCaptions"
+      data-bs-slide-to="2"
+      aria-label="Slide 3"
+    ></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="/static/images/outside.png" class="d-block w-100" alt="..." />
+      <div class="carousel-caption d-none d-md-block">
+        <h5>First slide label</h5>
+        <p>Some representative placeholder content for the first slide.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img
+        src="/static/images/woman-laptop.png"
+        class="d-block w-100"
+        alt="..."
+      />
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Second slide label</h5>
+        <p>Some representative placeholder content for the second slide.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="/static/images/tray.png" class="d-block w-100" alt="..." />
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Third slide label</h5>
+        <p>Some representative placeholder content for the third slide.</p>
+      </div>
+    </div>
+  </div>
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#carouselExampleCaptions"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#carouselExampleCaptions"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</section>
 
-{{ define "title" }}
-Welcome | Go first project
-{{ end }}
+<!-- About us section  -->
+<section class="container text-center about-us">
+  <h2 class="">Welcome to our Hotel</h2>
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Non laborum
+    consequatur, unde nemo mollitia laboriosam? Fugiat, possimus dignissimos.
+    Veniam dolore dolorum est delectus error dolor porro magni praesentium quae
+    unde?
+  </p>
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Non laborum
+    consequatur, unde nemo mollitia laboriosam? Fugiat, possimus dignissimos.
+    Veniam dolore dolorum est delectus error dolor porro magni praesentium quae
+    unde?
+  </p>
+  <a class="btn call-to-action-button" href="/reservation" role="button"
+    >Book Now</a
+  >
+</section>
 
-{{ define "content" }}
-<div class="container">
-    <h1>This is the home page</h1>
-    <p>The is the second paragraph from data: {{index .StringMap "test"}}</p>
-
-    <p>
-        <!-- Check if the remoteIP is not empty. ne - Not Equal to -->
-        {{if ne (index .StringMap "remote_ip") ""}}
-        Your remote IP address is {{index .StringMap "remote_ip"}}
-        {{else}}
-        Your IP address is not known. Please visit the <a href="/">Home page</a> to set your IP address
-        {{end}}
-    </p>
-</div>
+<!-- Rooms Showcase  -->
+<section class="container rooms-showcase">
+  <div class="rooms-showcase-container">
+    <div class="card border-0 me-lg-4 mb-lg-0 mb-4">
+      <div class="backgroundEffect"></div>
+      <div class="pic">
+        <img
+          class=""
+          src="static/images/room-images/room1.jpg"
+          alt="Room 1 image"
+        />
+        <div class="date">
+          <span class="day">Hot</span>
+          <span class="year">Deal</span>
+        </div>
+      </div>
+      <div class="content">
+        <p class="h-1 mt-4">Exquisite Room for the lorem</p>
+        <p class="text-muted mt-3">
+          Far far away, behind the word mountains, far from the countries
+          Vokalia and Consonantia, there live the blind texts.
+        </p>
+        <div
+          class="d-flex align-items-center justify-content-between mt-3 pb-3"
+        >
+          <div class="btn btn-primary">
+            Book Now<span class="fas fa-arrow-right"></span>
+          </div>
+          <div class="d-flex align-items-center justify-content-center foot">
+            <p class="font-bold admin">$15</p>
+            <p class="icon text-muted">per night</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card border-0 me-lg-4 mb-lg-0 mb-4">
+      <div class="backgroundEffect"></div>
+      <div class="pic">
+        <img
+          class=""
+          src="static/images/room-images/room2.jpg"
+          alt="Room 2 image"
+        />
+        <div class="date">
+          <span class="day">New</span>
+        </div>
+      </div>
+      <div class="content">
+        <p class="h-1 mt-4">Luxurious Banquet</p>
+        <p class="text-muted mt-3">
+          Far far away, behind the word mountains, far from the countries
+          Vokalia and Consonantia, there live the blind texts.
+        </p>
+        <div
+          class="d-flex align-items-center justify-content-between mt-3 pb-3"
+        >
+          <div class="btn btn-primary">
+            Book Now<span class="fas fa-arrow-right"></span>
+          </div>
+          <div class="d-flex align-items-center justify-content-center foot">
+            <p class="font-bold admin">$25</p>
+            <p class="icon text-muted">per night</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card border-0 mb-lg-0 mb-4">
+      <div class="backgroundEffect"></div>
+      <div class="pic">
+        <img class="" src="static/images/room-images/room3.jpg" alt="" />
+        <div class="date">
+          <span class="day">Splash</span>
+          <span class="year">Sale</span>
+        </div>
+      </div>
+      <div class="content">
+        <p class="h-1 mt-4">Comfort at your budget</p>
+        <p class="text-muted mt-3">
+          Far far away, behind the word mountains, far from the countries
+          Vokalia and Consonantia, there live the blind texts.
+        </p>
+        <div
+          class="d-flex align-items-center justify-content-between mt-3 pb-3"
+        >
+          <div class="btn btn-primary">
+            Book Now<span class="fas fa-arrow-right"></span>
+          </div>
+          <div class="d-flex align-items-center justify-content-center foot">
+            <p class="font-bold admin">$12</p>
+            <p class="icon text-muted">per night</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 {{ end }}
