@@ -37,6 +37,24 @@
     <!-- <link href="static/css/reservation.css" rel="stylesheet" type="text/css" /> -->
     <title>{{ template "title" . }}</title>
     {{block "css" .}} {{end}}
+
+    <style>
+      /* scrollbar */
+      ::-webkit-scrollbar {
+        width: 7px;
+      }
+      ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #7431f8;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #5520c0;
+      }
+    </style>
   </head>
 
   <body>

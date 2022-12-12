@@ -1,11 +1,29 @@
-{{ template "base" .}}
-
-{{ define "title" }}
-About us
-{{ end }}
-
-{{ define "content" }}
-<div class="container">
-    <h1>This is the about page</h1>
-</div>
+{{ template "base" .}} {{ define "title" }} Alpine Suit | Let comfort be with
+you {{ end }} {{ define "css" }}
+<link href="/static/css/rooms.css" rel="stylesheet" type="text/css" />
+{{ end }} {{ define "content" }}
+<!-- About section  -->
+<section class="container text-center about-us">
+  <img
+    src="static/images/room-images/marjors-suite.png"
+    class="img-fluid"
+    alt="Generals Room"
+  />
+  <h2 class="">Our Alpine Suit</h2>
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Non laborum
+    consequatur, unde nemo mollitia laboriosam? Fugiat, possimus dignissimos.
+    Veniam dolore dolorum est delectus error dolor porro magni praesentium quae
+    unde?
+  </p>
+  <p>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Non laborum
+    consequatur, unde nemo mollitia laboriosam? Fugiat, possimus dignissimos.
+    Veniam dolore dolorum est delectus error dolor porro magni praesentium quae
+    unde?
+  </p>
+  <a class="btn call-to-action-button" href="#" role="button"
+    >Check Availability</a
+  >
+</section>
 {{ end }}
