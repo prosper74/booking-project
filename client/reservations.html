@@ -38,8 +38,12 @@
         z-index: 2;
       }
 
-      .datepicker {
-        z-index: 100000;
+      .swal2-actions {
+        z-index: 0 !important;
+      }
+
+      .modal-buttons {
+        z-index: 0;
       }
 
       .about-us {
@@ -166,6 +170,7 @@
                 class="form-control"
                 id="start-date"
                 placeholder="dd/mm/yyyy"
+                autocomplete="off"
                 required
               />
               <div class="invalid-feedback">Arrival date is required.</div>
@@ -178,6 +183,7 @@
                 class="form-control"
                 id="end-date"
                 placeholder="dd/mm/yyyy"
+                autocomplete="off"
                 required
               />
               <div class="invalid-feedback">Depature date is required.</div>
@@ -422,12 +428,13 @@
             title,
             html,
             focusConfirm: false,
+            confirmButtonText: "Submit",
             showCancelButton: true,
             willOpen: () => {
               const elem = document.getElementById("reservation-dates-modal");
               const datepicker = new DateRangePicker(elem, {
                 format: "dd-mm-yyyy",
-                showOnFicus: true,
+                showOnFocus: true,
               });
             },
             didOpen: () => {
