@@ -13,45 +13,13 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker.min.css"
+    />
+    <link href="static/css/reservation.css" rel="stylesheet" type="text/css" />
+
     <title>Contact Us</title>
-
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
-
-      body {
-        margin-top: 30px;
-        background-color: rgb(245, 245, 245);
-      }
-
-      .sticky {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 10;
-      }
-
-      .contact-us {
-        margin: 8rem auto;
-      }
-
-      .call-to-action-button {
-        background-color: #7431f8;
-        color: white;
-        margin-top: 1.2rem;
-      }
-
-      .call-to-action-button:hover {
-        border: 1px solid #7431f8;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-      }
-
-      .footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-      }
-    </style>
   </head>
 
   <body>
@@ -318,30 +286,6 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
-    <script>
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
-      (() => {
-        "use strict";
-
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        const forms = document.querySelectorAll(".needs-validation");
-
-        // Loop over them and prevent submission
-        Array.from(forms).forEach((form) => {
-          form.addEventListener(
-            "submit",
-            (event) => {
-              if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-
-              form.classList.add("was-validated");
-            },
-            false
-          );
-        });
-      })();
-    </script>
+    <script src="static/js/reservation.js"></script>
   </body>
 </html>

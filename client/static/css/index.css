@@ -1,0 +1,208 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+body {
+    margin-top: 30px;
+    background-color: rgb(245, 245, 245);
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.about-us {
+    margin: 8rem auto;
+}
+
+.call-to-action-button {
+    background-color: #7431f8;
+    color: white;
+    margin-top: 1.2rem;
+}
+
+.call-to-action-button:hover {
+    border: 1px solid #7431f8;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+/* Showcase section starts  */
+.rooms-showcase {
+    margin: 8rem auto;
+}
+
+.rooms-showcase-container {
+    padding: 20px 0;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    justify-items: center;
+}
+
+@media screen and (min-width: 650px) {
+    .rooms-showcase-container {
+        gap: 15px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (min-width: 960px) {
+    .rooms-showcase-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.card {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background: #fff;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+}
+
+.card .backgroundEffect {
+    bottom: 0;
+    height: 0px;
+    width: 100%;
+}
+
+.card:hover {
+    color: #fff;
+    transform: scale(1.025);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 5px 10px;
+}
+
+.card:hover .backgroundEffect {
+    bottom: 0;
+    height: 320px;
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+    background: #7431f8;
+    animation: popBackground 0.3s ease-in;
+}
+
+@keyframes popBackground {
+    0% {
+        height: 20px;
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+    }
+
+    50% {
+        height: 80px;
+        border-top-left-radius: 75%;
+        border-top-right-radius: 75%;
+    }
+
+    75% {
+        height: 160px;
+        border-top-left-radius: 85%;
+        border-top-right-radius: 85%;
+    }
+
+    100% {
+        height: 320px;
+        border-top-left-radius: 100%;
+        border-top-right-radius: 100%;
+    }
+}
+
+.card .pic {
+    position: relative;
+}
+
+.card .pic img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.card .date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 70px;
+    background-color: #7431f8;
+    color: white;
+    position: absolute;
+    bottom: 0px;
+    transition: all ease;
+}
+
+.card .date .day {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.card .date,
+.card .date .year {
+    font-size: 10px;
+}
+
+.card .text-muted {
+    font-size: 12px;
+}
+
+.card:hover .text-muted {
+    color: #fff !important;
+}
+
+.card .content {
+    padding: 0 20px;
+}
+
+.card .content .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    background-color: #7431f8;
+    border-radius: 25px;
+    font-size: 12px;
+    border: none;
+}
+
+.card:hover .content .btn {
+    background: #fff;
+    color: #7431f8;
+    box-shadow: #0000001a 0px 3px 5px;
+}
+
+.card .content .btn .fas {
+    font-size: 10px;
+    padding-left: 5px;
+}
+
+.card .content .foot .admin {
+    color: #7431f8;
+    font-size: 20px;
+    margin-right: 4px;
+}
+
+.card:hover .content .foot .admin {
+    color: #fff;
+}
+
+.card .content .foot .icon {
+    font-size: 12px;
+}
+
+/* Showcase section ends  */
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
