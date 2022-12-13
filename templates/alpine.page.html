@@ -1,6 +1,11 @@
 {{ template "base" .}} {{ define "title" }} Alpine Suit | Let comfort be with
 you {{ end }} {{ define "css" }}
 <link href="/static/css/rooms.css" rel="stylesheet" type="text/css" />
+<style>
+  .swal2-actions {
+    z-index: 0 !important;
+  }
+</style>
 {{ end }} {{ define "content" }}
 <!-- About section  -->
 <section class="container text-center about-us">
@@ -22,8 +27,17 @@ you {{ end }} {{ define "css" }}
     Veniam dolore dolorum est delectus error dolor porro magni praesentium quae
     unde?
   </p>
-  <a class="btn call-to-action-button" href="#" role="button"
-    >Check Availability</a
-  >
+  <button id="availability" class="btn call-to-action-button">
+    Check Availability
+  </button>
 </section>
+{{ end }} {{define "js" }}
+<script src="/static/js/reservation.js"></script>
+<script>
+  document
+    .getElementById("availability")
+    .addEventListener("click", function () {
+      Prompt().customModal({ title: "Check Availability", html });
+    });
+</script>
 {{ end }}

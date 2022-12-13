@@ -1,6 +1,72 @@
-{{ template "base" .}} {{ define "title" }} About us {{ end }} {{ define
-"content" }}
-<div class="container">
-  <h1>This is the about page</h1>
-</div>
+{{ template "base" .}} {{ define "title" }} Make a reservation {{ end }} {{
+define "css" }}
+<link href="/static/css/reservation.css" rel="stylesheet" type="text/css" />
+{{ end }} {{ define "content" }}
+<!-- Check availability section  -->
+<section class="container text-center about-us">
+  <h2 class="mb-5">Check Available</h2>
+
+  <div class="row">
+    <!--Grid column-->
+    <div class="col-md-2"></div>
+
+    <div class="col-md-8 mb-md-0 mb-5">
+      <form
+        id="availability-form"
+        name="availability-form"
+        action="/reservation"
+        method="POST"
+        class="row g-3 needs-validation"
+        novalidate
+      >
+        <div class="col-md-6">
+          <label for="start-date" class="form-label">Arrival Date</label>
+          <input
+            type="text"
+            name="start"
+            class="form-control"
+            id="start-date"
+            placeholder="dd/mm/yyyy"
+            autocomplete="off"
+            required
+          />
+          <div class="invalid-feedback">Arrival date is required.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="end-date" class="form-label">Depature Date</label>
+          <input
+            type="text"
+            name="end"
+            class="form-control"
+            id="end-date"
+            placeholder="dd/mm/yyyy"
+            autocomplete="off"
+            required
+          />
+          <div class="invalid-feedback">Depature date is required.</div>
+        </div>
+        <div class="col-12">
+          <button
+            class="btn btn-primary call-to-action-button mt-3"
+            type="submit"
+          >
+            Check Availability
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-md-2"></div>
+  </div>
+</section>
+
+{{ end }} {{define "js" }}
+<script src="/static/js/reservation.js"></script>
+<script>
+  // date picker
+  const elem = document.getElementById("availability-form");
+  const datepicker = new DateRangePicker(elem, {
+    format: "dd-mm-yyyy",
+  });
+</script>
 {{ end }}

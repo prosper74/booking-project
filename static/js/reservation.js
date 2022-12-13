@@ -1,27 +1,27 @@
 // function for disabling form submissions if there are invalid fields
-(() => {
-  "use strict";
+  (() => {
+    "use strict";
 
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  // Loop over them and prevent submission
-  const forms = document.querySelectorAll(".needs-validation");
-  Array.from(forms).forEach((form) => {
-    form.addEventListener(
-      "submit",
-      (event) => {
-        if (!form.checkValidity()) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    // Loop over them and prevent submission
+    const forms = document.querySelectorAll(".needs-validation");
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
 
-        form.classList.add("was-validated");
-      },
-      false
-    );
-  });
-})();
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
 
-const html = `
+  const html = `
   <form
     id="availability-form"
     action=""
@@ -62,84 +62,71 @@ const html = `
   </form>
 `;
 
-const Prompt = () => {
-  const toast = (c) => {
-    const {
-      title = "",
-      icon = "success",
-      position = "top-end",
-      timer = 4000,
-      showConfirmButton = false,
-      confirmButtonText = "Got it",
-    } = c;
-    const Toast = Swal.mixin({
-      toast: true,
-      title,
-      icon,
-      position,
-      showConfirmButton,
-      confirmButtonText,
-      timer,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener("mouseenter", Swal.stopTimer);
-        toast.addEventListener("mouseleave", Swal.resumeTimer);
-      },
-    });
+  const Prompt = () => {
+    const toast = (c) => {
+      const {
+        title = "",
+        icon = "success",
+        position = "top-end",
+        timer = 4000,
+        showConfirmButton = false,
+        confirmButtonText = "Got it",
+      } = c;
+      const Toast = Swal.mixin({
+        toast: true,
+        title,
+        icon,
+        position,
+        showConfirmButton,
+        confirmButtonText,
+        timer,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
 
-    Toast.fire({});
+      Toast.fire({});
+    };
+
+    const alertModal = (c) => {
+      const { icon = "success", title = "", text = "", footer = "" } = c;
+      Swal.fire({ icon, title, text, footer });
+    };
+
+    const customModal = async (c) => {
+      const { title = "", html = "" } = c;
+
+      const { value: formValues } = await Swal.fire({
+        title,
+        html,
+        focusConfirm: false,
+        confirmButtonText: "Submit",
+        showCancelButton: true,
+        willOpen: () => {
+          const elem = document.getElementById("reservation-dates-modal");
+          const datepicker = new DateRangePicker(elem, {
+            format: "dd-mm-yyyy",
+            showOnFocus: true,
+          });
+        },
+        didOpen: () => {
+          document.getElementById("start").removeAttribute("disabled");
+          document.getElementById("end").removeAttribute("disabled");
+        },
+        preConfirm: () => {
+          return [
+            document.getElementById("start").value,
+            document.getElementById("end").value,
+          ];
+        },
+      });
+
+      if (formValues) {
+        Swal.fire(JSON.stringify(formValues));
+      }
+    };
+
+    return { toast, alertModal, customModal };
   };
-
-  const alertModal = (c) => {
-    const { icon = "success", title = "", text = "", footer = "" } = c;
-    Swal.fire({ icon, title, text, footer });
-  };
-
-  const customModal = async (c) => {
-    const { title = "", html = "" } = c;
-
-    const { value: formValues } = await Swal.fire({
-      title,
-      html,
-      focusConfirm: false,
-      confirmButtonText: "Submit",
-      showCancelButton: true,
-      willOpen: () => {
-        const elem = document.getElementById("reservation-dates-modal");
-        const datepicker = new DateRangePicker(elem, {
-          format: "dd-mm-yyyy",
-          showOnFocus: true,
-        });
-      },
-      didOpen: () => {
-        document.getElementById("start").removeAttribute("disabled");
-        document.getElementById("end").removeAttribute("disabled");
-      },
-      preConfirm: () => {
-        return [
-          document.getElementById("start").value,
-          document.getElementById("end").value,
-        ];
-      },
-    });
-
-    if (formValues) {
-      Swal.fire(JSON.stringify(formValues));
-    }
-  };
-
-  return { toast, alertModal, customModal };
-};
-
-// date picker
-const elem = document.getElementById("availability-form");
-const datepicker = new DateRangePicker(elem, {
-  format: "dd-mm-yyyy",
-});
-
-// Test button
-document
-  .getElementById("testButton")
-  .addEventListener("click", function () {
-    Prompt().customModal({ title: "Check Availability", html });
-  });

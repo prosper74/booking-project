@@ -10,10 +10,6 @@ body {
     z-index: 2;
 }
 
-.swal2-actions {
-    z-index: 0 !important;
-}
-
 .modal-buttons {
     z-index: 0;
 }
