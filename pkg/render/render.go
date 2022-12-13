@@ -12,24 +12,19 @@ import (
 	"github.com/atuprosper/booking-project/pkg/models"
 )
 
-// A FuncMap is a map of functions that we can use in our template
 var functions = template.FuncMap{}
 
 var app *config.AppConfig
 
-// NewTemplates sets the config for the template package
 func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-// This function adds default data to every templates by taking the specific data sent from the render function and attach this function to it
 func AddDefaultData(td *models.TemplateData) *models.TemplateData {
 	return td
 }
 
 func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
-	// This will rebuild the template cache on every page render. It is really not efficient. A better way is to set application wide configuration, that will build the template cache only ones and then use it for every render. To do this we create a new config file in pkg folder
-	// tc, err := CreateTemplateCache()
 
 	var tc map[string]*template.Template
 
@@ -40,11 +35,6 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 	} else {
 		tc, _ = CreateTemplateCache()
 	}
-
-	// If there are no template cache, die the server. If we get passed this, then we have our template cache
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 
 	// t holds the actual template found, while "ok" will return true if the template exists in our directory. If we get passed this, then we have the actual template that we want to use
 	t, ok := tc[tmpl]

@@ -47,12 +47,11 @@ This is where we create and configure our session
 This where we handle all our pages and templates.
 This is where we use our scs package and all it's features. We want to collect the IP address of our users and store them in the session, then send them to be used in our HTML templates
 
+- `func (m *Repository) Home(w http.ResponseWriter, r *http.Request)` A function with a 'reciever' m, of type 'Repository'. This will give our handler function access to everything in the config file
+- `var Repo *Repository` Creating a Repository pattern. This variable is the repository used by the handlers
 - Get the IP address of user using the r parameter, which holds the `*http.Request` Go built in package - `remoteIP := r.RemoteAddr`
-
 - Store the IP in the site wide config which is available via the paramter 'm'. It takes in three parameters. The context, the name (which can be anything), and the value - `m.App.Session.Put(r.Context(), "remote_ip", remoteIP)`
-
 - Get the remote IP from the session - `getRemoteIP := m.App.Session.GetString(r.Context(), "remote_ip")`
-
 - Store the retrieved IP in the `stringMap` which is available in our HTML template - `stringMap["remote_ip"] = getRemoteIP`
 
 ### The routes.go file
@@ -64,6 +63,11 @@ Make the templates recognize the static folder to use its contents (eg images)
 - Create a multiplexer to handle the fileServer. "http.StripePrefix" takes the url and modifies it to something it can handle. `mux.Handle("/static/*", http.StripPrefix("/static", fileServer))`
 - 'Recoverer' middleware from chi package. It helps for panic control `mux.Use(middleware.Recoverer)`
 
+### The render.go file 
+- `template.FuncMap{}` A FuncMap is a map of functions that we can use in our template
+- `NewTemplates` sets the config for the template package
+- `AddDefaultData` This function adds default data to every templates by taking the specific data sent from the render function and attach this function to it
+
 ### The middleware.go file 
 We can write our own middleware for `chi` package in this file.
 
@@ -72,3 +76,18 @@ We can write our own middleware for `chi` package in this file.
 - `NoSurf` middleware adds CSRF protection to all POST request - `func NoSurf(next http.Handler) http.Handler`
 
 - `SessionLoad` middleware makes our server to be 'state' aware, in order to keep our session in state `func (next http.Handler) http.Handler`
+
+- `LoadAndSave` provides middleware which automatically loads and saves session data for the current request, and communicates the session token to and from the client in a cookie.
+
+### The config.go file 
+This file should be made accessible by other packages, every package in this project can import it and use it. But this file should not import any package, it will only use the standard built-in Go packages. This will help us avoid an error called "import cycle"
+
+- `AppConfig` struct holds the application configurations
+- `InfoLog` allows you to create a log file and store informations in it
+
+### The templateData.go file 
+We create this seperate file to avoid Go `import cycle not allowed error`
+
+- `TemplateData struct` is a struct that holds data sent from handlers to templates
+- `interface{}` type is used when the type is not known
+- Cross Site Request Forgery Token (CSRFToken) - is a security token to handle forms

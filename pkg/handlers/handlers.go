@@ -9,8 +9,6 @@ import (
 	"github.com/atuprosper/booking-project/pkg/render"
 )
 
-// Creating a Repository pattern
-// This variable is the repository used by the handlers
 var Repo *Repository
 
 type Repository struct {
@@ -29,7 +27,6 @@ func NewHandlers(r *Repository) {
 	Repo = r
 }
 
-// A function with a 'reciever' m, of type 'Repository'. This will give our handler function access to everything in the config file
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	remoteIP := r.RemoteAddr
 	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
