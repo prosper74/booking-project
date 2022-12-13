@@ -67,3 +67,7 @@ func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, "reservation.page.html", &models.TemplateData{})
 }
+
+func (m *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "make-reservation.page.html", &models.TemplateData{})
+}

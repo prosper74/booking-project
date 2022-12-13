@@ -63,3 +63,12 @@ Make the templates recognize the static folder to use its contents (eg images)
 - Create a file server for the static directory `fileServer := http.FileServer(http.Dir("./static/"))`
 - Create a multiplexer to handle the fileServer. "http.StripePrefix" takes the url and modifies it to something it can handle. `mux.Handle("/static/*", http.StripPrefix("/static", fileServer))`
 - 'Recoverer' middleware from chi package. It helps for panic control `mux.Use(middleware.Recoverer)`
+
+### The middleware.go file 
+We can write our own middleware for `chi` package in this file.
+
+- `next` is commonly used as the parameter for custome middleware
+
+- `NoSurf` middleware adds CSRF protection to all POST request - `func NoSurf(next http.Handler) http.Handler`
+
+- `SessionLoad` middleware makes our server to be 'state' aware, in order to keep our session in state `func (next http.Handler) http.Handler`

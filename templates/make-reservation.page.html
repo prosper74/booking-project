@@ -1,0 +1,85 @@
+{{ template "base" .}} {{ define "title" }} Make a reservation {{ end }} {{
+define "css" }}
+<link href="/static/css/reservation.css" rel="stylesheet" type="text/css" />
+{{ end }} {{ define "content" }}
+<!-- Make Reservation section  -->
+<section class="container contact-us">
+  <!--Section heading-->
+  <h2 class="h1-responsive font-weight-bold text-center my-4">
+    Make Reservation
+  </h2>
+
+  <div class="row">
+    <!--Grid column-->
+    <div class="col-md-2"></div>
+
+    <div class="col-md-8 mb-md-0 mb-5">
+      <form class="row g-3 needs-validation" novalidate>
+        <div class="col-md-6">
+          <label for="first-name" class="form-label">First name</label>
+          <input type="text" class="form-control" id="first-name" required />
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">First name is required.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="last-name" class="form-label">Last name</label>
+          <input type="text" class="form-control" id="last-name" required />
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Last name is required.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="email" class="form-label">Email</label>
+          <div class="input-group has-validation">
+            <span class="input-group-text" id="inputGroupPrepend">📧</span>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              aria-describedby="inputGroupPrepend"
+              required
+            />
+            <div class="invalid-feedback">Please input a valid email.</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="phone" class="form-label">Phone Number</label>
+          <input type="number" class="form-control" id="phone" required />
+          <div class="invalid-feedback">
+            Please provide a valid phone number.
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="invalidCheck"
+              required
+            />
+            <label class="form-check-label" for="invalidCheck">
+              Agree to terms and conditions
+            </label>
+            <div class="invalid-feedback">
+              You must agree before submitting.
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <button
+            class="btn btn-primary call-to-action-button mt-3"
+            type="submit"
+          >
+            Make Reservation
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-md-2"></div>
+  </div>
+</section>
+
+{{ end }} {{define "js" }}
+<script src="/static/js/reservation.js"></script>
+{{ end }}
