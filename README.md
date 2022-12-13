@@ -72,11 +72,8 @@ Make the templates recognize the static folder to use its contents (eg images)
 We can write our own middleware for `chi` package in this file.
 
 - `next` is commonly used as the parameter for custome middleware
-
 - `NoSurf` middleware adds CSRF protection to all POST request - `func NoSurf(next http.Handler) http.Handler`
-
 - `SessionLoad` middleware makes our server to be 'state' aware, in order to keep our session in state `func (next http.Handler) http.Handler`
-
 - `LoadAndSave` provides middleware which automatically loads and saves session data for the current request, and communicates the session token to and from the client in a cookie.
 
 ### The config.go file 
