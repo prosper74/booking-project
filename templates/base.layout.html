@@ -300,21 +300,19 @@
             confirmButtonText: "Submit",
             showCancelButton: true,
             willOpen: () => {
-              const elem = document.getElementById("reservation-dates-modal");
-              const datepicker = new DateRangePicker(elem, {
-                format: "dd-mm-yyyy",
-                showOnFocus: true,
-              });
+              if (c.willOpen !== undefined) {
+                c.willOpen();
+              }
             },
             didOpen: () => {
-              document.getElementById("start").removeAttribute("disabled");
-              document.getElementById("end").removeAttribute("disabled");
+              if (c.didOpen !== undefined) {
+                c.didOpen();
+              }
             },
             preConfirm: () => {
-              return [
-                document.getElementById("start").value,
-                document.getElementById("end").value,
-              ];
+              if (c.preConfirm !== undefined) {
+                c.preConfirm();
+              }
             },
           });
 

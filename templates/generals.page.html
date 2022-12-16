@@ -79,8 +79,34 @@ end }} {{ define "css" }}
       Prompt().customModal({
         title: "Check Availability",
         message,
+        willOpen: () => {
+          const elem = document.getElementById("reservation-dates-modal");
+          const datepicker = new DateRangePicker(elem, {
+            format: "dd-mm-yyyy",
+            showOnFocus: true,
+          });
+        },
+        didOpen: () => {
+          document.getElementById("start").removeAttribute("disabled");
+          document.getElementById("end").removeAttribute("disabled");
+        },
+        preConfirm: () => {
+          return [
+            document.getElementById("start").value,
+            document.getElementById("end").value,
+          ];
+        },
         callback: () => {
-          fetch("/reservation-json")
+          const availabilityForm = document.getElementById("availability-form");
+          // Get the form inputs data
+          const formData = new FormData(availabilityForm);
+          // Add the CSRFToken to the form data
+          formData.append("csrf_token", "{{.CSRFToken}}");
+
+          fetch("/reservation-json", {
+            method: "post",
+            body: formData,
+          })
             .then((response) => response.json())
             .then((data) => console.log(data))
             .catch((err) => console.log(err));
