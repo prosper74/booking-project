@@ -25,7 +25,7 @@ define "css" }}
             type="text"
             name="start"
             class="form-control"
-            id="start-date"
+            id="start"
             placeholder="dd/mm/yyyy"
             autocomplete="off"
             required
@@ -38,7 +38,7 @@ define "css" }}
             type="text"
             name="end"
             class="form-control"
-            id="end-date"
+            id="end"
             placeholder="dd/mm/yyyy"
             autocomplete="off"
             required
@@ -46,6 +46,7 @@ define "css" }}
           <div class="invalid-feedback">Depature date is required.</div>
         </div>
         <div class="col-12">
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
           <button
             class="btn btn-primary call-to-action-button mt-3"
             type="submit"
@@ -61,7 +62,6 @@ define "css" }}
 </section>
 
 {{ end }} {{define "js" }}
-<script src="/static/js/reservation.js"></script>
 <script>
   // date picker
   const elem = document.getElementById("availability-form");

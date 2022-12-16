@@ -32,12 +32,60 @@ end }} {{ define "css" }}
   </button>
 </section>
 {{ end }} {{define "js" }}
-<script src="/static/js/reservation.js"></script>
 <script>
   document
     .getElementById("availability")
     .addEventListener("click", function () {
-      Prompt().customModal({ title: "Check Availability", html });
+      const message = `
+        <form
+          id="availability-form"
+          action=""
+          method="POST"
+          class="needs-validation"
+          novalidate
+        >
+          <div class="form-row">
+            <div class="col">
+              <div class="form-row" id="reservation-dates-modal">
+                <div class="col mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="start"
+                    id="start"
+                    placeholder="Arrival date"
+                    autocomplete="off"
+                    required
+                    disabled
+                  />
+                </div>
+                <div class="col">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="end"
+                    id="end"
+                    placeholder="Depature date"
+                    autocomplete="off"
+                    required
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      `;
+      Prompt().customModal({
+        title: "Check Availability",
+        message,
+        callback: () => {
+          fetch("/reservation-json")
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            .catch((err) => console.log(err));
+        },
+      });
     });
 </script>
 {{ end }}

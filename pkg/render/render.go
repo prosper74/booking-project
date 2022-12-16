@@ -10,6 +10,7 @@ import (
 
 	"github.com/atuprosper/booking-project/pkg/config"
 	"github.com/atuprosper/booking-project/pkg/models"
+	"github.com/justinas/nosurf"
 )
 
 var functions = template.FuncMap{}
@@ -20,11 +21,13 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	// Generate CSRFToken from nosurf
+	td.CSRFToken = nosurf.Token(r)
 	return td
 }
 
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 
 	var tc map[string]*template.Template
 
@@ -46,7 +49,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 	buf := new(bytes.Buffer)
 
 	// Before we execute the buffer, we want to attach the AddDefaultData
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 
 	//Execeute the tamplate file and put it in the buffer
 	_ = t.Execute(buf, td)
