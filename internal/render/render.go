@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/atuprosper/booking-project/pkg/config"
-	"github.com/atuprosper/booking-project/pkg/models"
+	"github.com/atuprosper/booking-project/internal/config"
+	"github.com/atuprosper/booking-project/internal/models"
 	"github.com/justinas/nosurf"
 )
 

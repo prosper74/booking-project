@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/atuprosper/booking-project/pkg/config"
-	"github.com/atuprosper/booking-project/pkg/handlers"
-	"github.com/atuprosper/booking-project/pkg/render"
+	"github.com/atuprosper/booking-project/internal/config"
+	"github.com/atuprosper/booking-project/internal/handlers"
+	"github.com/atuprosper/booking-project/internal/render"
 )
 
 const port = ":8080"
