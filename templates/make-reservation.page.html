@@ -14,16 +14,29 @@ define "css" }}
     <div class="col-md-2"></div>
 
     <div class="col-md-8 mb-md-0 mb-5">
-      <form class="row g-3 needs-validation" novalidate>
+      <form action="/make-reservation" method="post" class="row g-3" novalidate>
+        <!-- needs-validation -->
         <div class="col-md-6">
           <label for="first-name" class="form-label">First name</label>
-          <input type="text" class="form-control" id="first-name" required />
+          <input
+            type="text"
+            class="form-control"
+            id="first-name"
+            name="first-name"
+            required
+          />
           <div class="valid-feedback">Looks good!</div>
           <div class="invalid-feedback">First name is required.</div>
         </div>
         <div class="col-md-6">
           <label for="last-name" class="form-label">Last name</label>
-          <input type="text" class="form-control" id="last-name" required />
+          <input
+            type="text"
+            class="form-control"
+            id="last-name"
+            name="last-name"
+            required
+          />
           <div class="valid-feedback">Looks good!</div>
           <div class="invalid-feedback">Last name is required.</div>
         </div>
@@ -35,6 +48,7 @@ define "css" }}
               type="email"
               class="form-control"
               id="email"
+              name="email"
               aria-describedby="inputGroupPrepend"
               required
             />
@@ -43,7 +57,13 @@ define "css" }}
         </div>
         <div class="col-md-6">
           <label for="phone" class="form-label">Phone Number</label>
-          <input type="number" class="form-control" id="phone" required />
+          <input
+            type="number"
+            class="form-control"
+            id="phone"
+            name="phone"
+            required
+          />
           <div class="invalid-feedback">
             Please provide a valid phone number.
           </div>
@@ -54,10 +74,11 @@ define "css" }}
               class="form-check-input"
               type="checkbox"
               value=""
-              id="invalidCheck"
+              id="agreement"
+              name="agreement"
               required
             />
-            <label class="form-check-label" for="invalidCheck">
+            <label class="form-check-label" for="agreement">
               Agree to terms and conditions
             </label>
             <div class="invalid-feedback">
@@ -65,6 +86,7 @@ define "css" }}
             </div>
           </div>
         </div>
+        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
         <div class="col-12">
           <button
             class="btn btn-primary call-to-action-button mt-3"

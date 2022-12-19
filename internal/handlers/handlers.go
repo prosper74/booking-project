@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/atuprosper/booking-project/internal/config"
+	"github.com/atuprosper/booking-project/internal/forms"
 	"github.com/atuprosper/booking-project/internal/models"
 	"github.com/atuprosper/booking-project/internal/render"
 )
@@ -96,5 +97,11 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{})
+	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
+func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request) {
+
 }
