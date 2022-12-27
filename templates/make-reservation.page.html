@@ -14,23 +14,28 @@ define "css" }}
     <div class="col-md-2"></div>
 
     <div class="col-md-8 mb-md-0 mb-5">
+      {{$reservation := index .Data "reservation"}}
       <form action="/make-reservation" method="post" class="row g-3" novalidate>
         <!-- needs-validation -->
         <div class="col-md-6">
           <label for="first-name" class="form-label">First name</label>
           <input type="text" class="form-control {{with .Form.Errors.Get
           "first_name"}} is-invalid {{end}}" id="first-name" name="first_name"
-          required />
+          value="{{$reservation.FirstName}}" required />
           <div class="valid-feedback">Looks good!</div>
-          <div class="invalid-feedback">First name is required.</div>
+          <div class="invalid-feedback">
+            {{with .Form.Errors.Get "first_name"}} {{.}} {{end}}
+          </div>
         </div>
         <div class="col-md-6">
           <label for="last-name" class="form-label">Last name</label>
           <input type="text" class="form-control {{with .Form.Errors.Get
           "last_name"}} is-invalid {{end}}" id="last-name" name="last_name"
-          required />
+          value="{{$reservation.LastName}}" required />
           <div class="valid-feedback">Looks good!</div>
-          <div class="invalid-feedback">Last name is required.</div>
+          <div class="invalid-feedback">
+            {{with .Form.Errors.Get "last_name"}} {{.}} {{end}}
+          </div>
         </div>
         <div class="col-md-6">
           <label for="email" class="form-label">Email</label>
@@ -38,34 +43,20 @@ define "css" }}
             <span class="input-group-text" id="inputGroupPrepend">📧</span>
             <input type="email" class="form-control {{with .Form.Errors.Get
             "email"}} is-invalid {{end}}" id="email" name="email"
-            aria-describedby="inputGroupPrepend" required />
-            <div class="invalid-feedback">Please input a valid email.</div>
+            value="{{$reservation.Email}}" aria-describedby="inputGroupPrepend"
+            required />
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "email"}} {{.}} {{end}}
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <label for="phone" class="form-label">Phone number</label>
           <input type="number" class="form-control {{with .Form.Errors.Get
-          "phone"}} is-invalid {{end}}" id="phone" name="phone" required />
+          "phone"}} is-invalid {{end}}" id="phone" name="phone"
+          value="{{$reservation.Phone}}" required />
           <div class="invalid-feedback">
-            Please provide a valid phone number.
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="agreement"
-              name="agreement"
-              required
-            />
-            <label class="form-check-label" for="agreement">
-              Agree to terms and conditions
-            </label>
-            <div class="invalid-feedback">
-              You must agree before submitting.
-            </div>
+            {{with .Form.Errors.Get "phone"}} {{.}} {{end}}
           </div>
         </div>
         <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
