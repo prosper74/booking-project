@@ -18,25 +18,17 @@ define "css" }}
         <!-- needs-validation -->
         <div class="col-md-6">
           <label for="first-name" class="form-label">First name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="first-name"
-            name="first-name"
-            required
-          />
+          <input type="text" class="form-control {{with .Form.Errors.Get
+          "first_name"}} is-invalid {{end}}" id="first-name" name="first_name"
+          required />
           <div class="valid-feedback">Looks good!</div>
           <div class="invalid-feedback">First name is required.</div>
         </div>
         <div class="col-md-6">
           <label for="last-name" class="form-label">Last name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="last-name"
-            name="last-name"
-            required
-          />
+          <input type="text" class="form-control {{with .Form.Errors.Get
+          "last_name"}} is-invalid {{end}}" id="last-name" name="last_name"
+          required />
           <div class="valid-feedback">Looks good!</div>
           <div class="invalid-feedback">Last name is required.</div>
         </div>
@@ -44,26 +36,16 @@ define "css" }}
           <label for="email" class="form-label">Email</label>
           <div class="input-group has-validation">
             <span class="input-group-text" id="inputGroupPrepend">📧</span>
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              aria-describedby="inputGroupPrepend"
-              required
-            />
+            <input type="email" class="form-control {{with .Form.Errors.Get
+            "email"}} is-invalid {{end}}" id="email" name="email"
+            aria-describedby="inputGroupPrepend" required />
             <div class="invalid-feedback">Please input a valid email.</div>
           </div>
         </div>
         <div class="col-md-6">
-          <label for="phone" class="form-label">Phone Number</label>
-          <input
-            type="number"
-            class="form-control"
-            id="phone"
-            name="phone"
-            required
-          />
+          <label for="phone" class="form-label">Phone number</label>
+          <input type="number" class="form-control {{with .Form.Errors.Get
+          "phone"}} is-invalid {{end}}" id="phone" name="phone" required />
           <div class="invalid-feedback">
             Please provide a valid phone number.
           </div>

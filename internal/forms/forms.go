@@ -11,6 +11,11 @@ type Form struct {
 	Errors errors
 }
 
+// Valid, returns true if there are errors, otherwise return false
+func (f *Form) Valid() bool {
+	return len(f.Errors) == 0
+}
+
 // New, initializes a form struct
 func New(data url.Values) *Form {
 	return &Form{
@@ -20,11 +25,11 @@ func New(data url.Values) *Form {
 }
 
 // HasField, checks if form field is in post and is not empty
-func (f *Form) HasField(field string, req *http.Request) bool {
-	x := req.Form.Get(field)
-	return x != ""
-	// if x == "" {
-	// return false
-	// }
-	// return true
+func (f *Form) HasField(field string, r *http.Request) bool {
+	x := r.Form.Get(field)
+	if x == "" {
+		f.Errors.Add(field, "This field is required")
+		return false
+	}
+	return true
 }
