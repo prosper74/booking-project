@@ -22,6 +22,11 @@ func NewTemplates(a *config.AppConfig) {
 }
 
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	// PopString puts data into our session until a new page is loaded
+	td.Flash = app.Session.PopString(r.Context(), "flash")
+	td.Error = app.Session.PopString(r.Context(), "error")
+	td.Warning = app.Session.PopString(r.Context(), "warning")
+
 	// Generate CSRFToken from nosurf
 	td.CSRFToken = nosurf.Token(r)
 	return td

@@ -49,7 +49,9 @@
       style="background-color: #7431f8"
     >
       <div class="container container-fluid">
-        <a class="navbar-brand" href="/">Hotel</a>
+        <a class="navbar-brand" href="/"
+          ><img src="/static/images/logo.svg" alt="Hotel logo" width="170px"
+        /></a>
         <button
           class="navbar-toggler"
           type="button"
@@ -267,6 +269,7 @@
             showConfirmButton = false,
             confirmButtonText = "Got it",
           } = c;
+          
           const Toast = Swal.mixin({
             toast: true,
             title,
