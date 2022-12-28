@@ -1,0 +1,61 @@
+{{ template "base" .}} {{ define "title" }} Reservation Summary {{ end }} {{
+define "css"}}
+<link
+  href="/static/css/reservation_summary.css"
+  rel="stylesheet"
+  type="text/css"
+/>
+{{ end }} {{define "content" }} {{$res := index .Data "reservation"}}
+<section class="container">
+  <div class="mt-5 wrapper">
+    <h1>Reservation Summary</h1>
+    <svg
+      class="checkmark"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 52 52"
+    >
+      <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+      <path
+        class="checkmark__check"
+        fill="none"
+        d="M14.1 27.2l7.1 7.2 16.7-16.8"
+      />
+    </svg>
+  </div>
+  <hr />
+
+  <div class="row">
+    <div class="col">
+      <table class="table table-striped">
+        <thead></thead>
+        <tbody>
+          <tr>
+            <td>Name:</td>
+            <td>{{$res.FirstName}} {{$res.LastName}}</td>
+          </tr>
+          <tr>
+            <td>Room:</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Arrival:</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Departure:</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Email:</td>
+            <td>{{$res.Email}}</td>
+          </tr>
+          <tr>
+            <td>Phone:</td>
+            <td>{{$res.Phone}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{{ end }}

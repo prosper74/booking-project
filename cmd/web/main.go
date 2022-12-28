@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/atuprosper/booking-project/internal/config"
 	"github.com/atuprosper/booking-project/internal/handlers"
+	"github.com/atuprosper/booking-project/internal/models"
 	"github.com/atuprosper/booking-project/internal/render"
 )
 
@@ -19,6 +21,10 @@ var session *scs.SessionManager
 
 func main() {
 	app.InPrduction = false
+
+	// Things to be stored in the session
+	// gob, is a built in library used for stroing sessions
+	gob.Register(models.Reservation{})
 
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
