@@ -28,7 +28,7 @@ func New(data url.Values) *Form {
 	}
 }
 
-// Required checks for required fields using a varietic function (...string). that is our function can have many types of string, where some maybe required while some won't
+// Required checks for required fields using a Variadic function (...string). that is our function can have many types of string, where some maybe required while some won't
 func (f *Form) Required(fields ...string) {
 	for _, field := range fields {
 		value := f.Get(field)
