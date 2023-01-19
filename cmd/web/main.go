@@ -39,7 +39,7 @@ func main() {
 }
 
 func run() error {
-	app.InPrduction = false
+	app.InProduction = false
 
 	// Things to be stored in the session
 	// gob, is a built in library used for stroing sessions
@@ -49,7 +49,7 @@ func run() error {
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
 	session.Cookie.SameSite = http.SameSiteLaxMode
-	session.Cookie.Secure = app.InPrduction
+	session.Cookie.Secure = app.InProduction
 
 	app.Session = session
 

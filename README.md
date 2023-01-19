@@ -39,7 +39,7 @@ This is where we create and configure our session
 	
 - To set the strictness of the session, we use `session.Cookie.SameSite = http.SameSiteLaxMode`
 	
-- To make sure the connection is encrypted (i.e https), we use `session.Cookie.Secure = app.InPrduction`. In production, this should be true. In development, set it to false. Note that `app.InProduction` is set in the site wide `config.go` file
+- To make sure the connection is encrypted (i.e https), we use `session.Cookie.Secure = app.InProduction`. In production, this should be true. In development, set it to false. Note that `app.InProduction` is set in the site wide `config.go` file
 
 - Finally, we make our session available site wide by passing it to `app.Session = session`
 
