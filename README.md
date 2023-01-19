@@ -88,3 +88,7 @@ We create this seperate file to avoid Go `import cycle not allowed error`
 - `TemplateData struct` is a struct that holds data sent from handlers to templates
 - `interface{}` type is used when the type is not known
 - Cross Site Request Forgery Token (CSRFToken) - is a security token to handle forms
+
+### The test file 
+- To output test in hmtl format run `go test -coverprofile=coverage.out && go tool cover -html=coverage.out`
+- To know the percentage coverage run `go test -cover`
