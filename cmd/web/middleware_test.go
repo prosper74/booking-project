@@ -6,14 +6,27 @@ import (
 	"testing"
 )
 
-func TestNoSurf(t *testing.T) {
+func TestNoSurf(testPointer *testing.T) {
 	var handlerObject myHandler
-	h := NoSurf(&handlerObject)
+	testHandler := NoSurf(&handlerObject)
 
-	switch v := h.(type) {
+	// return the type of the handler 
+	switch handlerType := testHandler.(type) {
 	case http.Handler:
 		// do nothing
 	default:
-		t.Error(fmt.Sprintf("type is not http.Handler but is %T", v))
+		testPointer.Error(fmt.Sprintf("type is not http.Handler but is %T", handlerType))
+	}
+}
+
+func TestSessionLoad(testPointer *testing.T) {
+	var handlerObject myHandler
+	testHandler := SessionLoad(&handlerObject)
+
+	switch handlerType := testHandler.(type) {
+	case http.Handler:
+		// do nothing
+	default:
+		testPointer.Error(fmt.Sprintf("type is not http.Handler but is %T", handlerType))
 	}
 }
