@@ -19,7 +19,14 @@ var theTests = []struct {
 	params             []postData
 	expectedStatusCode int
 }{
-	{"home", "/", "GET", []postData{}, http.StatusOK},
+	{"home", "/", "GET", []postData{}, http.StatusOK},	
+	{"about", "/about", "GET", []postData{}, http.StatusOK},
+	{"contact", "/contact", "GET", []postData{}, http.StatusOK},
+	{"alpine", "/alpine", "GET", []postData{}, http.StatusOK},
+	{"generals", "/generals", "GET", []postData{}, http.StatusOK},
+	{"reservation", "/reservation", "GET", []postData{}, http.StatusOK},
+	{"make-reservation", "/make-reservation", "GET", []postData{}, http.StatusOK},
+	{"reservation-summary", "/reservation-summary", "GET", []postData{}, http.StatusOK},
 }
 
 func TestHandlers(testPointer *testing.T) {
