@@ -26,6 +26,9 @@ This project is a simple hotel booking and reservation project with key features
 - Change the name of every import to your current go mod name. Example, open the main.go file, in the `required imports` section, replace these "github.com/atuprosper/go-project/pkg/config" to "github.com/atuprosper/your-project-name/pkg/config". Go through all files and make this replacement
 - After all the necessary changes, run the app `go run cmd/web/*.go` this will install all the third party packages and run the server on the selected port.
 
+### Run the server
+- Manual: `go run cmd/web/main.go cmd/web/middleware.go cmd/web/routes.go`
+
 ### The main.go file
 This is where we create and configure our session
 
