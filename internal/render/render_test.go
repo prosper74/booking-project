@@ -24,6 +24,34 @@ func TestAddDefaultData(test *testing.T) {
 
 }
 
+func TestRenderTemplate(test *testing.T) {
+	pathToTemplates = "./../../templates"
+	tc, err := CreateTemplateCache()
+	if err != nil {
+		test.Error(err)
+	}
+
+	app.TemplateCache = tc
+
+	sessionRequest, err := getSession()
+	if err != nil {
+		test.Error(err)
+	}
+
+	var writer myWriter
+
+	err = RenderTemplate(&writer, sessionRequest, "home.page.html", &models.TemplateData{})
+	if err != nil {
+		test.Error("error writing template to browser", err)
+	}
+
+	err = RenderTemplate(&writer, sessionRequest, "non-existent.page.html", &models.TemplateData{})
+	if err == nil {
+		test.Error("rendered template that does not exist")
+	}
+
+}
+
 func getSession() (*http.Request, error) {
 	request, err := http.NewRequest("GET", "/some-url", nil)
 	if err != nil {
@@ -34,4 +62,17 @@ func getSession() (*http.Request, error) {
 	requestContext, _ = session.Load(requestContext, request.Header.Get("X-Session"))
 	request = request.WithContext(requestContext)
 	return request, nil
+}
+
+func TestNewTemplates(t *testing.T) {
+	NewTemplates(app)
+}
+
+func TestCreateTemplateCache(test *testing.T) {
+	pathToTemplates = "./../../templates"
+
+	_, err := CreateTemplateCache()
+	if err != nil {
+		test.Error(err)
+	}
 }
