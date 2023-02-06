@@ -29,6 +29,10 @@ This project is a simple hotel booking and reservation project with key features
 ### Run the server
 - Manual: `go run cmd/web/main.go cmd/web/middleware.go cmd/web/routes.go`
 
+### The test file 
+- To output test in hmtl format run `go test -coverprofile=coverage.out && go tool cover -html=coverage.out`
+- To know the percentage coverage run `go test -cover`
+
 ### The main.go file
 This is where we create and configure our session
 
