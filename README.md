@@ -28,6 +28,22 @@ This project is a simple hotel booking and reservation project with key features
 
 ### Run the server
 - Manual: `go run cmd/web/main.go cmd/web/middleware.go cmd/web/routes.go`
+- Batch: On Windows - create a `run.bat` file in the root directory of the project and paste the below code
+  ```
+  go build -o booking-project cmd/web/*.go
+  booking-project
+  ```
+
+  Then run `run.bat` in the terminal
+
+  On linux - create a `run.sh` file in the root directory of the project and paste the below code
+  ```
+  #!/bin/bash
+  go build -o booking-project cmd/web/*.go
+  booking-project
+  ```
+
+  Run `chmod +x run.sh` then run `run.bat` in the terminal
 
 ### The test file 
 - To output test in hmtl format run `go test -coverprofile=coverage.out && go tool cover -html=coverage.out`
