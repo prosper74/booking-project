@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/atuprosper/booking-project/internal/config"
 	"github.com/atuprosper/booking-project/internal/handlers"
+	"github.com/atuprosper/booking-project/internal/helpers"
 	"github.com/atuprosper/booking-project/internal/models"
 	"github.com/atuprosper/booking-project/internal/render"
 )
@@ -18,6 +20,8 @@ const port = ":8080"
 
 var app config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 func main() {
 
@@ -45,6 +49,12 @@ func run() error {
 	// gob, is a built in library used for stroing sessions
 	gob.Register(models.Reservation{})
 
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
@@ -70,6 +80,9 @@ func run() error {
 
 	// Render the NewTemplates and add a reference to the AppConfig
 	render.NewTemplates(&app)
+
+	// Pass the app config to the helpers
+	helpers.NewHelpers(&app)
 
 	return nil
 }
