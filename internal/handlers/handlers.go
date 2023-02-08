@@ -2,12 +2,14 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/atuprosper/booking-project/internal/config"
 	"github.com/atuprosper/booking-project/internal/forms"
+	"github.com/atuprosper/booking-project/internal/helpers"
 	"github.com/atuprosper/booking-project/internal/models"
 	"github.com/atuprosper/booking-project/internal/render"
 )
@@ -31,19 +33,7 @@ func NewHandlers(r *Repository) {
 }
 
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	remoteIP := r.RemoteAddr
-	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
-
-	//Perform some logic
-	stringMap := make(map[string]string)
-
-	getRemoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
-	stringMap["remote_ip"] = getRemoteIP
-
-	// Send the data to the template
-	render.RenderTemplate(w, r, "home.page.html", &models.TemplateData{
-		StringMap: stringMap,
-	})
+	render.RenderTemplate(w, r, "home.page.html", &models.TemplateData{})
 }
 
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
