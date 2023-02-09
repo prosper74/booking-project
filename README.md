@@ -48,6 +48,7 @@ This project is a simple hotel booking and reservation project with key features
 ### The test file 
 - To output test in hmtl format run `go test -coverprofile=coverage.out && go tool cover -html=coverage.out`
 - To know the percentage coverage run `go test -cover`
+- Run test for the entire project `go test -v ./...`
 
 ### The main.go file
 This is where we create and configure our session
