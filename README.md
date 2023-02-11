@@ -50,6 +50,12 @@ This project is a simple hotel booking and reservation project with key features
 - To know the percentage coverage run `go test -cover`
 - Run test for the entire project `go test -v ./...`
 
+### Soda migration 
+- run `soda generate fizz migration-name` in the terminal, to create the migration folder and files
+- The up file is used to create or update while the down file is used to delete or downgrade
+- run `soda migrate` to run the migration files
+- run `soda migrate down` to run the down migration files
+
 ### The main.go file
 This is where we create and configure our session
 
