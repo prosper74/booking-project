@@ -51,7 +51,7 @@ This project is a simple hotel booking and reservation project with key features
 - Run test for the entire project `go test -v ./...`
 
 ### Soda migration 
-- run `soda generate fizz migration-name` in the terminal, to create the migration folder and files
+- run `soda generate fizz migration-name` in the terminal, to create the migration folder and files. Run this code to create migration files for each table
 - The up file is used to create or update while the down file is used to delete or downgrade
 - run `soda migrate` to run the migration files
 - run `soda migrate down` to run the down migration files
