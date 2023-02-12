@@ -55,6 +55,7 @@ This project is a simple hotel booking and reservation project with key features
 - The up file is used to create or update while the down file is used to delete or downgrade
 - run `soda migrate` to run the migration files
 - run `soda migrate down` to run the down migration files
+- run `soda reset` to drop everything in the database and create the migration again
 
 ### The main.go file
 This is where we create and configure our session
