@@ -19,6 +19,7 @@ This project is a simple hotel booking and reservation project with key features
 - [Alex Edwards SCS](https://github.com/alexedwards/scs/v2) package for managing sessions
 - [Chi router](https://github.com/go-chi/chi/v5)
 - [Justinas nosurf](https://github.com/justinas/nosurf)
+- [JackC PGX](https://github.com/jackc/pgx/v5) pgx is a pure Go driver and toolkit for PostgreSQL.
 
 ### Note: 
 - Create your own go mod file and delete the one used here, run the following command `go mod init your-project-name`
