@@ -10,6 +10,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/atuprosper/booking-project/internal/config"
+	"github.com/atuprosper/booking-project/internal/driver"
 	"github.com/atuprosper/booking-project/internal/handlers"
 	"github.com/atuprosper/booking-project/internal/helpers"
 	"github.com/atuprosper/booking-project/internal/models"
@@ -25,11 +26,14 @@ var errorLog *log.Logger
 
 func main() {
 
-	err := run()
+	connectedDB, err := run()
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Close database connection when main function finish running
+	defer connectedDB.SQL.Close()
 
 	fmt.Println(fmt.Sprintf("Server started at port %s", port))
 	// Create a variable to serve the routes
@@ -42,7 +46,7 @@ func main() {
 	log.Fatal(err)
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	app.InProduction = false
 
 	// Things to be stored in the session
@@ -63,17 +67,24 @@ func run() error {
 
 	app.Session = session
 
+	// Connect to database
+	log.Println("Connecting to database...")
+	connectedDB, err := driver.ConnectSQL("host=localhost port=5432 dbname=database_connect user=postgres password=")
+	if err != nil {
+		log.Fatal("Cannot connect to database. Closing application")
+	}
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("Cannot create template cache")
-		return err
+		return nil, err
 	}
 
 	app.TemplateCache = tc
 	app.UseCache = false
 
 	// Variable to reference our app
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, connectedDB)
 
 	// Pass the repo variable back to the new handler
 	handlers.NewHandlers(repo)
@@ -84,5 +95,5 @@ func run() error {
 	// Pass the app config to the helpers
 	helpers.NewHelpers(&app)
 
-	return nil
+	return connectedDB, nil
 }

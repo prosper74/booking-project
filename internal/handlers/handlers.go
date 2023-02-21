@@ -6,22 +6,27 @@ import (
 	"net/http"
 
 	"github.com/atuprosper/booking-project/internal/config"
+	"github.com/atuprosper/booking-project/internal/driver"
 	"github.com/atuprosper/booking-project/internal/forms"
 	"github.com/atuprosper/booking-project/internal/helpers"
 	"github.com/atuprosper/booking-project/internal/models"
 	"github.com/atuprosper/booking-project/internal/render"
+	"github.com/atuprosper/booking-project/internal/repository"
+	"github.com/atuprosper/booking-project/internal/repository/dbrepo"
 )
 
 var Repo *Repository
 
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // This function creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(appConfig *config.AppConfig, dbConnectionPool *driver.DB) *Repository {
 	return &Repository{
-		App: a,
+		App: appConfig,
+		DB:  dbrepo.NewPostgresRepo(dbConnectionPool.SQL, appConfig),
 	}
 }
 
