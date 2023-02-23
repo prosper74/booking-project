@@ -12,6 +12,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/atuprosper/booking-project/internal/config"
+	"github.com/atuprosper/booking-project/internal/driver"
 	"github.com/atuprosper/booking-project/internal/models"
 	"github.com/atuprosper/booking-project/internal/render"
 	"github.com/go-chi/chi"
@@ -46,6 +47,11 @@ func getRoutes() http.Handler {
 
 	app.Session = session
 
+	connectedDB, err := driver.ConnectSQL("host=localhost port=5432 dbname=database_connect user=postgres password=")
+	if err != nil {
+		log.Fatal("Cannot connect to database. Closing application")
+	}
+
 	tc, err := CreateTestTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
@@ -54,7 +60,7 @@ func getRoutes() http.Handler {
 	app.TemplateCache = tc
 	app.UseCache = true
 
-	repo := NewRepo(&app)
+	repo := NewRepo(&app, connectedDB)
 	NewHandlers(repo)
 
 	render.NewTemplates(&app)
