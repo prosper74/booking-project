@@ -95,7 +95,7 @@ func run() (*driver.DB, error) {
 	handlers.NewHandlers(repo)
 
 	// Render the NewTemplates and add a reference to the AppConfig
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 
 	// Pass the app config to the helpers
 	helpers.NewHelpers(&app)
