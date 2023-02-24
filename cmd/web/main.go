@@ -50,8 +50,11 @@ func run() (*driver.DB, error) {
 	app.InProduction = false
 
 	// Things to be stored in the session
-	// gob, is a built in library used for stroing sessions
+	// gob, is a built in library used for storing sessions
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
 
 	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	app.InfoLog = infoLog
