@@ -27,6 +27,7 @@ define "css" }}
             {{with .Form.Errors.Get "first_name"}} {{.}} {{end}}
           </div>
         </div>
+
         <div class="col-md-6">
           <label for="last-name" class="form-label">Last name</label>
           <input type="text" class="form-control {{with .Form.Errors.Get
@@ -37,6 +38,29 @@ define "css" }}
             {{with .Form.Errors.Get "last_name"}} {{.}} {{end}}
           </div>
         </div>
+
+        <div class="col-md-6">
+          <label for="start-date" class="form-label">Start Date</label>
+          <input
+            type="text"
+            id="start-date"
+            class="form-control"
+            name="start_date"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <label for="end-date" class="form-label">End Date</label>
+          <input
+            type="text"
+            id="end-date"
+            class="form-control"
+            name="end_date"
+          />
+        </div>
+
+        <input type="hidden" name="room_id" value="1" />
+
         <div class="col-md-6">
           <label for="email" class="form-label">Email</label>
           <div class="input-group has-validation">
@@ -50,6 +74,7 @@ define "css" }}
             </div>
           </div>
         </div>
+
         <div class="col-md-6">
           <label for="phone" class="form-label">Phone number</label>
           <input type="number" class="form-control {{with .Form.Errors.Get
@@ -59,7 +84,9 @@ define "css" }}
             {{with .Form.Errors.Get "phone"}} {{.}} {{end}}
           </div>
         </div>
+
         <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+
         <div class="col-12">
           <button
             class="btn btn-primary call-to-action-button mt-3"
