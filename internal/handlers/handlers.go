@@ -156,7 +156,7 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	newReservation, err := m.DB.InsertReservation(reservation)
+	newReservationId, err := m.DB.InsertReservation(reservation)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -166,7 +166,7 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 		StartDate:     startDate,
 		EndDate:       endDate,
 		RoomID:        roomId,
-		ReservationID: newReservation,
+		ReservationID: newReservationId,
 		RestrictionID: 1,
 	}
 
