@@ -47,7 +47,7 @@ func getRoutes() http.Handler {
 
 	app.Session = session
 
-	connectedDB, err := driver.ConnectSQL("host=localhost port=5432 dbname=database_connect user=postgres password=")
+	connectedDB, err := driver.ConnectSQL("host=localhost port=5432 dbname=test_database user=postgres password=")
 	if err != nil {
 		log.Fatal("Cannot connect to database. Closing application")
 	}
