@@ -143,14 +143,14 @@ func (repo *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 }
 
 // GetUserByID returns a user by id
-func (m *postgresDBRepo) GetUserByID(id int) (models.User, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+func (repo *postgresDBRepo) GetUserByID(id int) (models.User, error) {
+	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	query := `select id, first_name, last_name, email, password, access_level, created_at, updated_at
 			from users where id = $1`
 
-	row := m.DB.QueryRowContext(ctx, query, id)
+	row := repo.DB.QueryRowContext(context, query, id)
 
 	var u models.User
 	err := row.Scan(
@@ -172,15 +172,15 @@ func (m *postgresDBRepo) GetUserByID(id int) (models.User, error) {
 }
 
 // UpdateUser updates a user in the database
-func (m *postgresDBRepo) UpdateUser(u models.User) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+func (repo *postgresDBRepo) UpdateUser(u models.User) error {
+	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	query := `
 		update users set first_name = $1, last_name = $2, email = $3, access_level = $4, updated_at = $5
 `
 
-	_, err := m.DB.ExecContext(ctx, query,
+	_, err := repo.DB.ExecContext(context, query,
 		u.FirstName,
 		u.LastName,
 		u.Email,
@@ -196,14 +196,14 @@ func (m *postgresDBRepo) UpdateUser(u models.User) error {
 }
 
 // Authenticate authenticates a user
-func (m *postgresDBRepo) Authenticate(email, testPassword string) (int, string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+func (repo *postgresDBRepo) Authenticate(email, testPassword string) (int, string, error) {
+	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	var id int
 	var hashedPassword string
 
-	row := m.DB.QueryRowContext(ctx, "select id, password from users where email = $1", email)
+	row := repo.DB.QueryRowContext(context, "select id, password from users where email = $1", email)
 	err := row.Scan(&id, &hashedPassword)
 	if err != nil {
 		return id, "", err
@@ -220,8 +220,8 @@ func (m *postgresDBRepo) Authenticate(email, testPassword string) (int, string, 
 }
 
 // AllReservations returns a slice of all reservations
-func (m *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+func (repo *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
+	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	var reservations []models.Reservation
@@ -235,7 +235,7 @@ func (m *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
 		order by r.start_date asc
 `
 
-	rows, err := m.DB.QueryContext(ctx, query)
+	rows, err := repo.DB.QueryContext(context, query)
 	if err != nil {
 		return reservations, err
 	}
