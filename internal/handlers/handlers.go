@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -62,8 +61,8 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
-	start := r.Form.Get("start")
-	end := r.Form.Get("end")
+	// start := r.Form.Get("start")
+	// end := r.Form.Get("end")
 
 	startDate, err := time.Parse("02-01-2006", r.Form.Get("start"))
 	if err != nil {
@@ -91,6 +90,20 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/reservation", http.StatusSeeOther)
 		return
 	}
+
+	data := make(map[string]interface{})
+	data["rooms"] = rooms
+
+	reservationDates := models.Reservation{
+		StartDate: startDate,
+		EndDate:   endDate,
+	}
+
+	m.App.Session.Put(r.Context(), "reservation", reservationDates)
+
+	render.Template(w, r, "available-rooms.page.html", &models.TemplateData{
+		Data: data,
+	})
 
 }
 
