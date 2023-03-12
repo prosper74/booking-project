@@ -92,7 +92,6 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte(fmt.Sprintf("Start date is %s, End date is %s", start, end)))
 }
 
 // Availability json, to handle availability request and send back json

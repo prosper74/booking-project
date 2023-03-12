@@ -1,0 +1,46 @@
+{{ template "base" .}} {{ define "title" }} Welcome | We give you a home away
+from home {{ end }} {{ define "css" }}
+<link href="/static/css/index.css" rel="stylesheet" type="text/css" />
+{{ end }} {{ define "content" }}
+
+<!-- Rooms Showcase  -->
+<section class="container rooms-showcase">
+  <h2 class="">Available Rooms</h2>
+  <div class="rooms-showcase-container">
+    {{$rooms := index .Data "rooms"}} {{range $rooms}}
+    <div class="card border-0 me-lg-4 mb-lg-0 mb-4">
+      <div class="backgroundEffect"></div>
+      <div class="pic">
+        <img
+          class=""
+          src="static/images/room-images/room1.jpg"
+          alt="Room 1 image"
+        />
+        <div class="date">
+          <span class="day">Hot</span>
+          <span class="year">Deal</span>
+        </div>
+      </div>
+      <div class="content">
+        <p class="h-1 mt-4">{{.RoomName}}</p>
+        <p class="text-muted mt-3">
+          Far far away, behind the word mountains, far from the countries
+          Vokalia and Consonantia, there live the blind texts.
+        </p>
+        <div
+          class="d-flex align-items-center justify-content-between mt-3 pb-3"
+        >
+          <div class="btn btn-primary">
+            Book Now<span class="fas fa-arrow-right"></span>
+          </div>
+          <div class="d-flex align-items-center justify-content-center foot">
+            <p class="font-bold admin">$15</p>
+            <p class="icon text-muted">per night</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{end}}
+  </div>
+</section>
+{{ end }} {{define "js" }} {{ end }}
