@@ -64,6 +64,34 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
+
+	startDate, err := time.Parse("02-01-2006", r.Form.Get("start"))
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	endDate, err := time.Parse("02-01-2006", r.Form.Get("end"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	rooms, err := m.DB.SearchAvailabilityForAllRooms(startDate, endDate)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	for _, item := range rooms {
+		m.App.InfoLog.Println("ROOM:", item.ID, item.RoomName)
+	}
+
+	if len(rooms) == 0 {
+		m.App.Session.Put(r.Context(), "error", "No availabe rooms on the date selected")
+		http.Redirect(w, r, "/reservation", http.StatusSeeOther)
+		return
+	}
+
 	w.Write([]byte(fmt.Sprintf("Start date is %s, End date is %s", start, end)))
 }
 

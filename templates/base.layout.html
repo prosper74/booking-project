@@ -269,7 +269,7 @@
             showConfirmButton = false,
             confirmButtonText = "Got it",
           } = c;
-          
+
           const Toast = Swal.mixin({
             toast: true,
             title,
@@ -336,6 +336,20 @@
 
         return { toast, alertModal, customModal };
       };
+    </script>
+
+    <script>
+      {{with .Error}}
+        Prompt().toast({title: "{{.}}", icon: "error", timer: 6000, showConfirmButton: true, confirmButtonText: "Close"})
+      {{end}}
+
+      {{with .Flash}}
+        Prompt().toast({title: "{{.}}", icon: "success", timer: 6000, showConfirmButton: true, confirmButtonText: "Close"})
+      {{end}}
+
+      {{with .Warning}}
+        Prompt().toast({title: "{{.}}", icon: "warning", timer: 6000, showConfirmButton: true, confirmButtonText: "Close"})
+      {{end}}
     </script>
 
     {{block "js" .}} {{end}}
