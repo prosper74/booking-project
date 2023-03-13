@@ -5,7 +5,7 @@ from home {{ end }} {{ define "css" }}
 
 <!-- Rooms Showcase  -->
 <section class="container rooms-showcase">
-  <h2 class="">Available Rooms</h2>
+  <h2 class="text-center">Available Rooms</h2>
   <div class="rooms-showcase-container">
     {{$rooms := index .Data "rooms"}} {{range $rooms}}
     <a

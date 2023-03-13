@@ -4,17 +4,26 @@ define "css" }}
 {{ end }} {{ define "content" }}
 <!-- Make Reservation section  -->
 <section class="container contact-us">
+  {{$reservation := index .Data "reservation"}}
+
   <!--Section heading-->
   <h2 class="h1-responsive font-weight-bold text-center my-4">
     Make Reservation
   </h2>
+
+  <h4 class="h3-responsive font-weight-bold text-center mt-2">
+    Reservation Details
+  </h4>
+  <p class="text-center">
+    Start date: {{$reservation.StartDate}}<br />
+    Start date: {{$reservation.EndDate}}
+  </p>
 
   <div class="row">
     <!--Grid column-->
     <div class="col-md-2"></div>
 
     <div class="col-md-8 mb-md-0 mb-5">
-      {{$reservation := index .Data "reservation"}}
       <form action="/make-reservation" method="post" class="row g-3" novalidate>
         <!-- needs-validation -->
         <div class="col-md-6">
@@ -39,7 +48,7 @@ define "css" }}
           </div>
         </div>
 
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
           <label for="start-date" class="form-label">Start Date</label>
           <input
             type="text"
@@ -57,9 +66,15 @@ define "css" }}
             class="form-control"
             name="end_date"
           />
-        </div>
+        </div> -->
 
         <input type="hidden" name="room_id" value="1" />
+        <input
+          type="hidden"
+          name="start_date"
+          value="{{$reservation.StartDate}}"
+        />
+        <input type="hidden" name="end_date" value="{{$reservation.EndDate}}" />
 
         <div class="col-md-6">
           <label for="email" class="form-label">Email</label>

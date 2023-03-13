@@ -132,9 +132,15 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
-	var reservation models.Reservation
+	reservationInSession, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	
 	data := make(map[string]interface{})
-	data["reservation"] = reservation
+	data["reservation"] = reservationInSession
 
 	render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
 		Form: forms.New(nil),
