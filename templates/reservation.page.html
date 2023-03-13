@@ -67,6 +67,7 @@ define "css" }}
   const elem = document.getElementById("availability-form");
   const datepicker = new DateRangePicker(elem, {
     format: "dd-mm-yyyy",
+    minDate: new Date(),
   });
 </script>
 {{ end }}
