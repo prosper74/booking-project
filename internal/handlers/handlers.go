@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/atuprosper/booking-project/internal/config"
@@ -219,6 +220,33 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 	m.App.Session.Put(r.Context(), "reservation", reservation)
 
 	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
+}
+
+func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
+	// split the URL up by /, and grab the 3rd element
+	exploded := strings.Split(r.RequestURI, "/")
+	roomID, err := strconv.Atoi(exploded[2])
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "missing url parameter")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// Get the reservation in session
+	reservationInSession, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// Update the reservation by adding the room ID 
+	reservationInSession.RoomID = roomID
+
+	m.App.Session.Put(r.Context(), "reservation", reservationInSession)
+
+	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
+
 }
 
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {

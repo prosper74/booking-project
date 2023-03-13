@@ -8,7 +8,10 @@ from home {{ end }} {{ define "css" }}
   <h2 class="">Available Rooms</h2>
   <div class="rooms-showcase-container">
     {{$rooms := index .Data "rooms"}} {{range $rooms}}
-    <a href="/available-rooms/{{.ID}}" class="card border-0 me-lg-4 mb-lg-0 mb-4">
+    <a
+      href="/choose-room/{{.ID}}"
+      class="card border-0 me-lg-4 mb-lg-0 mb-4 text-decoration-none"
+    >
       <div class="backgroundEffect"></div>
       <div class="pic">
         <img
