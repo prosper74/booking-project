@@ -15,8 +15,9 @@ define "css" }}
     Reservation Details
   </h4>
   <p class="text-center">
-    Start date: {{$reservation.StartDate}}<br />
-    Start date: {{$reservation.EndDate}}
+    Room name: {{$reservation.Room.RoomName}}<br />
+    Arrival date: {{index .StringMap "start_date"}}<br />
+    Departure date: {{index .StringMap "end_date"}}
   </p>
 
   <div class="row">
@@ -25,6 +26,18 @@ define "css" }}
 
     <div class="col-md-8 mb-md-0 mb-5">
       <form action="/make-reservation" method="post" class="row g-3" novalidate>
+        <input type="hidden" name="room_id" value="{{$reservation.RoomID}}" />
+        <input
+          type="hidden"
+          name="start_date"
+          value='{{index .StringMap "start_date"}}'
+        />
+        <input
+          type="hidden"
+          name="end_date"
+          value='{{index .StringMap "end_date"}}'
+        />
+
         <!-- needs-validation -->
         <div class="col-md-6">
           <label for="first-name" class="form-label">First name</label>
@@ -47,34 +60,6 @@ define "css" }}
             {{with .Form.Errors.Get "last_name"}} {{.}} {{end}}
           </div>
         </div>
-
-        <!-- <div class="col-md-6">
-          <label for="start-date" class="form-label">Start Date</label>
-          <input
-            type="text"
-            id="start-date"
-            class="form-control"
-            name="start_date"
-          />
-        </div>
-
-        <div class="col-md-6">
-          <label for="end-date" class="form-label">End Date</label>
-          <input
-            type="text"
-            id="end-date"
-            class="form-control"
-            name="end_date"
-          />
-        </div> -->
-
-        <input type="hidden" name="room_id" value="1" />
-        <input
-          type="hidden"
-          name="start_date"
-          value="{{$reservation.StartDate}}"
-        />
-        <input type="hidden" name="end_date" value="{{$reservation.EndDate}}" />
 
         <div class="col-md-6">
           <label for="email" class="form-label">Email</label>

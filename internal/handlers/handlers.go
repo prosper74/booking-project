@@ -62,8 +62,6 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
-	// start := r.Form.Get("start")
-	// end := r.Form.Get("end")
 
 	startDate, err := time.Parse("02-01-2006", r.Form.Get("start"))
 	if err != nil {
@@ -138,13 +136,29 @@ func (m *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	
+
+	room, err := m.DB.GetRoomByID(reservationInSession.RoomID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	reservationInSession.Room.RoomName = room.RoomName
+
+	startDate := reservationInSession.StartDate.Format("2006-01-02")
+	endDate := reservationInSession.EndDate.Format("2006-01-02")
+
+	stringMap := make(map[string]string)
+	stringMap["start_date"] = startDate
+	stringMap["end_date"] = endDate
+
 	data := make(map[string]interface{})
 	data["reservation"] = reservationInSession
 
 	render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
-		Form: forms.New(nil),
-		Data: data,
+		Form:      forms.New(nil),
+		Data:      data,
+		StringMap: stringMap,
 	})
 }
 
@@ -160,6 +174,7 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 	startDate, err := time.Parse("2006-01-02", r.Form.Get("start_date"))
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
 	}
 
 	endDate, err := time.Parse("2006-01-02", r.Form.Get("end_date"))
@@ -246,7 +261,7 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Update the reservation by adding the room ID 
+	// Update the reservation by adding the room ID
 	reservationInSession.RoomID = roomID
 
 	m.App.Session.Put(r.Context(), "reservation", reservationInSession)
@@ -259,7 +274,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
 		m.App.ErrorLog.Println("Cannot get error from session")
-		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
+		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session. Please, select available room and make a reservation")
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
