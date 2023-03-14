@@ -103,6 +103,7 @@ end }} {{ define "css" }}
           const formData = new FormData(availabilityForm);
           // Add the CSRFToken to the form data
           formData.append("csrf_token", "{{.CSRFToken}}");
+          formData.append("room_id", "1");
 
           fetch("/reservation-json", {
             method: "post",
