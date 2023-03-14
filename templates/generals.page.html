@@ -113,7 +113,14 @@ end }} {{ define "css" }}
             .then((data) => {
               data.ok
                 ? Prompt().customModal({
-                    message: `<h3>Room is available!</h3> <p>Would you like to proceed to making a reservation on the selected date?</p> <a href="" class="btn btn-primary">Book Now</a>`,
+                    message:
+                      `<h3>Room is available!</h3> <p>Would you like to proceed to making a reservation on the selected date?</p> <a class="btn btn-primary" href="/book-room?id=` +
+                      data.room_id +
+                      `&sd=` +
+                      data.start_date +
+                      `&ed=` +
+                      data.end_date +
+                      `">Book Now</a>`,
                     icon: "success",
                     showConfirmButton: false,
                   })
