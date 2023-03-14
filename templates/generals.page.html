@@ -112,8 +112,19 @@ end }} {{ define "css" }}
             .then((response) => response.json())
             .then((data) => {
               data.ok
-                ? console.log("Room is available")
-                : console.log("Room is not available!");
+                ? Prompt().customModal({
+                    message:
+                      '<h3>Room is available!</h3> <p>Would you like to proceed to making a reservation on the selected date?</p> <a href="" class="btn btn-primary">Book Now</a>',
+                    icon: "success",
+                    showConfirmButton: false,
+                  })
+                : Prompt().toast({
+                    title: "Room is not available!<br /> Try another date",
+                    icon: "error",
+                    timer: 5000,
+                    showConfirmButton: true,
+                    confirmButtonText: "Close",
+                  });
             })
             .catch((err) => console.error(err));
         },

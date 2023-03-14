@@ -294,13 +294,21 @@
         };
 
         const customModal = async (c) => {
-          const { title = "", message = "" } = c;
+          const {
+            title = "",
+            icon = "",
+            message = "",
+            showConfirmButton = true,
+            confirmButtonText = "Submit",
+          } = c;
 
           const { value: result } = await Swal.fire({
             title,
+            icon,
             html: message,
             focusConfirm: false,
-            confirmButtonText: "Submit",
+            showConfirmButton,
+            confirmButtonText,
             showCancelButton: true,
             willOpen: () => {
               if (c.willOpen !== undefined) {
