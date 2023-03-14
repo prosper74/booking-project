@@ -108,8 +108,11 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 // Availability json, to handle availability request and send back json
 type jsonResponse struct {
-	Ok      bool   `json:"ok"`
-	Message string `json:"message"`
+	Ok        bool   `json:"ok"`
+	Message   string `json:"message"`
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
+	RoomID    string `json:"room_id"`
 }
 
 func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
@@ -131,10 +134,13 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
-	
+
 	response := jsonResponse{
 		Ok:      available,
 		Message: "",
+		StartDate: r.Form.Get("start"),
+		EndDate: r.Form.Get("end"),
+		RoomID: r.Form.Get("room_id"),
 	}
 
 	out, err := json.MarshalIndent(response, "", "    ")
