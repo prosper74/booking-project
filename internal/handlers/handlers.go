@@ -136,11 +136,11 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := jsonResponse{
-		Ok:      available,
-		Message: "",
+		Ok:        available,
+		Message:   "",
 		StartDate: r.Form.Get("start"),
-		EndDate: r.Form.Get("end"),
-		RoomID: r.Form.Get("room_id"),
+		EndDate:   r.Form.Get("end"),
+		RoomID:    r.Form.Get("room_id"),
 	}
 
 	out, err := json.MarshalIndent(response, "", "    ")
@@ -276,7 +276,6 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	m.App.Session.Put(r.Context(), "reservation", reservationInSession)
 
 	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
-
 }
 
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
