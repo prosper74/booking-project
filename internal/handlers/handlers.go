@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -276,6 +277,14 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	m.App.Session.Put(r.Context(), "reservation", reservationInSession)
 
 	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
+}
+
+func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
+	roomID, _ := strconv.Atoi(r.URL.Query().Get("id"))
+	sd := r.URL.Query().Get("sd")
+	ed := r.URL.Query().Get("ed")
+
+	log.Println(roomID, sd, ed)
 }
 
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
