@@ -103,13 +103,35 @@ you {{ end }} {{ define "css" }}
           const formData = new FormData(availabilityForm);
           // Add the CSRFToken to the form data
           formData.append("csrf_token", "{{.CSRFToken}}");
+          formData.append("room_id", "2");
 
           fetch("/reservation-json", {
             method: "post",
             body: formData,
           })
             .then((response) => response.json())
-            .then((data) => console.log(data))
+            .then((data) => {
+              data.ok
+                ? Prompt().customModal({
+                    message:
+                      `<h3>Room is available!</h3> <p>Would you like to proceed to making a reservation on the selected date?</p> <a class="btn btn-primary" href="/book-room?id=` +
+                      data.room_id +
+                      `&sd=` +
+                      data.start_date +
+                      `&ed=` +
+                      data.end_date +
+                      `">Book Now</a>`,
+                    icon: "success",
+                    showConfirmButton: false,
+                  })
+                : Prompt().toast({
+                    title: "Room is not available!<br /> Try another date",
+                    icon: "error",
+                    timer: 5000,
+                    showConfirmButton: true,
+                    confirmButtonText: "Close",
+                  });
+            })
             .catch((err) => console.log(err));
         },
       });
