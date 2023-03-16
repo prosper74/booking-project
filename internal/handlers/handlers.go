@@ -19,6 +19,7 @@ import (
 
 var Repo *Repository
 
+// Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
 	DB  repository.DatabaseRepo
@@ -37,30 +38,37 @@ func NewHandlers(r *Repository) {
 	Repo = r
 }
 
+// This function handles the Home page and renders the template
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "home.page.html", &models.TemplateData{})
 }
 
+// This function handles the About page and renders the template
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "about.page.html", &models.TemplateData{})
 }
 
+// This function handles the Contact page and renders the template
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "contact.page.html", &models.TemplateData{})
 }
 
+// This function handles the single room(Luxery) page and renders the template
 func (m *Repository) Alpine(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "alpine.page.html", &models.TemplateData{})
 }
 
+// This function handles the single room(Generals) page and renders the template
 func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "generals.page.html", &models.TemplateData{})
 }
 
+// This function handles the reservation page and renders the template
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "reservation.page.html", &models.TemplateData{})
 }
 
+// This function handles the search page and displays the available rooms template
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	startDate, err := time.Parse("02-01-2006", r.Form.Get("start"))
@@ -104,7 +112,6 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "available-rooms.page.html", &models.TemplateData{
 		Data: data,
 	})
-
 }
 
 // Availability json, to handle availability request and send back json
@@ -116,6 +123,7 @@ type jsonResponse struct {
 	RoomID    string `json:"room_id"`
 }
 
+// This function checks if the dates entered in a single room search has availability
 func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	startDate, err := time.Parse("02-01-2006", r.Form.Get("start"))
 	if err != nil {
@@ -156,6 +164,7 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	w.Write(out)
 }
 
+// This function handles the make reservation page and renders the template
 func (m *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
 	reservationInSession, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
@@ -191,6 +200,7 @@ func (m *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// This function POST the reservation and store them in the database
 func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
@@ -254,6 +264,7 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
 }
 
+// This function handles the selected room from the available rooms displayed in search availability
 func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	// split the URL up by /, and grab the 3rd element
 	exploded := strings.Split(r.RequestURI, "/")
@@ -280,6 +291,7 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
 
+// This function takes URL parameters, builds a sessional variable, and redirects user to make reservation page
 func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 	var reservation models.Reservation
 	roomID, _ := strconv.Atoi(r.URL.Query().Get("id"))
@@ -310,6 +322,7 @@ func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
 
+// This function displays the reservation summary page
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
