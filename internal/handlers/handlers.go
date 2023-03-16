@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -67,6 +66,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	startDate, err := time.Parse("02-01-2006", r.Form.Get("start"))
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
 	}
 
 	endDate, err := time.Parse("02-01-2006", r.Form.Get("end"))
@@ -120,6 +120,7 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	startDate, err := time.Parse("02-01-2006", r.Form.Get("start"))
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
 	}
 
 	endDate, err := time.Parse("02-01-2006", r.Form.Get("end"))
@@ -280,11 +281,33 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
+	var reservation models.Reservation
 	roomID, _ := strconv.Atoi(r.URL.Query().Get("id"))
-	sd := r.URL.Query().Get("sd")
-	ed := r.URL.Query().Get("ed")
+	startDate, err := time.Parse("02-01-2006", r.URL.Query().Get("sd"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	endDate, err := time.Parse("02-01-2006", r.URL.Query().Get("ed"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 
-	log.Println(roomID, sd, ed)
+	room, err := m.DB.GetRoomByID(roomID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	reservation.Room.RoomName = room.RoomName
+	reservation.RoomID = roomID
+	reservation.StartDate = startDate
+	reservation.EndDate = endDate
+
+	m.App.Session.Put(r.Context(), "reservation", reservation)
+
+	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
 
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
