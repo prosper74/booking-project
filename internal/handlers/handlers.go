@@ -325,9 +325,9 @@ func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 // This function displays the reservation summary page
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
-	if !ok {
-		m.App.ErrorLog.Println("Cannot get error from session")
-		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session. Please, select available room and make a reservation")
+	if !ok || reservation.FirstName == "" || reservation.LastName == "" || reservation.Email == "" || reservation.Phone == "" {
+		m.App.ErrorLog.Println("Cannot get reservation from session")
+		m.App.Session.Put(r.Context(), "error", "<h5>Can't get reservation from session!</h5><br /> Please, select an available room and make a reservation")
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
