@@ -25,7 +25,7 @@ func NewPostgresRepo(dbConnection *sql.DB, appConfig *config.AppConfig) reposito
 }
 
 func NewTestRepo(appConfig *config.AppConfig) repository.DatabaseRepo {
-	return &postgresDBRepo{
+	return &testDBRepo{
 		App: appConfig,
 	}
 }
