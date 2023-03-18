@@ -34,7 +34,7 @@ func NewRepo(appConfig *config.AppConfig, dbConnectionPool *driver.DB) *Reposito
 }
 
 // This function creates a new repository
-func NewTestRepo(appConfig *config.AppConfig, dbConnectionPool *driver.DB) *Repository {
+func NewTestRepo(appConfig *config.AppConfig) *Repository {
 	return &Repository{
 		App: appConfig,
 		DB:  dbrepo.NewTestRepo(appConfig),
