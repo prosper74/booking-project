@@ -64,6 +64,8 @@ func TestMain(m *testing.M) {
 	NewHandlers(repo)
 
 	render.NewRenderer(&app)
+
+	os.Exit(m.Run())
 }
 
 func getRoutes() http.Handler {
