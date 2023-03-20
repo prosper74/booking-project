@@ -147,3 +147,15 @@ func CreateTestTemplateCache() (map[string]*template.Template, error) {
 
 	return myCache, nil
 }
+
+func TestRepository_Reservation(t *testing.T) {
+	reservation := models.Reservation{
+		ID: 1,
+		Room: models.Room{
+			ID: 1,
+			RoomName: "Generals Suit",
+		},
+	}
+
+	request, _ := http.NewRequest("GET", "/make-reservation", nil)
+}
