@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/gob"
 	"fmt"
 	"html/template"
@@ -152,10 +153,19 @@ func TestRepository_Reservation(t *testing.T) {
 	reservation := models.Reservation{
 		ID: 1,
 		Room: models.Room{
-			ID: 1,
+			ID:       1,
 			RoomName: "Generals Suit",
 		},
 	}
 
 	request, _ := http.NewRequest("GET", "/make-reservation", nil)
+}
+
+func getContext(request *http.Request) context.Context {
+	context, err := session.Load(request.Context(), request.Header.Get("X-Session"))
+	if err != nil {
+		log.Println(err)
+	}
+
+	return context
 }
