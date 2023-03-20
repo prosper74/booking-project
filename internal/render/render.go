@@ -85,7 +85,6 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	// The underscore _ means we are ignoring the index of the list
 	for _, page := range pages {
 		name := filepath.Base(page)
-		fmt.Println("Page is currently", page)
 
 		// Create a template set (ts), that will have functions "Funcs(functions), which are external functions not build into Go language"
 		ts, err := template.New(name).Funcs(functions).ParseFiles(page)
