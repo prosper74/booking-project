@@ -173,6 +173,7 @@ func TestRepository_Reservation(t *testing.T) {
 	if requestRecorder.Code != http.StatusOK {
 		t.Errorf("Reservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusOK)
 	}
+
 }
 
 func getContext(request *http.Request) context.Context {
