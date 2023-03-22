@@ -190,6 +190,7 @@ func TestRepository_Reservation(t *testing.T) {
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
 	requestRecorder = httptest.NewRecorder()
+	reservation.RoomID = 100
 	session.Put(requestContext, "reservation", reservation)
 
 	handler.ServeHTTP(requestRecorder, request)
