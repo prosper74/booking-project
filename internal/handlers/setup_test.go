@@ -212,7 +212,11 @@ func TestRepository_PostReservation(t *testing.T) {
 	request, _ := http.NewRequest("POST", "/make-reservation", strings.NewReader(requestBody))
 	requestContext := getContext(request)
 	request = request.WithContext(requestContext)
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	requestRecorder := httptest.NewRecorder()
+
+	handler := http.HandlerFunc(Repo.PostMakeReservation)
+	handler.ServeHTTP(requestRecorder, request)
 
 	
 }
