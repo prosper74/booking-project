@@ -10,6 +10,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -200,8 +201,15 @@ func TestRepository_Reservation(t *testing.T) {
 }
 
 func TestRepository_PostReservation(t *testing.T) {
+	requestBody := "start_date=2050-01-01"
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "end_date=2050-01-05")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "first_name=Prosper")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "last_name=Atu")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "email=atu@prosper.com")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "phone=145245254554")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "room_id=1")
 
-	request, _ := http.NewRequest("POST", "/make-reservation", nil)
+	request, _ := http.NewRequest("POST", "/make-reservation", strings.NewReader(requestBody))
 	requestContext := getContext(request)
 	request = request.WithContext(requestContext)
 	requestRecorder := httptest.NewRecorder()
