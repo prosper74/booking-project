@@ -199,6 +199,16 @@ func TestRepository_Reservation(t *testing.T) {
 	}
 }
 
+func TestRepository_PostReservation(t *testing.T) {
+
+	request, _ := http.NewRequest("POST", "/make-reservation", nil)
+	requestContext := getContext(request)
+	request = request.WithContext(requestContext)
+	requestRecorder := httptest.NewRecorder()
+
+	
+}
+
 func getContext(request *http.Request) context.Context {
 	context, err := session.Load(request.Context(), request.Header.Get("X-Session"))
 	if err != nil {
