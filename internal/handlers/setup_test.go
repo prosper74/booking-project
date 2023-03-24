@@ -218,7 +218,9 @@ func TestRepository_PostReservation(t *testing.T) {
 	handler := http.HandlerFunc(Repo.PostMakeReservation)
 	handler.ServeHTTP(requestRecorder, request)
 
-	
+	if requestRecorder.Code != http.StatusSeeOther {
+		t.Errorf("PostReservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusSeeOther)
+	}
 }
 
 func getContext(request *http.Request) context.Context {
