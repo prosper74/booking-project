@@ -167,7 +167,7 @@ func TestRepository_Reservation(t *testing.T) {
 	requestRecorder := httptest.NewRecorder()
 
 	session.Put(requestContext, "reservation", reservation)
-	handler := http.HandlerFunc(Repo.Reservation)
+	handler := http.HandlerFunc(Repo.MakeReservation)
 	handler.ServeHTTP(requestRecorder, request)
 
 	// Check if test pass
@@ -195,8 +195,8 @@ func TestRepository_Reservation(t *testing.T) {
 	session.Put(requestContext, "reservation", reservation)
 
 	handler.ServeHTTP(requestRecorder, request)
-	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("Reservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	if requestRecorder.Code != http.StatusOK {
+		t.Errorf("Reservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusOK)
 	}
 }
 
