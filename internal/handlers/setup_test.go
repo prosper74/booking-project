@@ -221,6 +221,20 @@ func TestRepository_PostReservation(t *testing.T) {
 	if requestRecorder.Code != http.StatusSeeOther {
 		t.Errorf("PostReservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusSeeOther)
 	}
+
+	// Test for missing body
+	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(requestBody))
+	requestContext = getContext(request)
+	request = request.WithContext(requestContext)
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	requestRecorder = httptest.NewRecorder()
+
+	handler = http.HandlerFunc(Repo.PostMakeReservation)
+	handler.ServeHTTP(requestRecorder, request)
+
+	if requestRecorder.Code != http.StatusSeeOther {
+		t.Errorf("PostReservation handler returned wrong response code for missing post body: got %d, expected %d", requestRecorder.Code, http.StatusSeeOther)
+	}
 }
 
 func getContext(request *http.Request) context.Context {
