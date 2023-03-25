@@ -218,8 +218,8 @@ func TestRepository_PostReservation(t *testing.T) {
 	handler := http.HandlerFunc(Repo.PostMakeReservation)
 	handler.ServeHTTP(requestRecorder, request)
 
-	if requestRecorder.Code != http.StatusSeeOther {
-		t.Errorf("PostReservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusSeeOther)
+	if requestRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
 	// Test for missing body
@@ -232,8 +232,8 @@ func TestRepository_PostReservation(t *testing.T) {
 	handler = http.HandlerFunc(Repo.PostMakeReservation)
 	handler.ServeHTTP(requestRecorder, request)
 
-	if requestRecorder.Code != http.StatusSeeOther {
-		t.Errorf("PostReservation handler returned wrong response code for missing post body: got %d, expected %d", requestRecorder.Code, http.StatusSeeOther)
+	if requestRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong response code for missing post body: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
 	}
 }
 
