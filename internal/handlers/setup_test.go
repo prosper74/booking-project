@@ -301,6 +301,28 @@ func TestRepository_PostReservation(t *testing.T) {
 	if requestRecorder.Code != http.StatusTemporaryRedirect {
 		t.Errorf("PostReservation handler returned wrong response code for invalid room id: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
 	}
+
+	// Test for invalid data
+	requestBody = "start_date=2050-01-02"
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "end_date=2050-01-05")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "first_name=P")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "last_name=Atu")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "email=atu@prosper.com")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "phone=145245254554")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "room_id=1")
+
+	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(requestBody))
+	requestContext = getContext(request)
+	request = request.WithContext(requestContext)
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	requestRecorder = httptest.NewRecorder()
+
+	handler = http.HandlerFunc(Repo.PostMakeReservation)
+	handler.ServeHTTP(requestRecorder, request)
+
+	if requestRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong response code for invalid data: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	}
 }
 
 func getContext(request *http.Request) context.Context {
