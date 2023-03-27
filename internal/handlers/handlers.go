@@ -241,7 +241,7 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 	if !form.Valid() {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
-
+		m.App.Session.Put(r.Context(), "error", "Invalid form input")
 		render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
 			Form: form,
 			Data: data,
