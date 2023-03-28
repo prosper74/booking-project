@@ -1,6 +1,7 @@
 package dbrepo
 
 import (
+	"errors"
 	"time"
 
 	"github.com/atuprosper/booking-project/internal/models"
@@ -12,6 +13,10 @@ func (repo *testDBRepo) AllUsers() bool {
 
 // Inserts a reservation into the database
 func (repo *testDBRepo) InsertReservation(res models.Reservation) (int, error) {
+	// Fail test if the room_id == 2
+	if res.RoomID == 2 {
+		return 0, errors.New("failed to insert reservation")
+	}
 	return 1, nil
 }
 
