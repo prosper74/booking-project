@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/gob"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -164,26 +165,26 @@ func TestRepository_MakeReservation(t *testing.T) {
 	request = request.WithContext(requestContext)
 
 	// NewRecorder assimilates a request response cycle like a browser
-	requestRecorder := httptest.NewRecorder()
+	responseRecorder := httptest.NewRecorder()
 
 	session.Put(requestContext, "reservation", reservation)
 	handler := http.HandlerFunc(Repo.MakeReservation)
-	handler.ServeHTTP(requestRecorder, request)
+	handler.ServeHTTP(responseRecorder, request)
 
 	// Check if test pass
-	if requestRecorder.Code != http.StatusOK {
-		t.Errorf("Reservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusOK)
+	if responseRecorder.Code != http.StatusOK {
+		t.Errorf("Reservation handler returned wrong response code: got %d, expected %d", responseRecorder.Code, http.StatusOK)
 	}
 
 	// Test cases when reservation is not in session (Reset everything)
 	request, _ = http.NewRequest("GET", "/make-reservation", nil)
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
-	requestRecorder = httptest.NewRecorder()
+	responseRecorder = httptest.NewRecorder()
 
-	handler.ServeHTTP(requestRecorder, request)
-	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("Reservation handler returned wrong response code when reservation is not in session: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	handler.ServeHTTP(responseRecorder, request)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("Reservation handler returned wrong response code when reservation is not in session: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
 	// Test with non-existing room
@@ -192,11 +193,11 @@ func TestRepository_MakeReservation(t *testing.T) {
 	request, _ = http.NewRequest("GET", "/make-reservation", nil)
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
-	requestRecorder = httptest.NewRecorder()
+	responseRecorder = httptest.NewRecorder()
 
-	handler.ServeHTTP(requestRecorder, request)
-	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("Reservation handler returned wrong response code when reservation is not in session: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	handler.ServeHTTP(responseRecorder, request)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("Reservation handler returned wrong response code when reservation is not in session: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
 	}
 }
 
@@ -213,13 +214,13 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	requestContext := getContext(request)
 	request = request.WithContext(requestContext)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	requestRecorder := httptest.NewRecorder()
+	responseRecorder := httptest.NewRecorder()
 
 	handler := http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(requestRecorder, request)
+	handler.ServeHTTP(responseRecorder, request)
 
-	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong response code: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
 	// Test for missing body
@@ -227,13 +228,13 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	requestRecorder = httptest.NewRecorder()
+	responseRecorder = httptest.NewRecorder()
 
 	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(requestRecorder, request)
+	handler.ServeHTTP(responseRecorder, request)
 
-	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for missing post body: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong response code for missing post body: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
 	// Test for invalid start date
@@ -249,13 +250,13 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	requestRecorder = httptest.NewRecorder()
+	responseRecorder = httptest.NewRecorder()
 
 	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(requestRecorder, request)
+	handler.ServeHTTP(responseRecorder, request)
 
-	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for invalid start date: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong response code for invalid start date: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
 	// Test for invalid end date
@@ -271,13 +272,13 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	requestRecorder = httptest.NewRecorder()
+	responseRecorder = httptest.NewRecorder()
 
 	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(requestRecorder, request)
+	handler.ServeHTTP(responseRecorder, request)
 
-	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for invalid end date: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong response code for invalid end date: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
 	// Test for invalid room id
@@ -293,13 +294,13 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	requestRecorder = httptest.NewRecorder()
+	responseRecorder = httptest.NewRecorder()
 
 	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(requestRecorder, request)
+	handler.ServeHTTP(responseRecorder, request)
 
-	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for invalid room id: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong response code for invalid room id: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
 	// Test for invalid data
@@ -315,13 +316,13 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	requestRecorder = httptest.NewRecorder()
+	responseRecorder = httptest.NewRecorder()
 
 	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(requestRecorder, request)
+	handler.ServeHTTP(responseRecorder, request)
 
-	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for invalid data: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong response code for invalid data: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
 	// Test for inability to insert reservation
@@ -337,13 +338,35 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	requestRecorder = httptest.NewRecorder()
+	responseRecorder = httptest.NewRecorder()
 
 	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(requestRecorder, request)
+	handler.ServeHTTP(responseRecorder, request)
 
-	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for failing to insert reservation: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("PostReservation handler returned wrong response code for failing to insert reservation: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
+	}
+}
+
+func TestRepository_AvailabilityJSON(t *testing.T) {
+	// First case - Rooms are not available
+	requestBody := "start=2050-01-01"
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "end=2050-01-05")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "room_id=1")
+
+	request, _ := http.NewRequest("POST", "/reservation-json", strings.NewReader(requestBody))
+	requestContext := getContext(request)
+	request = request.WithContext(requestContext)
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")	
+	handler := http.HandlerFunc(Repo.AvailabilityJSON)
+	responseRecorder := httptest.NewRecorder()
+	handler.ServeHTTP(responseRecorder, request)
+
+	var j jsonResponse
+	// convert the json response and save it in the variable j
+	err := json.Unmarshal([]byte(responseRecorder.Body.String()), &j)
+	if err != nil {
+		t.Error("Failed to parse JSON")
 	}
 }
 
