@@ -181,11 +181,7 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 		RoomID:    r.Form.Get("room_id"),
 	}
 
-	out, err := json.MarshalIndent(response, "", "    ")
-	if err != nil {
-		helpers.ServerError(w, err)
-		return
-	}
+	out, _ := json.MarshalIndent(response, "", "    ")
 
 	// Tell the browser the type of file in the header
 	w.Header().Set("Content-Type", "Application/json")
