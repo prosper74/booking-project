@@ -133,6 +133,19 @@ type jsonResponse struct {
 
 // This function checks if the dates entered in a single room search has availability
 func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		response := jsonResponse{
+			Ok: false,
+			Message: "Internal server error",
+		}
+
+		out, _ := json.MarshalIndent(response, "", "    ")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(out)
+		return
+	}
+
 	startDate, err := time.Parse("02-01-2006", r.Form.Get("start"))
 	if err != nil {
 		helpers.ServerError(w, err)

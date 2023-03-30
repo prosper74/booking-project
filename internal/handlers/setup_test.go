@@ -150,7 +150,7 @@ func CreateTestTemplateCache() (map[string]*template.Template, error) {
 	return myCache, nil
 }
 
-func TestRepository_Reservation(t *testing.T) {
+func TestRepository_MakeReservation(t *testing.T) {
 	reservation := models.Reservation{
 		ID: 1,
 		Room: models.Room{
@@ -183,24 +183,24 @@ func TestRepository_Reservation(t *testing.T) {
 
 	handler.ServeHTTP(requestRecorder, request)
 	if requestRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("Reservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
+		t.Errorf("Reservation handler returned wrong response code when reservation is not in session: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
-	// Test with non-existing room 
+	// Test with non-existing room
+	reservation.RoomID = 152221
+	session.Put(requestContext, "reservation", reservation)
 	request, _ = http.NewRequest("GET", "/make-reservation", nil)
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
 	requestRecorder = httptest.NewRecorder()
-	reservation.RoomID = 100
-	session.Put(requestContext, "reservation", reservation)
 
 	handler.ServeHTTP(requestRecorder, request)
-	if requestRecorder.Code != http.StatusOK {
-		t.Errorf("Reservation handler returned wrong response code: got %d, expected %d", requestRecorder.Code, http.StatusOK)
+	if requestRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("Reservation handler returned wrong response code when reservation is not in session: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
 	}
 }
 
-func TestRepository_PostReservation(t *testing.T) {
+func TestRepository_PostMakeReservation(t *testing.T) {
 	requestBody := "start_date=2050-01-01"
 	requestBody = fmt.Sprintf("%s&%s", requestBody, "end_date=2050-01-05")
 	requestBody = fmt.Sprintf("%s&%s", requestBody, "first_name=Prosper")
@@ -236,7 +236,7 @@ func TestRepository_PostReservation(t *testing.T) {
 		t.Errorf("PostReservation handler returned wrong response code for missing post body: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
-	// Test for invalid start date 
+	// Test for invalid start date
 	requestBody = "start_date=invalid"
 	requestBody = fmt.Sprintf("%s&%s", requestBody, "end_date=2050-01-05")
 	requestBody = fmt.Sprintf("%s&%s", requestBody, "first_name=Prosper")
@@ -258,7 +258,7 @@ func TestRepository_PostReservation(t *testing.T) {
 		t.Errorf("PostReservation handler returned wrong response code for invalid start date: got %d, expected %d", requestRecorder.Code, http.StatusTemporaryRedirect)
 	}
 
-	// Test for invalid end date 
+	// Test for invalid end date
 	requestBody = "start_date=2050-01-05"
 	requestBody = fmt.Sprintf("%s&%s", requestBody, "end_date=invalid")
 	requestBody = fmt.Sprintf("%s&%s", requestBody, "first_name=Prosper")
@@ -331,7 +331,7 @@ func TestRepository_PostReservation(t *testing.T) {
 	requestBody = fmt.Sprintf("%s&%s", requestBody, "last_name=Atu")
 	requestBody = fmt.Sprintf("%s&%s", requestBody, "email=atu@prosper.com")
 	requestBody = fmt.Sprintf("%s&%s", requestBody, "phone=145245254554")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "room_id=1")
+	requestBody = fmt.Sprintf("%s&%s", requestBody, "room_id=2")
 
 	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(requestBody))
 	requestContext = getContext(request)
