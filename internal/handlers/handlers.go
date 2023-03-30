@@ -162,7 +162,14 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 
 	available, err := m.DB.SearchAvailabilityByDatesByRoomID(startDate, endDate, roomId)
 	if err != nil {
-		helpers.ServerError(w, err)
+		response := jsonResponse{
+			Ok: false,
+			Message: "Error connecting to the database",
+		}
+
+		out, _ := json.MarshalIndent(response, "", "    ")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(out)
 		return
 	}
 
