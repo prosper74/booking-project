@@ -308,15 +308,15 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	}
 
 	// Test for invalid data
-	requestBody = "start_date=2050-01-02"
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "end_date=2050-01-05")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "first_name=P")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "last_name=Atu")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "email=atu@prosper.com")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "phone=145245254554")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "room_id=1")
+	postedData.Add("start_date", "2050-01-02")
+	postedData.Add("end_date", "2050-01-05")
+	postedData.Add("first_name", "P")
+	postedData.Add("last_name", "Atu")
+	postedData.Add("email", "atu@prosper.com")
+	postedData.Add("phone", "484848448484")
+	postedData.Add("room_id", "1")
 
-	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(requestBody))
+	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
