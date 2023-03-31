@@ -330,13 +330,13 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	}
 
 	// Test for inability to insert reservation
-	requestBody = "start_date=2050-01-02"
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "end_date=2050-01-05")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "first_name=Prosper")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "last_name=Atu")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "email=atu@prosper.com")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "phone=145245254554")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "room_id=2")
+	postedData.Add("start_date", "2050-01-01")
+	postedData.Add("end_date", "2050-01-05")
+	postedData.Add("first_name", "Prosper")
+	postedData.Add("last_name", "Atu")
+	postedData.Add("email", "atu@prosper.com")
+	postedData.Add("phone", "484848448484")
+	postedData.Add("room_id", "2")
 
 	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(requestBody))
 	requestContext = getContext(request)
