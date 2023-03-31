@@ -203,8 +203,6 @@ func TestRepository_MakeReservation(t *testing.T) {
 }
 
 func TestRepository_PostMakeReservation(t *testing.T) {
-	requestBody := "start_date=2050-01-01"
-
 	postedData := url.Values{}
 	postedData.Add("start_date", "2050-01-01")
 	postedData.Add("end_date", "2050-01-05")
@@ -338,7 +336,7 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	postedData.Add("phone", "484848448484")
 	postedData.Add("room_id", "2")
 
-	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(requestBody))
+	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
 	requestContext = getContext(request)
 	request = request.WithContext(requestContext)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -354,11 +352,12 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 
 func TestRepository_AvailabilityJSON(t *testing.T) {
 	// First case - Rooms are not available
-	requestBody := "start=2050-01-01"
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "end=2050-01-05")
-	requestBody = fmt.Sprintf("%s&%s", requestBody, "room_id=1")
+	postedData := url.Values{}
+	postedData.Add("start", "2050-01-02")
+	postedData.Add("end", "2050-01-05")
+	postedData.Add("room_id", "1")
 
-	request, _ := http.NewRequest("POST", "/reservation-json", strings.NewReader(requestBody))
+	request, _ := http.NewRequest("POST", "/reservation-json", strings.NewReader(postedData.Encode()))
 	requestContext := getContext(request)
 	request = request.WithContext(requestContext)
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
