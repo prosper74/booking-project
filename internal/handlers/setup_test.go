@@ -1,18 +1,13 @@
 package handlers
 
 import (
-	"context"
 	"encoding/gob"
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
-	"net/http/httptest"
-	"net/url"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 	"time"
 
@@ -33,6 +28,10 @@ var functions = template.FuncMap{}
 func TestMain(m *testing.M) {
 	// what am I going to put in the session
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
+	gob.Register(map[string]int{})
 
 	// change this to true when in production
 	app.InProduction = false
@@ -150,234 +149,4 @@ func CreateTestTemplateCache() (map[string]*template.Template, error) {
 	}
 
 	return myCache, nil
-}
-
-func TestRepository_MakeReservation(t *testing.T) {
-	reservation := models.Reservation{
-		ID: 1,
-		Room: models.Room{
-			ID:       1,
-			RoomName: "Generals Suit",
-		},
-	}
-
-	request, _ := http.NewRequest("GET", "/make-reservation", nil)
-	requestContext := getContext(request)
-	request = request.WithContext(requestContext)
-
-	// NewRecorder assimilates a request response cycle like a browser
-	responseRecorder := httptest.NewRecorder()
-
-	session.Put(requestContext, "reservation", reservation)
-	handler := http.HandlerFunc(Repo.MakeReservation)
-	handler.ServeHTTP(responseRecorder, request)
-
-	// Check if test pass
-	if responseRecorder.Code != http.StatusOK {
-		t.Errorf("Reservation handler returned wrong response code: got %d, expected %d", responseRecorder.Code, http.StatusOK)
-	}
-
-	// Test cases when reservation is not in session (Reset everything)
-	request, _ = http.NewRequest("GET", "/make-reservation", nil)
-	requestContext = getContext(request)
-	request = request.WithContext(requestContext)
-	responseRecorder = httptest.NewRecorder()
-
-	handler.ServeHTTP(responseRecorder, request)
-	if responseRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("Reservation handler returned wrong response code when reservation is not in session: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
-	}
-
-	// Test with non-existing room
-	reservation.RoomID = 152221
-	session.Put(requestContext, "reservation", reservation)
-	request, _ = http.NewRequest("GET", "/make-reservation", nil)
-	requestContext = getContext(request)
-	request = request.WithContext(requestContext)
-	responseRecorder = httptest.NewRecorder()
-
-	handler.ServeHTTP(responseRecorder, request)
-	if responseRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("Reservation handler returned wrong response code when reservation is not in session: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
-	}
-}
-
-func TestRepository_PostMakeReservation(t *testing.T) {
-	postedData := url.Values{}
-	postedData.Add("start_date", "2050-01-01")
-	postedData.Add("end_date", "2050-01-05")
-	postedData.Add("first_name", "Prosper")
-	postedData.Add("last_name", "Atu")
-	postedData.Add("email", "atu@prosper.com")
-	postedData.Add("phone", "484848448484")
-	postedData.Add("room_id", "1")
-
-	request, _ := http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
-	requestContext := getContext(request)
-	request = request.WithContext(requestContext)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder := httptest.NewRecorder()
-
-	handler := http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
-	}
-
-	// Test for missing body
-	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
-	requestContext = getContext(request)
-	request = request.WithContext(requestContext)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder = httptest.NewRecorder()
-
-	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for missing post body: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
-	}
-
-	// Test for invalid start date
-	postedData.Add("start_date", "invalid")
-	postedData.Add("end_date", "2050-01-05")
-	postedData.Add("first_name", "Prosper")
-	postedData.Add("last_name", "Atu")
-	postedData.Add("email", "atu@prosper.com")
-	postedData.Add("phone", "484848448484")
-	postedData.Add("room_id", "1")
-
-	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
-	requestContext = getContext(request)
-	request = request.WithContext(requestContext)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder = httptest.NewRecorder()
-
-	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for invalid start date: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
-	}
-
-	// Test for invalid end date
-	postedData.Add("start_date", "2050-01-02")
-	postedData.Add("end_date", "invalid")
-	postedData.Add("first_name", "Prosper")
-	postedData.Add("last_name", "Atu")
-	postedData.Add("email", "atu@prosper.com")
-	postedData.Add("phone", "484848448484")
-	postedData.Add("room_id", "1")
-
-	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
-	requestContext = getContext(request)
-	request = request.WithContext(requestContext)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder = httptest.NewRecorder()
-
-	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for invalid end date: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
-	}
-
-	// Test for invalid room id
-	postedData.Add("start_date", "2050-01-02")
-	postedData.Add("end_date", "2050-01-05")
-	postedData.Add("first_name", "Prosper")
-	postedData.Add("last_name", "Atu")
-	postedData.Add("email", "atu@prosper.com")
-	postedData.Add("phone", "484848448484")
-	postedData.Add("room_id", "invalid")
-
-	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
-	requestContext = getContext(request)
-	request = request.WithContext(requestContext)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder = httptest.NewRecorder()
-
-	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for invalid room id: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
-	}
-
-	// Test for invalid data
-	postedData.Add("start_date", "2050-01-02")
-	postedData.Add("end_date", "2050-01-05")
-	postedData.Add("first_name", "P")
-	postedData.Add("last_name", "Atu")
-	postedData.Add("email", "atu@prosper.com")
-	postedData.Add("phone", "484848448484")
-	postedData.Add("room_id", "1")
-
-	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
-	requestContext = getContext(request)
-	request = request.WithContext(requestContext)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder = httptest.NewRecorder()
-
-	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for invalid data: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
-	}
-
-	// Test for inability to insert reservation
-	postedData.Add("start_date", "2050-01-01")
-	postedData.Add("end_date", "2050-01-05")
-	postedData.Add("first_name", "Prosper")
-	postedData.Add("last_name", "Atu")
-	postedData.Add("email", "atu@prosper.com")
-	postedData.Add("phone", "484848448484")
-	postedData.Add("room_id", "2")
-
-	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
-	requestContext = getContext(request)
-	request = request.WithContext(requestContext)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder = httptest.NewRecorder()
-
-	handler = http.HandlerFunc(Repo.PostMakeReservation)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("PostReservation handler returned wrong response code for failing to insert reservation: got %d, expected %d", responseRecorder.Code, http.StatusTemporaryRedirect)
-	}
-}
-
-func TestRepository_AvailabilityJSON(t *testing.T) {
-	// First case - Rooms are not available
-	postedData := url.Values{}
-	postedData.Add("start", "2050-01-02")
-	postedData.Add("end", "2050-01-05")
-	postedData.Add("room_id", "1")
-
-	request, _ := http.NewRequest("POST", "/reservation-json", strings.NewReader(postedData.Encode()))
-	requestContext := getContext(request)
-	request = request.WithContext(requestContext)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	handler := http.HandlerFunc(Repo.AvailabilityJSON)
-	responseRecorder := httptest.NewRecorder()
-	handler.ServeHTTP(responseRecorder, request)
-
-	var j jsonResponse
-	// convert the json response and save it in the variable j
-	err := json.Unmarshal([]byte(responseRecorder.Body.String()), &j)
-	if err != nil {
-		t.Error("Failed to parse JSON")
-	}
-}
-
-func getContext(request *http.Request) context.Context {
-	context, err := session.Load(request.Context(), request.Header.Get("X-Session"))
-	if err != nil {
-		log.Println(err)
-	}
-
-	return context
 }
