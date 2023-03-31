@@ -51,11 +51,6 @@ func TestMain(m *testing.M) {
 
 	app.Session = session
 
-	// connectedDB, err := driver.ConnectSQL("host=localhost port=5432 dbname=test_database user=postgres password=")
-	// if err != nil {
-	// 	log.Fatal("Cannot connect to database. Closing application")
-	// }
-
 	tc, err := CreateTestTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
@@ -101,7 +96,6 @@ func getRoutes() http.Handler {
 // NoSurf is the csrf protection middleware
 func NoSurf(next http.Handler) http.Handler {
 	csrfHandler := nosurf.New(next)
-
 	csrfHandler.SetBaseCookie(http.Cookie{
 		HttpOnly: true,
 		Path:     "/",
