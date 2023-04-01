@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/atuprosper/booking-project/internal/models"
 )
 
 type postData struct {
@@ -46,8 +48,56 @@ func TestHandlers(testPointer *testing.T) {
 	}
 }
 
-func getContext(req *http.Request) context.Context {
-	ctx, err := session.Load(req.Context(), req.Header.Get("X-Session"))
+func TestRepository_MakeReservation(t *testing.T) {
+	reservation := models.Reservation{
+		RoomID: 1,
+		Room: models.Room{
+			ID:       1,
+			RoomName: "Generals Suit",
+		},
+	}
+
+	request, _ := http.NewRequest("GET", "/make-reservation", nil)
+	ctx := getContext(request)
+	request = request.WithContext(ctx)
+	responseRecorder := httptest.NewRecorder()
+	session.Put(ctx, "reservation", reservation)
+
+	handler := http.HandlerFunc(Repo.MakeReservation)
+	handler.ServeHTTP(responseRecorder, request)
+
+	if responseRecorder.Code != http.StatusOK {
+		t.Errorf("Reservation handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusOK)
+	}
+
+	// test case where reeservation is not in session (reset everything)
+	request, _ = http.NewRequest("GET", "/make-reservation", nil)
+	ctx = getContext(request)
+	request = request.WithContext(ctx)
+	responseRecorder = httptest.NewRecorder()
+
+	handler.ServeHTTP(responseRecorder, request)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("Reservation handler returned wrong response code for reservation not in session: got %d, wanted %d", responseRecorder.Code, http.StatusTemporaryRedirect)
+	}
+
+	// test with non-existent room
+	request, _ = http.NewRequest("GET", "/make-reservation", nil)
+	ctx = getContext(request)
+	request = request.WithContext(ctx)
+	responseRecorder = httptest.NewRecorder()
+
+	reservation.RoomID = 100
+	session.Put(ctx, "reservation", reservation)
+
+	handler.ServeHTTP(responseRecorder, request)
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("Reservation handler returned wrong response code for non existing room: got %d, wanted %d", responseRecorder.Code, http.StatusTemporaryRedirect)
+	}
+}
+
+func getContext(request *http.Request) context.Context {
+	ctx, err := session.Load(request.Context(), request.Header.Get("X-Session"))
 	if err != nil {
 		log.Println(err)
 	}
