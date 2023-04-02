@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -101,6 +102,7 @@ func TestRepository_MakeReservation(t *testing.T) {
 }
 
 func TestRepository_PostMakeReservation(t *testing.T) {
+	// create our request body
 	postedData := url.Values{}
 	postedData.Add("start_date", "2050-01-01")
 	postedData.Add("end_date", "2050-01-02")
@@ -110,12 +112,22 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 	postedData.Add("phone", "2255887744")
 	postedData.Add("room_id", "1")
 
+	// create our request
 	request, _ := http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
+
+	// get the context with session
 	ctx := getContext(request)
 	request = request.WithContext(ctx)
+
+	// set the request header
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	// create our response recorder, which satisfies the requirements
+	// for http.ResponseWriter
 	responseRecorder := httptest.NewRecorder()
 
+	// make our handler a http.HandlerFunc
+	// make the request to our handler
 	handler := http.HandlerFunc(Repo.PostMakeReservation)
 	handler.ServeHTTP(responseRecorder, request)
 
@@ -260,6 +272,38 @@ func TestNewRepo(t *testing.T) {
 	if reflect.TypeOf(testRepo).String() != "*handlers.Repository" {
 		t.Errorf("Did not get correct type from NewRepo: got %s, wanted *Repository", reflect.TypeOf(testRepo).String())
 	}
+}
+
+func TestRepository_AvailabilityJSON(t *testing.T) {
+	// first case -- rooms are not available
+	postedData := url.Values{}
+	postedData.Add("start", "2050-01-01")
+	postedData.Add("end", "2050-01-02")
+	postedData.Add("room_id", "1")
+
+	request, _ := http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
+	ctx := getContext(request)
+	request = request.WithContext(ctx)
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	responseRecorder := httptest.NewRecorder()
+
+	handler := http.HandlerFunc(Repo.AvailabilityJSON)
+	handler.ServeHTTP(responseRecorder, request)
+
+	// since we have no rooms available, we expect to get status http.StatusSeeOther
+	// this time we want to parse JSON and get the expected response
+	var j jsonResponse
+	err := json.Unmarshal([]byte(responseRecorder.Body.String()), &j)
+	if err != nil {
+		t.Error("failed to parse json!")
+	}
+
+	// since we specified a start date > 2049-12-31, we expect no availability
+	if j.Ok {
+		t.Error("Got availability when none was expected in AvailabilityJSON")
+	}
+
+	
 }
 
 func getContext(request *http.Request) context.Context {
