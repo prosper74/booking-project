@@ -349,6 +349,33 @@ func TestRepository_AvailabilityJSON(t *testing.T) {
 	if j.Ok || j.Message != "Internal server error" {
 		t.Error("Got availability when request body was empty")
 	}
+
+	// fourth case -- database error
+	postedData = url.Values{}
+	postedData.Add("start", "2040-01-01")
+	postedData.Add("end", "2040-01-02")
+	postedData.Add("room_id", "1")
+
+	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
+	ctx = getContext(request)
+	request = request.WithContext(ctx)
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	responseRecorder = httptest.NewRecorder()
+
+	handler = http.HandlerFunc(Repo.AvailabilityJSON)
+	handler.ServeHTTP(responseRecorder, request)
+
+	// this time we want to parse JSON and get the expected response
+	err = json.Unmarshal([]byte(responseRecorder.Body.String()), &j)
+	if err != nil {
+		t.Error("failed to parse json!")
+	}
+
+	// since we specified a start date < 2049-12-31, we expect availability
+	if j.Ok || j.Message != "Error querying database" {
+		t.Error("Got availability when simulating database error")
+	}
+
 }
 
 func getContext(request *http.Request) context.Context {
