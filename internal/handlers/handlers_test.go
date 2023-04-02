@@ -375,7 +375,44 @@ func TestRepository_AvailabilityJSON(t *testing.T) {
 	if j.Ok || j.Message != "Error querying database" {
 		t.Error("Got availability when simulating database error")
 	}
+}
 
+func TestRepository_ReservationSummary(t *testing.T) {
+	// first case -- reservation in session
+	reservation := models.Reservation{
+		RoomID: 1,
+		Room: models.Room{
+			ID:       1,
+			RoomName: "Generals Quarters",
+		},
+	}
+
+	request, _ := http.NewRequest("POST", "/make-reservation", nil)
+	ctx := getContext(request)
+	request = request.WithContext(ctx)
+	responseRecorder := httptest.NewRecorder()
+
+	session.Put(ctx, "reservation", reservation)
+
+	handler := http.HandlerFunc(Repo.ReservationSummary)
+	handler.ServeHTTP(responseRecorder, request)
+
+	if responseRecorder.Code != http.StatusOK {
+		t.Errorf("ReservationSummary handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusOK)
+	}
+
+	// second case -- reservation not in session
+	request, _ = http.NewRequest("POST", "/make-reservation", nil)
+	ctx = getContext(request)
+	request = request.WithContext(ctx)
+	responseRecorder = httptest.NewRecorder()
+
+	handler = http.HandlerFunc(Repo.ReservationSummary)
+	handler.ServeHTTP(responseRecorder, request)
+
+	if responseRecorder.Code != http.StatusTemporaryRedirect {
+		t.Errorf("ReservationSummary handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusOK)
+	}
 }
 
 func getContext(request *http.Request) context.Context {
