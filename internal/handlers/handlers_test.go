@@ -6,9 +6,11 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"reflect"
 	"strings"
 	"testing"
 
+	"github.com/atuprosper/booking-project/internal/driver"
 	"github.com/atuprosper/booking-project/internal/models"
 )
 
@@ -248,6 +250,15 @@ func TestRepository_PostMakeReservation(t *testing.T) {
 
 	if responseRecorder.Code != http.StatusTemporaryRedirect {
 		t.Errorf("PostReservation handler failed when trying to insert restrictions: got %d, wanted %d", responseRecorder.Code, http.StatusTemporaryRedirect)
+	}
+}
+
+func TestNewRepo(t *testing.T) {
+	var db driver.DB
+	testRepo := NewRepo(&app, &db)
+
+	if reflect.TypeOf(testRepo).String() != "*handlers.Repository" {
+		t.Errorf("Did not get correct type from NewRepo: got %s, wanted *Repository", reflect.TypeOf(testRepo).String())
 	}
 }
 
