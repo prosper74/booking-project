@@ -328,6 +328,27 @@ func TestRepository_AvailabilityJSON(t *testing.T) {
 	if !j.Ok {
 		t.Error("Got no availability when some was expected in AvailabilityJSON")
 	}
+
+	// third case -- no request body
+	request, _ = http.NewRequest("POST", "/make-reservation", nil)
+	ctx = getContext(request)
+	request = request.WithContext(ctx)
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	responseRecorder = httptest.NewRecorder()
+
+	handler = http.HandlerFunc(Repo.AvailabilityJSON)
+	handler.ServeHTTP(responseRecorder, request)
+
+	// this time we want to parse JSON and get the expected response
+	err = json.Unmarshal([]byte(responseRecorder.Body.String()), &j)
+	if err != nil {
+		t.Error("failed to parse json!")
+	}
+
+	// since we specified a start date < 2049-12-31, we expect availability
+	if j.Ok || j.Message != "Internal server error" {
+		t.Error("Got availability when request body was empty")
+	}
 }
 
 func getContext(request *http.Request) context.Context {
