@@ -455,6 +455,22 @@ func TestRepository_ChooseRoom(t *testing.T) {
 	if responseRecorder.Code != http.StatusSeeOther {
 		t.Errorf("ChooseRoom handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusSeeOther)
 	}
+
+	// third case -- missing url parameter, or malformed parameter
+	request, _ = http.NewRequest("GET", "/choose-room/goat", nil)
+	ctx = getContext(request)
+	request = request.WithContext(ctx)
+	request.RequestURI = "/choose-room/goat"
+
+	responseRecorder = httptest.NewRecorder()
+	session.Put(ctx, "reservation", reservation)
+
+	handler = http.HandlerFunc(Repo.ChooseRoom)
+	handler.ServeHTTP(responseRecorder, request)
+
+	if responseRecorder.Code != http.StatusSeeOther {
+		t.Errorf("ChooseRoom handler returned wrong response code for missing parameter: got %d, wanted %d", responseRecorder.Code, http.StatusSeeOther)
+	}
 }
 
 func getContext(request *http.Request) context.Context {
