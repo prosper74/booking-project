@@ -421,7 +421,7 @@ func TestRepository_ChooseRoom(t *testing.T) {
 		RoomID: 1,
 		Room: models.Room{
 			ID:       1,
-			RoomName: "Generals Quarters",
+			RoomName: "Generals Suit",
 		},
 	}
 
@@ -438,6 +438,22 @@ func TestRepository_ChooseRoom(t *testing.T) {
 
 	if responseRecorder.Code != http.StatusSeeOther {
 		t.Errorf("ChooseRoom handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusTemporaryRedirect)
+	}
+
+	// second case -- reservation not in session
+	request, _ = http.NewRequest("GET", "/choose-room/1", nil)
+	ctx = getContext(request)
+	request = request.WithContext(ctx)
+	request.RequestURI = "/choose-room/1"
+
+	responseRecorder = httptest.NewRecorder()
+	session.Put(ctx, "reservation", reservation)
+
+	handler = http.HandlerFunc(Repo.ChooseRoom)
+	handler.ServeHTTP(responseRecorder, request)
+
+	if responseRecorder.Code != http.StatusSeeOther {
+		t.Errorf("ChooseRoom handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusSeeOther)
 	}
 }
 
