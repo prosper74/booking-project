@@ -32,8 +32,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Close database connection when main function finish running
+	// Close database connection when main function finish running and the mail server if mail has finsished sending
 	defer connectedDB.SQL.Close()
+	defer close(app.MailChannel)
 
 	fmt.Println(fmt.Sprintf("Server started at port %s", port))
 	// Create a variable to serve the routes
@@ -55,6 +56,9 @@ func run() (*driver.DB, error) {
 	gob.Register(models.User{})
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
+
+	mailChannel := make(chan models.MailData)
+	app.MailChannel = mailChannel
 
 	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	app.InfoLog = infoLog
