@@ -486,7 +486,6 @@ func TestRepository_BookRoom(t *testing.T) {
 	request, _ := http.NewRequest("GET", "/book-room?sd=2050-01-01&ed=2050-01-02&id=1", nil)
 	ctx := getContext(request)
 	request = request.WithContext(ctx)
-	request.RequestURI = "/choose-room/1"
 
 	responseRecorder := httptest.NewRecorder()
 	session.Put(ctx, "reservation", reservation)
@@ -496,6 +495,21 @@ func TestRepository_BookRoom(t *testing.T) {
 
 	if responseRecorder.Code != http.StatusSeeOther {
 		t.Errorf("BookRoom handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusSeeOther)
+	}
+
+	// second case -- database failed
+	request, _ = http.NewRequest("GET", "/book-room?sd=2050-01-01&ed=2050-01-02&id=4", nil)
+	ctx = getContext(request)
+	request = request.WithContext(ctx)
+
+	responseRecorder = httptest.NewRecorder()
+	session.Put(ctx, "reservation", reservation)
+
+	handler = http.HandlerFunc(Repo.BookRoom)
+	handler.ServeHTTP(responseRecorder, request)
+
+	if responseRecorder.Code != http.StatusSeeOther {
+		t.Errorf("BookRoom handler returned wrong response code trying to connect to access database: got %d, wanted %d", responseRecorder.Code, http.StatusSeeOther)
 	}
 }
 
