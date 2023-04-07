@@ -40,14 +40,6 @@ func main() {
 	fmt.Println("Listening for mail...")
 	listenForMail()
 
-	// message := models.MailData{
-	// 	From:    "me@prosper.com",
-	// 	To:      "send@user.com",
-	// 	Subject: "Testing",
-	// 	Content: "",
-	// }
-	// app.MailChannel <- message
-
 	fmt.Println(fmt.Sprintf("Server started at port %s", port))
 	// Create a variable to serve the routes
 	srv := &http.Server{

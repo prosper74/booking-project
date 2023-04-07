@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -136,7 +138,7 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		response := jsonResponse{
-			Ok: false,
+			Ok:      false,
 			Message: "Internal server error",
 		}
 
@@ -163,7 +165,7 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	available, err := m.DB.SearchAvailabilityByDatesByRoomID(startDate, endDate, roomId)
 	if err != nil {
 		response := jsonResponse{
-			Ok: false,
+			Ok:      false,
 			Message: "Error connecting to the database",
 		}
 
@@ -280,12 +282,31 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 		RestrictionID: 1,
 	}
 
+	log.Println(reservation.StartDate)
+
 	err = m.DB.InsertRoomRestriction(restriction)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't insert room restriction!")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
+
+	// Send email notification
+	htmlBodyForCustomer := fmt.Sprintf(`
+	<strong>Thank you for making a reservation</strong><br />
+	<p>Dear %s, </p>
+	<p>This is to confirm your reservation from %s, to %s. </p>
+	<p>We hope to see you soon</p>
+	`, reservation.FirstName, reservation.StartDate.Format("2006-01-02"), reservation.EndDate.Format("2006-01-02"))
+
+	messageForCustomer := models.MailData{
+		To:      reservation.Email,
+		From:    "me@prosper.com",
+		Subject: "Reservation Confirmation",
+		Content: htmlBodyForCustomer,
+	}
+
+	m.App.MailChannel <- messageForCustomer
 
 	m.App.Session.Put(r.Context(), "reservation", reservation)
 
