@@ -9,6 +9,7 @@ import (
 )
 
 func listenForMail() {
+	// Go routine function that runs in the background
 	go func() {
 		for {
 			message := <-app.MailChannel
