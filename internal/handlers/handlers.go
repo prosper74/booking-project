@@ -291,22 +291,40 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	// Send email notification
-	htmlBodyForCustomer := fmt.Sprintf(`
+	// Send email notification to customer
+	htmlBody := fmt.Sprintf(`
 	<strong>Thank you for making a reservation</strong><br />
 	<p>Dear %s, </p>
 	<p>This is to confirm your reservation from %s, to %s. </p>
 	<p>We hope to see you soon</p>
 	`, reservation.FirstName, reservation.StartDate.Format("2006-01-02"), reservation.EndDate.Format("2006-01-02"))
 
-	messageForCustomer := models.MailData{
+	message := models.MailData{
 		To:      reservation.Email,
 		From:    "me@prosper.com",
 		Subject: "Reservation Confirmation",
-		Content: htmlBodyForCustomer,
+		Content: htmlBody,
 	}
 
-	m.App.MailChannel <- messageForCustomer
+	m.App.MailChannel <- message
+
+	// Send email notification to admin
+	htmlBody = fmt.Sprintf(`
+	<strong>Hello, Admin</strong><br />
+	<p>There is a new reservation from %s %s, </p>
+	<p>Reservation Dates: %s, to %s. </p>
+	<p>Room: %s. </p>
+	<p>Customer Email: %s</p>
+	`, reservation.FirstName, reservation.LastName, reservation.StartDate.Format("2006-01-02"), reservation.EndDate.Format("2006-01-02"), reservation.Room.RoomName, reservation.Email)
+
+	message = models.MailData{
+		To:      "Admin@email.com",
+		From:    "Admin@server.com",
+		Subject: "New Reservation",
+		Content: htmlBody,
+	}
+
+	m.App.MailChannel <- message
 
 	m.App.Session.Put(r.Context(), "reservation", reservation)
 
