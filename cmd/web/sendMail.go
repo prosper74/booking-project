@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/atuprosper/booking-project/internal/models"
@@ -33,7 +36,24 @@ func sendMessage(m models.MailData) {
 
 	email := mail.NewMSG()
 	email.SetFrom(m.From).AddTo(m.To).SetSubject(m.Subject)
-	email.SetBody(mail.TextHTML, m.Content)
+
+	if m.Template == "" {
+		email.SetBody(mail.TextHTML, m.Content)
+	} else {
+		// ioutil is used to read files
+		data, err := ioutil.ReadFile(fmt.Sprintf("./email-template/%s", m.Template))
+
+		if err != nil {
+			app.ErrorLog.Println(err)
+		}
+
+		// convert the []byte returned to string
+		mailTemplate := string(data)
+
+		// Replace the template litrals [%body%] with the content passed
+		messageToSend := strings.Replace(mailTemplate, "[%body%]", m.Content, 1)
+		email.SetBody(mail.TextHTML, messageToSend)
+	}
 
 	err = email.Send(client)
 	if err != nil {
