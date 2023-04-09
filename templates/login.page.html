@@ -1,0 +1,79 @@
+{{ template "base" .}} {{ define "title" }} Login {{ end }} {{
+define "css" }}
+<link href="/static/css/reservation.css" rel="stylesheet" type="text/css" />
+
+<style>
+  .other-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .other-action-button {
+    color: gray;
+    text-decoration: none;
+  }
+</style>
+{{ end }} {{ define "content" }}
+<!-- Make Reservation section  -->
+<section class="container contact-us">
+
+  <!--Section heading-->
+  <h2 class="h1-responsive font-weight-bold text-center my-4">
+    Login
+  </h2>
+
+  <div class="row">
+    <!--Grid column-->
+    <div class="col-md-3"></div>
+
+    <div class="col-md-6 mb-md-0 mb-5">
+      <form action="/make-reservation" method="post" class="row g-3" novalidate>
+        <!-- needs-validation -->
+        <div class="col-md-12">
+          <label for="email" class="form-label">Email</label>
+          <div class="input-group has-validation">
+            <span class="input-group-text" id="inputGroupPrepend">📧</span>
+            <input type="email" class="form-control {{with .Form.Errors.Get
+                    " email"}} is-invalid {{end}}" id="email" name="email" value=""
+              aria-describedby="inputGroupPrepend" required />
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "email"}} {{.}} {{end}}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-group has-validation">
+            <span class="input-group-text" id="inputGroupPrepend">👁️</span>
+            <input type="password" class="form-control" id="password" name="password" value=""
+              aria-describedby="inputGroupPrepend" required />
+          </div>
+        </div>
+
+        <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+
+        <div class="other-actions">
+          <a href="/user/forgot-password" class="other-action-button">
+            Forgot password?
+          </a>
+
+          <a href="/user/signup" class="other-action-button" type="submit">
+            Sign up instead
+          </a>
+        </div>
+
+        <div class="col-12">
+          <button class="btn btn-primary call-to-action-button mt-3" type="submit">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-md-3"></div>
+  </div>
+</section>
+
+{{ end }}

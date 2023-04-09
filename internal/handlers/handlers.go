@@ -417,3 +417,10 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 
 	m.App.Session.Remove(r.Context(), "reservation")
 }
+
+// This function handles the Admin Login page and renders the template
+func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "login.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
