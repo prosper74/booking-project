@@ -43,3 +43,10 @@ func (repo *testDBRepo) GetRoomByID(id int) (models.Room, error) {
 
 	return room, nil
 }
+
+// GetUserByID returns a user by id
+func (repo *testDBRepo) GetUserByID(id int) (models.User, error) {
+	var user models.User
+
+	return user, nil
+}
