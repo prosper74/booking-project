@@ -50,3 +50,8 @@ func (repo *testDBRepo) GetUserByID(id int) (models.User, error) {
 
 	return user, nil
 }
+
+// UpdateUser updates a user in the database
+func (repo *testDBRepo) UpdateUser(user models.User) error {
+	return nil
+}
