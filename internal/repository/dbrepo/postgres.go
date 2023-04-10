@@ -152,39 +152,39 @@ func (repo *postgresDBRepo) GetUserByID(id int) (models.User, error) {
 
 	row := repo.DB.QueryRowContext(context, query, id)
 
-	var u models.User
+	var user models.User
 	err := row.Scan(
-		&u.ID,
-		&u.FirstName,
-		&u.LastName,
-		&u.Email,
-		&u.Password,
-		&u.AccessLevel,
-		&u.CreatedAt,
-		&u.UpdatedAt,
+		&user.ID,
+		&user.FirstName,
+		&user.LastName,
+		&user.Email,
+		&user.Password,
+		&user.AccessLevel,
+		&user.CreatedAt,
+		&user.UpdatedAt,
 	)
 
 	if err != nil {
-		return u, err
+		return user, err
 	}
 
-	return u, nil
+	return user, nil
 }
 
 // UpdateUser updates a user in the database
-func (repo *postgresDBRepo) UpdateUser(u models.User) error {
+func (repo *postgresDBRepo) UpdateUser(user models.User) error {
 	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	query := `
 		update users set first_name = $1, last_name = $2, email = $3, access_level = $4, updated_at = $5
-`
+	`
 
 	_, err := repo.DB.ExecContext(context, query,
-		u.FirstName,
-		u.LastName,
-		u.Email,
-		u.AccessLevel,
+		user.FirstName,
+		user.LastName,
+		user.Email,
+		user.AccessLevel,
 		time.Now(),
 	)
 
