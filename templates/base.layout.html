@@ -67,12 +67,6 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/about">About us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/contact">Contact us</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="/user/login">Login</a>
           </li>
         </ul>
@@ -202,17 +196,17 @@
   <script src="/static/js/app.js"></script>
 
   <script>
-    { { with .Error} }
+    {{with .Error}}
     Prompt().toast({ title: "{{.}}", icon: "error", timer: 6000, showConfirmButton: true, confirmButtonText: "Close" })
-    { { end } }
+    {{end}}
 
-    { { with .Flash} }
+    {{with .Flash}}
     Prompt().toast({ title: "{{.}}", icon: "success", timer: 6000, showConfirmButton: true, confirmButtonText: "Close" })
-    { { end } }
+    {{end}}
 
-    { { with .Warning} }
+    {{with .Warning}}
     Prompt().toast({ title: "{{.}}", icon: "warning", timer: 6000, showConfirmButton: true, confirmButtonText: "Close" })
-    { { end } }
+    {{end}}
   </script>
 
   {{block "js" .}} {{end}}

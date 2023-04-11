@@ -439,12 +439,18 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 
 	form := forms.New(r.PostForm)
 	form.Required("email", "password")
+	form.IsEmail("email")
+
+	log.Println("Email error: ", form.Errors.Get("email"))
+	log.Println("Password error: ", form.Errors.Get("password"))
 
 	if !form.Valid() {
-		m.App.Session.Put(r.Context(), "error", "Invalid form input")
+		m.App.Session.Put(r.Context(), "error", "Invalid inputs")
 		render.Template(w, r, "login.page.html", &models.TemplateData{
-			Form: forms.New(nil),
+			Form: form,
 		})
+
+		return
 	}
 
 	id, _, err := m.DB.Authenticate(email, password)
