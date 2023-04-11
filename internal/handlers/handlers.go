@@ -431,7 +431,9 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 
 	err := r.ParseForm()
 	if err != nil {
-		log.Println(err)
+		m.App.Session.Put(r.Context(), "error", "Can't parse form")
+		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		return
 	}
 
 	email := r.Form.Get("email")
@@ -440,9 +442,6 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 	form := forms.New(r.PostForm)
 	form.Required("email", "password")
 	form.IsEmail("email")
-
-	log.Println("Email error: ", form.Errors.Get("email"))
-	log.Println("Password error: ", form.Errors.Get("password"))
 
 	if !form.Valid() {
 		stringMap := make(map[string]string)
@@ -462,6 +461,7 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 
 		m.App.Session.Put(r.Context(), "error", "Invalid email/password")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		
 		return
 	}
 
