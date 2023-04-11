@@ -28,3 +28,9 @@ func ServerError(responseWriter http.ResponseWriter, err error) {
 	// Send feedback to the user
 	http.Error(responseWriter, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
+
+// Check if a user is exists
+func IsAuthenticated(request *http.Request) bool {
+	exists := app.Session.Exists(request.Context(), "user_id")
+	return exists
+}
