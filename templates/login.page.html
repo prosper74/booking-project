@@ -34,8 +34,8 @@ define "css" }}
           <label for="email" class="form-label">Email</label>
           <div class="input-group has-validation">
             <span class="input-group-text" id="inputGroupPrepend">📧</span>
-            <input type="email" class="form-control {{with .Form.Errors.Get
-              "email"}} is-invalid {{end}}" id="email" name="email" value="" aria-describedby="inputGroupPrepend"
+            <input type="email" class='form-control {{with .Form.Errors.Get
+              "email"}} is-invalid {{end}}' id="email" name="email" value='{{index .StringMap "email"}}' aria-describedby="inputGroupPrepend"
               required />
             <div class="invalid-feedback">
               {{with .Form.Errors.Get "email"}} {{.}} {{end}}

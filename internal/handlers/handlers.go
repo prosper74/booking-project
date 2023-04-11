@@ -445,9 +445,12 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 	log.Println("Password error: ", form.Errors.Get("password"))
 
 	if !form.Valid() {
+		stringMap := make(map[string]string)
+		stringMap["email"] = email
 		m.App.Session.Put(r.Context(), "error", "Invalid inputs")
 		render.Template(w, r, "login.page.html", &models.TemplateData{
-			Form: form,
+			Form:      form,
+			StringMap: stringMap,
 		})
 
 		return
