@@ -47,8 +47,8 @@ define "css" }}
           <label for="password" class="form-label">Password</label>
           <div class="input-group has-validation">
             <span class="input-group-text" id="inputGroupPrepend">👁️</span>
-            <input type="password" class="form-control {{with .Form.Errors.Get
-              "password"}} is-invalid {{end}}" id="password" name="password" value=""
+            <input type="password" class='form-control {{with .Form.Errors.Get
+              "password"}} is-invalid {{end}}' id="password" name="password" value=""
               aria-describedby="inputGroupPrepend" required />
             <div class="invalid-feedback">
               {{with .Form.Errors.Get "password"}} {{.}} {{end}}
