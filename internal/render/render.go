@@ -23,18 +23,23 @@ func NewRenderer(a *config.AppConfig) {
 	app = a
 }
 
-func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+func AddDefaultData(templateData *models.TemplateData, r *http.Request) *models.TemplateData {
 	// PopString puts data into our session until a new page is loaded
-	td.Flash = app.Session.PopString(r.Context(), "flash")
-	td.Error = app.Session.PopString(r.Context(), "error")
-	td.Warning = app.Session.PopString(r.Context(), "warning")
+	templateData.Flash = app.Session.PopString(r.Context(), "flash")
+	templateData.Error = app.Session.PopString(r.Context(), "error")
+	templateData.Warning = app.Session.PopString(r.Context(), "warning")
 
 	// Generate CSRFToken from nosurf
-	td.CSRFToken = nosurf.Token(r)
-	return td
+	templateData.CSRFToken = nosurf.Token(r)
+
+	if app.Session.Exists(r.Context(), "user_id") {
+		templateData.IsAuthenticated = 1
+	}
+
+	return templateData
 }
 
-func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) error {
+func Template(w http.ResponseWriter, r *http.Request, tmpl string, templateData *models.TemplateData) error {
 
 	var tc map[string]*template.Template
 
@@ -56,10 +61,10 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 	buf := new(bytes.Buffer)
 
 	// Before we execute the buffer, we want to attach the AddDefaultData
-	td = AddDefaultData(td, r)
+	templateData = AddDefaultData(templateData, r)
 
 	//Execeute the tamplate file and put it in the buffer
-	_ = t.Execute(buf, td)
+	_ = t.Execute(buf, templateData)
 
 	// Write the buffer to the resposeWriter(browser)
 	_, err := buf.WriteTo(w)
