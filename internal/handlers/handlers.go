@@ -461,11 +461,11 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 
 		m.App.Session.Put(r.Context(), "error", "Invalid email/password")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
-		
+
 		return
 	}
 
 	m.App.Session.Put(r.Context(), "user_id", id)
-	m.App.Session.Put(r.Context(), "success", "Login Successful")
+	m.App.Session.Put(r.Context(), "flash", "Login Successful")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
