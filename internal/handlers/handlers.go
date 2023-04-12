@@ -432,6 +432,7 @@ func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// This function handles user details and authentication
 func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 	// Allways renew the token in seesion for login or logout
 	_ = m.App.Session.RenewToken(r.Context())
@@ -477,10 +478,16 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
+// This function logs out the user 
 func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	_ = m.App.Session.Destroy(r.Context())
 	_ = m.App.Session.RenewToken(r.Context())
 
 	m.App.Session.Put(r.Context(), "warning", "You have logged out of your account")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+
+func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "admin-dashboard.page.html", &models.TemplateData{})
 }
