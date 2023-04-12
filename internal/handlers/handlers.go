@@ -420,6 +420,13 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 
 // This function handles the Admin Login page and renders the template
 func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
+	userExists := m.App.Session.GetInt(r.Context(), "user_id")
+	if userExists > 0 {
+		m.App.Session.Put(r.Context(), "warning", "You are already logged in")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
 	render.Template(w, r, "login.page.html", &models.TemplateData{
 		Form: forms.New(nil),
 	})
