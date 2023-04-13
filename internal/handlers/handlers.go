@@ -475,10 +475,10 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 
 	m.App.Session.Put(r.Context(), "user_id", id)
 	m.App.Session.Put(r.Context(), "flash", "Login Successful")
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
 }
 
-// This function logs out the user 
+// This function logs out the user
 func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	_ = m.App.Session.Destroy(r.Context())
 	_ = m.App.Session.RenewToken(r.Context())
@@ -486,7 +486,6 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	m.App.Session.Put(r.Context(), "warning", "You have logged out of your account")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
-
 
 func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-dashboard.page.html", &models.TemplateData{})
