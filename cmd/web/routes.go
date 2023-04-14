@@ -44,6 +44,10 @@ func routes(app *config.AppConfig) http.Handler {
 		// Use the Auth middleware
 		mux.Use(Auth)
 		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
+
+		mux.Get("/new-reservations", handlers.Repo.AdminNewReservations)
+		mux.Get("/all-reservations", handlers.Repo.AdminAllReservations)
+		mux.Get("/reservations-calendar", handlers.Repo.AdminReservationsCalendar)
 	})
 
 	return mux
