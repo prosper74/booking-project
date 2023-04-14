@@ -492,10 +492,17 @@ func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-dashboard.page.html", &models.TemplateData{})
 }
 
+// Handles the new-reservations route
 func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "new-reservations.page.html", &models.TemplateData{})
 }
 
+// Handles the all-reservations route
 func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "all-reservations.page.html", &models.TemplateData{})
+}
+
+// Handles the reservations-calendar route
+func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "reservations-calendar.page.html", &models.TemplateData{})
 }
