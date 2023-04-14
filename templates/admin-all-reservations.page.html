@@ -13,9 +13,16 @@
       </div>
     </div>
 
+    {{$reservations := index .Data "reservations"}}
+
     <div class="row">
       <div class="grid-margin">
-        All Reservations Content
+
+        <p>
+          {{range $reservations}}
+          {{.Room.RoomName}} <br>
+          {{end}}
+        </p>
       </div>
     </div>
   </div>
