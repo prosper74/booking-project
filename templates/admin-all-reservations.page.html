@@ -37,12 +37,14 @@
             <tr>
               <td>{{.ID}}</td>
               <td>{{.Room.RoomName}}</td>
-              <td>{{.FirstName}} {{.LastName}}</td>
+              <td>
+                <a href="/admin/reservations/all/{{.ID}}">{{.FirstName}} {{.LastName}}</a>
+              </td>
               <td>{{.Phone}}</td>
               <td>{{.Email}}</td>
-              <td>{{.StartDate}}</td>
-              <td>{{.EndDate}}</td>
-              <td>{{.CreatedAt}}</td>
+              <td>{{humanDate .StartDate}}</td>
+              <td>{{humanDate .EndDate}}</td>
+              <td>{{humanDate .CreatedAt}}</td>
             </tr>
             {{end}}
           </tbody>
@@ -57,6 +59,12 @@
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 
 <script>
-  const dataTable = new simpleDatatables.DataTable("#all-reservations", {})
+  // defer script - run when all content is loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    const dataTable = new simpleDatatables.DataTable("#all-reservations", {
+      select: 3,
+      sort: "desc"
+    })
+  })
 </script>
 {{end}}
