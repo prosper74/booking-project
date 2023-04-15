@@ -45,7 +45,7 @@
 
     ::-webkit-scrollbar-thumb:hover {
       background: #5520c0;
-    }    
+    }
   </style>
 </head>
 
@@ -57,7 +57,8 @@
         <div class="card-body card-body-padding d-flex align-items-center justify-content-between">
           <div class="ps-lg-1">
             <div class="d-flex align-items-center justify-content-between">
-              <p class="mb-0 font-weight-medium me-3 buy-now-text">Enjoy 50% discount this festive season when you book two rooms!</p>
+              <p class="mb-0 font-weight-medium me-3 buy-now-text">Enjoy 50% discount this festive season when you book
+                two rooms!</p>
               <a href="/reservation" class="btn me-2 buy-now-btn border-0">Book Now</a>
             </div>
           </div>
@@ -73,8 +74,8 @@
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo me-5" href="/admin/dashboard"><img src="/static/admin/images/logo.svg" class="me-2"
-            alt="logo" /></a>
+        <a class="navbar-brand brand-logo me-5" href="/admin/dashboard"><img src="/static/admin/images/logo.svg"
+            class="me-2" alt="logo" /></a>
         <a class="navbar-brand brand-logo-mini" href="/admin/dashboard"><img src="/static/admin/images/logo-mini.svg"
             alt="logo" /></a>
       </div>
@@ -87,7 +88,7 @@
           <li class="nav-item">
             <a href="/" class="nav-link">
               Public Site
-            </a>            
+            </a>
           </li>
 
           <li class="nav-item">
@@ -95,9 +96,9 @@
               Logout
             </a>
           </li>
-          
+
           <li class="nav-item nav-profile">
-            <img src="/static/admin/images/faces/face28.jpg" alt="profile" />            
+            <img src="/static/admin/images/faces/face28.jpg" alt="profile" />
           </li>
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
@@ -117,6 +118,7 @@
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
+
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
               aria-controls="ui-basic">
@@ -130,17 +132,25 @@
                 <li class="nav-item"> <a class="nav-link" href="/admin/all-reservations">All Reservations</a></li>
               </ul>
             </div>
-          </li>  
+          </li>
+
           <li class="nav-item">
             <a class="nav-link" href="/admin/reservations-calendar">
               <i class="ti-layout-list-post menu-icon"></i>
               <span class="menu-title">Reservation Calendar</span>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/todo-list">
+              <i class="ti-layout-list-post menu-icon"></i>
+              <span class="menu-title">Todo List</span>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- partial -->
-      
+
       {{template "admin_content" .}}
 
       <!-- main-panel ends -->
@@ -150,8 +160,8 @@
     <!-- partial:partials/_footer.html -->
     <footer class="footer">
       <div class="d-sm-flex justify-content-center justify-content-sm-between">
-        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright ©2023 
-          <a href="#">Hotel </a></span>        
+        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright ©2023
+          <a href="#">Hotel </a></span>
       </div>
     </footer>
     <!-- partial -->
