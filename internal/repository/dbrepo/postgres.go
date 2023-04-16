@@ -330,7 +330,7 @@ func (m *postgresDBRepo) GetReservationByID(id int) (models.Reservation, error) 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	var res models.Reservation
+	var reservation models.Reservation
 
 	query := `
 		select r.id, r.first_name, r.last_name, r.email, r.phone, r.start_date,
@@ -344,26 +344,26 @@ func (m *postgresDBRepo) GetReservationByID(id int) (models.Reservation, error) 
 	row := m.DB.QueryRowContext(ctx, query, id)
 
 	err := row.Scan(
-		&res.ID,
-		&res.FirstName,
-		&res.LastName,
-		&res.Email,
-		&res.Phone,
-		&res.StartDate,
-		&res.EndDate,
-		&res.RoomID,
-		&res.CreatedAt,
-		&res.UpdatedAt,
-		&res.Processed,
-		&res.Room.ID,
-		&res.Room.RoomName,
+		&reservation.ID,
+		&reservation.FirstName,
+		&reservation.LastName,
+		&reservation.Email,
+		&reservation.Phone,
+		&reservation.StartDate,
+		&reservation.EndDate,
+		&reservation.RoomID,
+		&reservation.CreatedAt,
+		&reservation.UpdatedAt,
+		&reservation.Processed,
+		&reservation.Room.ID,
+		&reservation.Room.RoomName,
 	)
 
 	if err != nil {
-		return res, err
+		return reservation, err
 	}
 
-	return res, nil
+	return reservation, nil
 }
 
 // UpdateReservation updates a reservation in the database
