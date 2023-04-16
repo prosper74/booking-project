@@ -1,0 +1,27 @@
+{{template "admin" .}}
+{{define "css"}}
+{{end}} {{define "admin_content"}}
+
+<!-- partial -->
+<div class="main-panel">
+  {{$reservation := index .Data "reservation"}}
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-12 grid-margin">
+        <div>
+          <h4 class="font-weight-bold mb-0">{{$reservation.Room.RoomName}}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="grid-margin">
+        Reservation ID: {{$reservation.ID}}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- main-panel ends -->
+
+{{end}} {{define "js"}}
+{{end}}

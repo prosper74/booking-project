@@ -526,7 +526,30 @@ func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request
 
 // Handles the single-reservation route
 func (m *Repository) AdminSingleReservation(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "admin-single-reservation.page.html", &models.TemplateData{})
+	urlParams := strings.Split(r.RequestURI, "/")
+	id, err := strconv.Atoi(urlParams[4])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	src := urlParams[3]
+	stringMap := make(map[string]string)
+	stringMap["src"] = src
+
+	reservation, err := m.DB.GetReservationByID(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["reservation"] = reservation
+
+	render.Template(w, r, "admin-single-reservation.page.html", &models.TemplateData{
+		StringMap: stringMap,
+		Data:      data,
+	})
 }
 
 // Handles the reservations-calendar route
