@@ -524,6 +524,11 @@ func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request
 	})
 }
 
+// Handles the single-reservation route
+func (m *Repository) AdminSingleReservation(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "admin-single-reservation.page.html", &models.TemplateData{})
+}
+
 // Handles the reservations-calendar route
 func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-reservations-calendar.page.html", &models.TemplateData{})
