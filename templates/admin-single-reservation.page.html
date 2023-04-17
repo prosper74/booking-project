@@ -36,6 +36,12 @@
           <strong>Room Name: </strong> {{$reservation.Room.RoomName}} <br>
           <strong>Created At: </strong> {{humanDate $reservation.CreatedAt}} <br>
         </p>
+
+        <button id="processReservation" class="btn btn-warning call-to-action-button mt-3"
+          onclick="processReservation({{$reservation.ID}})">
+          Mark as processed
+        </button>
+
         <form action="/admin/reservations/{{$src}}/{{$reservation.ID}}" method="post" class="row g-3 main-form"
           novalidate>
           <!-- needs-validation -->
@@ -102,6 +108,21 @@
   </div>
 </div>
 <!-- main-panel ends -->
-
-{{end}} {{define "js"}}
+{{end}}
+{{define "js"}}
+{{$src := index .StringMap "src"}}
+<script>
+  function processReservation(id) {
+    Prompt().customModal({
+      title: "Are you sure you want to mark this Reservation as Processed?",
+      message: "",
+      icon: "warning",
+      callback: function (result) {
+        if (result !== false) {
+          window.location.href = "/admin/process-reservation/{{$src}}/" + id
+        }
+      }
+    })
+  }
+</script>
 {{end}}
