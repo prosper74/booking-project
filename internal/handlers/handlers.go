@@ -549,6 +549,7 @@ func (m *Repository) AdminSingleReservation(w http.ResponseWriter, r *http.Reque
 	render.Template(w, r, "admin-single-reservation.page.html", &models.TemplateData{
 		StringMap: stringMap,
 		Data:      data,
+		Form: forms.New(nil),
 	})
 }
 

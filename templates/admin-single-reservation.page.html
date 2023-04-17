@@ -1,22 +1,102 @@
 {{template "admin" .}}
 {{define "css"}}
+<style>
+  .main-form {
+    margin-top: 1rem;
+  }
+
+  .main-form label {
+    font-weight: bold;
+  }
+
+  .main-form .form-control {
+    border-radius: 5px;
+  }
+</style>
 {{end}} {{define "admin_content"}}
 
 <!-- partial -->
 <div class="main-panel">
+  {{$src := index .StringMap "src"}}
   {{$reservation := index .Data "reservation"}}
   <div class="content-wrapper">
     <div class="row">
       <div class="col-md-12 grid-margin">
         <div>
-          <h4 class="font-weight-bold mb-0">{{$reservation.Room.RoomName}}</h4>
+          <h4 class="font-weight-bold mb-0">Reservation for {{$reservation.Room.RoomName}}</h4>
         </div>
       </div>
     </div>
 
     <div class="row">
       <div class="grid-margin">
-        Reservation ID: {{$reservation.ID}}
+        <p>
+          <strong>Arrival Date: </strong> {{humanDate $reservation.StartDate}} <br>
+          <strong>Departure Date: </strong> {{humanDate $reservation.EndDate}} <br>
+          <strong>Room Name: </strong> {{$reservation.Room.RoomName}} <br>
+          <strong>Created At: </strong> {{humanDate $reservation.CreatedAt}} <br>
+        </p>
+        <form action="/admin/reservations/{{$src}}/{{$reservation.ID}}" method="post" class="row g-3 main-form"
+          novalidate>
+          <!-- needs-validation -->
+          <div class="col-md-6">
+            <label for="first-name" class="form-label">First name</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+                  "first_name"}} is-invalid {{end}}' id="first-name" name="first_name"
+              value="{{$reservation.FirstName}}" required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "first_name"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="last-name" class="form-label">Last name</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+                  "last_name"}} is-invalid {{end}}' id="last-name" name="last_name" value="{{$reservation.LastName}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "last_name"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="email" class="form-label">Email</label>
+            <div class="input-group has-validation">
+              <span class="input-group-text" id="inputGroupPrepend">📧</span>
+              <input type="email" class='form-control {{with .Form.Errors.Get
+                    "email"}} is-invalid {{end}}' id="email" name="email" value="{{$reservation.Email}}"
+                aria-describedby="inputGroupPrepend" required />
+              <div class="invalid-feedback">
+                {{with .Form.Errors.Get "email"}} {{.}} {{end}}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="phone" class="form-label">Phone number</label>
+            <input type="number" class='form-control {{with .Form.Errors.Get
+                  "phone"}} is-invalid {{end}}' id="phone" name="phone" value="{{$reservation.Phone}}" required />
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "phone"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+
+          <div class="col-12">
+            <button class="btn btn-primary call-to-action-button mt-3" type="submit">
+              Save
+            </button>
+            <a href="/admin/{{$src}}-reservations" class="btn btn-warning call-to-action-button mt-3">
+              Cancel
+            </a>
+            <a href="#" class="btn btn-danger call-to-action-button mt-3">
+              Delete
+            </a>
+          </div>
+        </form>
       </div>
     </div>
   </div>
