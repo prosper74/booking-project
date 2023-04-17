@@ -524,7 +524,7 @@ func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request
 	})
 }
 
-// Handles the single-reservation route
+// Handles the single-reservation route for POST
 func (m *Repository) AdminSingleReservation(w http.ResponseWriter, r *http.Request) {
 	urlParams := strings.Split(r.RequestURI, "/")
 	id, err := strconv.Atoi(urlParams[4])
@@ -551,6 +551,44 @@ func (m *Repository) AdminSingleReservation(w http.ResponseWriter, r *http.Reque
 		Data:      data,
 		Form: forms.New(nil),
 	})
+}
+
+// Handles the single-reservation route
+func (m *Repository) PostAdminSingleReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	urlParams := strings.Split(r.RequestURI, "/")
+	id, err := strconv.Atoi(urlParams[4])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	src := urlParams[3]
+
+	reservation, err := m.DB.GetReservationByID(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	reservation.FirstName = r.Form.Get("first_name")
+	reservation.LastName = r.Form.Get("last_name")
+	reservation.Email = r.Form.Get("email")
+	reservation.Phone = r.Form.Get("phone")
+
+	err = m.DB.UpdateReservation(reservation)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	m.App.Session.Put(r.Context(), "flash", "Reservation Updated")
+	http.Redirect(w, r, fmt.Sprintf("/admin/%s-reservations", src), http.StatusSeeOther)
 }
 
 // Handles the reservations-calendar route

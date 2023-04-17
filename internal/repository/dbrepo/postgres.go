@@ -367,7 +367,7 @@ func (m *postgresDBRepo) GetReservationByID(id int) (models.Reservation, error) 
 }
 
 // UpdateReservation updates a reservation in the database
-func (m *postgresDBRepo) UpdateReservation(u models.Reservation) error {
+func (m *postgresDBRepo) UpdateReservation(user models.Reservation) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -377,12 +377,12 @@ func (m *postgresDBRepo) UpdateReservation(u models.Reservation) error {
 	`
 
 	_, err := m.DB.ExecContext(ctx, query,
-		u.FirstName,
-		u.LastName,
-		u.Email,
-		u.Phone,
+		user.FirstName,
+		user.LastName,
+		user.Email,
+		user.Phone,
 		time.Now(),
-		u.ID,
+		user.ID,
 	)
 
 	if err != nil {
