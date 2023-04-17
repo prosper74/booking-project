@@ -549,7 +549,7 @@ func (m *Repository) AdminSingleReservation(w http.ResponseWriter, r *http.Reque
 	render.Template(w, r, "admin-single-reservation.page.html", &models.TemplateData{
 		StringMap: stringMap,
 		Data:      data,
-		Form: forms.New(nil),
+		Form:      forms.New(nil),
 	})
 }
 
@@ -569,6 +569,8 @@ func (m *Repository) PostAdminSingleReservation(w http.ResponseWriter, r *http.R
 	}
 
 	src := urlParams[3]
+	stringMap := make(map[string]string)
+	stringMap["src"] = src
 
 	reservation, err := m.DB.GetReservationByID(id)
 	if err != nil {
@@ -580,6 +582,25 @@ func (m *Repository) PostAdminSingleReservation(w http.ResponseWriter, r *http.R
 	reservation.LastName = r.Form.Get("last_name")
 	reservation.Email = r.Form.Get("email")
 	reservation.Phone = r.Form.Get("phone")
+
+	form := forms.New(r.PostForm)
+	form.Required("first_name", "last_name", "email", "phone")
+	form.MinLength("first_name", 3, 30)
+	form.MinLength("last_name", 3, 30)
+	form.IsEmail("email")
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+		m.App.Session.Put(r.Context(), "error", "Invalid inputs")
+		render.Template(w, r, "admin-single-reservation.page.html", &models.TemplateData{
+			Form:      form,
+			Data:      data,
+			StringMap: stringMap,
+		})
+
+		return
+	}
 
 	err = m.DB.UpdateReservation(reservation)
 	if err != nil {
