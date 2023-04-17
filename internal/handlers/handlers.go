@@ -17,6 +17,7 @@ import (
 	"github.com/atuprosper/booking-project/internal/render"
 	"github.com/atuprosper/booking-project/internal/repository"
 	"github.com/atuprosper/booking-project/internal/repository/dbrepo"
+	"github.com/go-chi/chi/v5"
 )
 
 var Repo *Repository
@@ -609,6 +610,21 @@ func (m *Repository) PostAdminSingleReservation(w http.ResponseWriter, r *http.R
 	}
 
 	m.App.Session.Put(r.Context(), "flash", "Reservation Updated")
+	http.Redirect(w, r, fmt.Sprintf("/admin/%s-reservations", src), http.StatusSeeOther)
+}
+
+// Handles the processing of revervation
+func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
+	src := chi.URLParam(r, "src")
+
+	err := m.DB.UpdateProcessedForReservation(id, 1)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	m.App.Session.Put(r.Context(), "flash", "<strong>Successful!!!</strong><br><br> <p>Reservation is now marked as Processed</p>")
 	http.Redirect(w, r, fmt.Sprintf("/admin/%s-reservations", src), http.StatusSeeOther)
 }
 
