@@ -406,3 +406,18 @@ func (m *postgresDBRepo) DeleteReservation(id int) error {
 
 	return nil
 }
+
+// UpdateProcessedForReservation updates processed for a reservation by id
+func (m *postgresDBRepo) UpdateProcessedForReservation(id, processed int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := "update reservations set processed = $1 where id = $2"
+
+	_, err := m.DB.ExecContext(ctx, query, processed, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
