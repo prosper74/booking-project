@@ -12,6 +12,11 @@
   .main-form .form-control {
     border-radius: 5px;
   }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+  }
 </style>
 {{end}} {{define "admin_content"}}
 
@@ -37,8 +42,7 @@
           <strong>Created At: </strong> {{humanDate $reservation.CreatedAt}} <br>
         </p>
 
-        <button id="processReservation" class="btn btn-warning call-to-action-button mt-3"
-          onclick="processReservation({{$reservation.ID}})">
+        <button class="btn btn-warning call-to-action-button mt-3" onclick="processReservation({{$reservation.ID}})">
           Mark as processed
         </button>
 
@@ -91,16 +95,19 @@
 
           <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
 
-          <div class="col-12">
-            <button class="btn btn-primary call-to-action-button mt-3" type="submit">
-              Save
-            </button>
-            <a href="/admin/{{$src}}-reservations" class="btn btn-warning call-to-action-button mt-3">
-              Cancel
-            </a>
-            <a href="#" class="btn btn-danger call-to-action-button mt-3">
+          <div class="col-12 button-container">
+            <div>
+              <button class="btn btn-primary call-to-action-button mt-3" type="submit">
+                Save
+              </button>
+              <a href="/admin/{{$src}}-reservations" class="btn btn-warning call-to-action-button mt-3">
+                Cancel
+              </a>
+            </div>
+            
+            <button class="btn btn-danger call-to-action-button mt-3">
               Delete
-            </a>
+            </button>
           </div>
         </form>
       </div>
