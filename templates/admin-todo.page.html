@@ -1,0 +1,54 @@
+{{template "admin" .}}
+{{define "css"}}
+<style>
+  .list-wrapper {
+    overflow: auto;
+  }
+</style>
+{{end}} {{define "admin_content"}}
+
+<!-- partial -->
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-12 grid-margin">
+        <div>
+          <h4 class="font-weight-bold mb-0">Todo List</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            
+            <div class="add-items d-flex my-4">
+              <input type="text" class="form-control todo-list-input me-2" placeholder="Add new task">
+              <button class="add btn btn-icon text-primary todo-list-add-btn bg-transparent"><i
+                  class="ti-location-arrow"></i></button>
+            </div>
+            
+            <div class="list-wrapper pt-2">
+              <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+                <li>
+                  <div class="form-check form-check-flat">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox">
+                      Become A Travel Pro In One Easy Lesson
+                    </label>
+                  </div>
+                  <i class="remove ti-trash"></i>
+                </li>
+              </ul>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- main-panel ends -->
+
+{{end}} {{define "js"}} {{end}}
