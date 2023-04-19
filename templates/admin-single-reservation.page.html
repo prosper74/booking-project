@@ -19,6 +19,11 @@
     justify-content: space-between;
     align-items: center;
   }
+
+  .hr-top {
+    border: 1px solid rgb(170, 170, 170);
+    border-radius: 10px;
+  }
 </style>
 {{end}} {{define "admin_content"}}
 
@@ -50,6 +55,8 @@
         <button class="btn btn-warning call-to-action-button mt-3" onclick="processReservation({{$reservation.ID}})">
           Mark as processed
         </button>
+
+        <hr class="hr-top">
 
         <form action="/admin/reservations/{{$src}}/{{$reservation.ID}}" method="post" class="row g-3 main-form"
           novalidate>
