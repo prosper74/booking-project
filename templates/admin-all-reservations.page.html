@@ -1,6 +1,11 @@
 {{template "admin" .}}
 {{define "css"}}
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+<style>
+  .datatable-container {
+    overflow-x: auto;
+  }
+</style>
 {{end}} {{define "admin_content"}}
 
 <!-- partial -->
