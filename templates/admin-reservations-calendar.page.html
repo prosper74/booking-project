@@ -1,5 +1,12 @@
 {{template "admin" .}}
 {{define "css"}}
+<style>
+  .calendar-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
 {{end}} {{define "admin_content"}}
 
 <!-- partial -->
@@ -15,12 +22,14 @@
 
     <div class="row">
       <div class="grid-margin">
-        <h3 class="text-center">{{index .StringMap "this_month"}}, {{index .StringMap "this_year"}}</h3>
         <div class="calendar-buttons">
           <a class="btn btn-sm btn-outline-secondary"
             href='/admin/reservations-calendar?y={{index .StringMap "previous_year"}}&m={{index .StringMap "previous_month"}}'>
             <i class="ti-angle-double-left"></i>
           </a>
+
+          <h3>{{index .StringMap "this_month"}}, {{index .StringMap "this_year"}}</h3>
+
           <a class="btn btn-sm btn-outline-secondary"
             href='/admin/reservations-calendar?y={{index .StringMap "next_year"}}&m={{index .StringMap "next_month"}}'>
             <i class="ti-angle-double-right"></i>
