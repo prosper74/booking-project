@@ -670,3 +670,8 @@ func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Re
 		StringMap: stringMap,
 	})
 }
+
+// Handles the admin todo list route
+func (m *Repository) AdminTodoList(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{})
+}
