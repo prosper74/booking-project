@@ -645,5 +645,26 @@ func (m *Repository) AdminDeleteReservation(w http.ResponseWriter, r *http.Reque
 
 // Handles the reservations-calendar route
 func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Request) {
+	now := time.Now()
+
+	if r.URL.Query().Get("y") != "" {
+		month, _ := strconv.Atoi(r.URL.Query().Get("m"))
+		year, _ := strconv.Atoi(r.URL.Query().Get("y"))
+
+		now = time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.UTC)
+	}
+
+	// get next and previous months/year
+	nextMonth := now.AddDate(0, 1, 0)
+	previousMonth := now.AddDate(0, -1, 0)
+
+	stringMap := make(map[string]string)
+	stringMap["this_month"] = now.Format("01")
+	stringMap["this_year"] = now.Format("2006")
+	stringMap["next_month"] = nextMonth.Format("01")
+	stringMap["next_year"] = nextMonth.Format("2006")
+	stringMap["previous_month"] = previousMonth.Format("01")
+	stringMap["previous_year"] = previousMonth.Format("2006")
+
 	render.Template(w, r, "admin-reservations-calendar.page.html", &models.TemplateData{})
 }
