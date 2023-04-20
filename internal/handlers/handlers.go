@@ -686,6 +686,38 @@ func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Re
 
 	data["rooms"] = rooms
 
+	// get the reservation and block maps
+	for _, room := range rooms {
+		reservationMap := make(map[string]int)
+		blockMap := make(map[string]int)
+
+		for day := firstOfMonth; day.After(lastOfMonth) == false; day.AddDate(0, 0, 1) {
+			reservationMap[day.Format("2006-01-2")] = 0
+			blockMap[day.Format("2006-01-2")] = 0
+
+			restrictions, err := m.DB.GetRestrictionsForCurrentRoom(room.ID, firstOfMonth, lastOfMonth)
+			if err != nil {
+				helpers.ServerError(w, err)
+				return
+			}
+
+			for _, restriction := range restrictions {
+				if restriction.ReservationID > 0 {
+					for d := restriction.StartDate; d.After(restriction.EndDate) == false; d.AddDate(0,0,1) {
+						reservationMap[d.Format("2006-01-2")] = restriction.ReservationID						
+					}
+				} else {
+					blockMap[restriction.StartDate.Format("2006-01-2")] = restriction.ID
+				}
+			}
+		}
+
+		data[fmt.Sprintf("reservation_map_%d", room.ID)] = reservationMap
+		data[fmt.Sprintf("block_map_%d", room.ID)] = blockMap
+
+		m.App.Session.Put(r.Context(), fmt.Sprintf("block_map_%d", room.ID), blockMap)
+	}
+
 	render.Template(w, r, "admin-reservations-calendar.page.html", &models.TemplateData{
 		StringMap: stringMap,
 		Data:      data,
