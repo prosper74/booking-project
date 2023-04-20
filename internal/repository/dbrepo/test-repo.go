@@ -103,3 +103,10 @@ func (m *testDBRepo) AllRooms() ([]models.Room, error) {
 
 	return rooms, nil
 }
+
+// Get the restrictions for a room
+func (m *testDBRepo) GetRestrictionsForCurrentRoom(roomID int, start, end time.Time) ([]models.RoomRestriction, error) {
+	var restrictions []models.RoomRestriction	
+
+	return restrictions, nil
+}
