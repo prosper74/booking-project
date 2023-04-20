@@ -14,6 +14,9 @@
   {{$now := index .Data "now"}}
   {{$rooms := index .Data "rooms"}}
   {{$daysInMonth := index .IntMap "days_in_month"}}
+  {{$currentMonth:= index .StringMap "this_month"}}
+  {{$currentYear:= index .StringMap "this_year"}}
+
   <div class="content-wrapper">
     <div class="row">
       <div class="col-md-12 grid-margin">
