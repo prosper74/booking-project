@@ -48,8 +48,11 @@
         <p>
           <strong>Arrival Date: </strong> {{humanDate $reservation.StartDate}} <br>
           <strong>Departure Date: </strong> {{humanDate $reservation.EndDate}} <br>
-          <strong>Room Name: </strong> {{$reservation.Room.RoomName}} <br>
+          <strong>Room Name: </strong> {{$reservation.Room.RoomName}} <br>          
           <strong>Created At: </strong> {{humanDate $reservation.CreatedAt}} <br>
+          {{if eq $reservation.Processed 1}}
+          <strong>Status: </strong> Processed <br>
+          {{end}}
         </p>
 
         <button class="btn btn-warning call-to-action-button mt-3" onclick="processReservation({{$reservation.ID}})">
