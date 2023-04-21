@@ -48,7 +48,7 @@
         <p>
           <strong>Arrival Date: </strong> {{humanDate $reservation.StartDate}} <br>
           <strong>Departure Date: </strong> {{humanDate $reservation.EndDate}} <br>
-          <strong>Room Name: </strong> {{$reservation.Room.RoomName}} <br>          
+          <strong>Room Name: </strong> {{$reservation.Room.RoomName}} <br>
           <strong>Created At: </strong> {{humanDate $reservation.CreatedAt}} <br>
           {{if eq $reservation.Processed 1}}
           <strong>Status: </strong> Processed <br>
@@ -110,13 +110,19 @@
 
           <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
 
-          <div class="button-container">
-            <button class="btn btn-primary call-to-action-button mt-3" type="submit">
+          <div class="button-container mt-3">
+            <button class="btn btn-primary call-to-action-button" type="submit">
               Save
             </button>
-            <a href="/admin/{{$src}}-reservations" class="btn btn-warning call-to-action-button mt-3">
+            {{if eq $src "cal"}}
+            <a href="#!" class="btn btn-warning call-to-action-button" onclick="window.history.go(-1)">
+              Back
+            </a>
+            {{else}}
+            <a href="/admin/{{$src}}-reservations" class="btn btn-warning call-to-action-button">
               Cancel
             </a>
+            {{end}}
           </div>
         </form>
       </div>
