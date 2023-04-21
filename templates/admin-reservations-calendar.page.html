@@ -62,7 +62,11 @@
             <tr>
               {{range $index := iterate $daysInMonth}}
               <td class="text-center">
-                <input type="checkbox">
+                <input {{if gt (index $blocks (printf "%s-%s-%d" $currentYear $currentMonth (add $index 1))) 0}} checked
+                  name="remove_block_{{$roomID}}_{{printf "%s-%s-%d" $currentYear $currentMonth (add $index 1)}}"
+                  value="{{index $blocks (printf "%s-%s-%d" $currentYear $currentMonth (add $index 1))}}" {{else}}
+                  name="add_block_{{$roomID}}_{{printf "%s-%s-%d" $currentYear $currentMonth (add $index 1)}}" {{end}}
+                  type="checkbox">
               </td>
               {{end}}
             </tr>
