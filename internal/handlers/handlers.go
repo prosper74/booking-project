@@ -727,6 +727,11 @@ func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Re
 	})
 }
 
+// Handles the reservation calendar POST route
+func (m *Repository) AdminPostReservationsCalendar(w http.ResponseWriter, r *http.Request) {
+	log.Println("works")
+}
+
 // Handles the admin todo list route
 func (m *Repository) AdminTodoList(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{})

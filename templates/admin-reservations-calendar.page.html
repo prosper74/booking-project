@@ -6,6 +6,11 @@
     justify-content: space-between;
     align-items: center;
   }
+
+  .hr-top {
+    border: 1px solid rgb(170, 170, 170);
+    border-radius: 10px;
+  }
 </style>
 {{end}} {{define "admin_content"}}
 
@@ -42,7 +47,7 @@
           </a>
         </div>
 
-        <form action="admin/reservations-calendar" action="post">
+        <form action="/admin/reservations-calendar" method="post">
           <div class="table-responsive">
             {{range $rooms}}
             {{$roomID := .ID}}
@@ -83,6 +88,8 @@
 
             <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
           </div>
+
+          <hr class="hr-top">
 
           <button class="btn btn-primary call-to-action-button mt-4" type="submit">
             Save
