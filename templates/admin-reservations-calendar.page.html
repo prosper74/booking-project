@@ -45,6 +45,9 @@
         <div class="table-responsive">
           {{range $rooms}}
           {{$roomID := .ID}}
+          {{$blocks := index $.Data (printf "block_map_%d" .ID)}}
+          {{$reservations := index $.Data (printf "reservation_map_%d" .ID)}}
+
           <h4 class="mb-2">{{.RoomName}}</h4>
           <table class="table table-bordered table-sm mb-4">
             <tr class="table-dark">
