@@ -24,6 +24,16 @@
     border: 1px solid rgb(170, 170, 170);
     border-radius: 10px;
   }
+
+  .delete-btn {
+    color: #ff4747;
+    background-color: transparent;
+    border-color: #ff4747;
+  }
+
+  .delete-btn:hover {
+    color: #fff;
+  }
 </style>
 {{end}} {{define "admin_content"}}
 
@@ -37,7 +47,11 @@
         <div>
           <h4 class="font-weight-bold mb-0">Reservation for {{$reservation.Room.RoomName}}</h4>
         </div>
-        <button class="btn btn-danger call-to-action-button mt-3" onclick="deleteReservation({{$reservation.ID}})">
+        <!-- <button class="btn btn-danger call-to-action-button mt-3" onclick="deleteReservation({{$reservation.ID}})">
+          Delete
+        </button> -->
+        <button type="button" class="btn btn-danger btn-icon-text delete-btn" onclick="deleteReservation({{$reservation.ID}})">
+          <i class="ti-trash btn-icon-prepend"></i>
           Delete
         </button>
       </div>
