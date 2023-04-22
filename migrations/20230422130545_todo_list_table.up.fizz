@@ -1,0 +1,5 @@
+create_table("todo_list") {
+  t.Column("id", "integer", {primary: true})
+  t.Column("todo",  "string", {"default": ""})
+  t.Column("user_id", "integer", {})
+}
