@@ -28,11 +28,59 @@
   .delete-btn {
     color: #ff4747;
     background-color: transparent;
-    border-color: #ff4747;
+    border-color: transparent;
+    font-size: 16px;
+    font-weight: 600;
   }
 
   .delete-btn:hover {
-    color: #fff;
+    color: #a20000;
+  }
+
+  .processed-btn {
+    color: #333;
+    background-color: transparent;
+    border-color: transparent;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .processed-btn:hover {
+    color: #5520c0;
+  }
+
+  /* Popover styles */
+  #popover-btn {
+    color: #5520c0;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .popover {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+    margin-left: -6rem;
+  }
+
+  .popover ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .popover li {
+    margin: 10px 0;
+  }
+
+  .popover a {
+    color: #333;
+    text-decoration: none;
   }
 </style>
 {{end}} {{define "admin_content"}}
@@ -45,12 +93,25 @@
     <div class="row">
       <div class="col-md-12 grid-margin headingContainer">
         <div>
-          <h4 class="font-weight-bold mb-0">Reservation for {{$reservation.Room.RoomName}}</h4>
+          <h3 class="font-weight-bold mb-0">Reservation Details</h3>
         </div>
-        <button type="button" class="btn btn-danger btn-icon-text delete-btn" onclick="deleteReservation({{$reservation.ID}})">
-          <i class="ti-trash btn-icon-prepend"></i>
-          Delete
-        </button>
+        <div>
+          <button id="popover-btn" class="btn"><i class="ti-more-alt"></i></button>
+          <div class="popover">
+            <ul>
+              <li>
+                <button class="btn-icon-text delete-btn" onclick="deleteReservation({{$reservation.ID}})">
+                  <i class="ti-trash btn-icon-prepend"></i>
+                  Delete
+                </button>
+              </li>
+              <li><button class="btn-icon-text processed-btn" onclick="processReservation({{$reservation.ID}})">
+                <i class="ti-trash btn-icon-prepend"></i>
+                Processed?
+              </button></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -65,10 +126,6 @@
           <strong>Status: </strong> Processed <br>
           {{end}}
         </p>
-
-        <button class="btn btn-warning call-to-action-button mt-3" onclick="processReservation({{$reservation.ID}})">
-          Mark as processed
-        </button>
 
         <hr class="hr-top">
 
@@ -170,5 +227,35 @@
       }
     })
   }
+
+  // popover functions
+  const popoverBtn = document.getElementById('popover-btn');
+  const popover = document.querySelector('.popover');
+
+  popoverBtn.addEventListener('click', () => {
+    if (popover.style.display === 'block') {
+      popover.style.display = 'none';
+    } else {
+      popover.style.display = 'block';
+      popover.style.opacity = 0;
+      popover.style.transform = 'translateY(-10px)';
+      popover.style.transition = 'opacity 0.4s, transform 0.4s';
+      setTimeout(() => {
+        popover.style.opacity = 1;
+        popover.style.transform = 'translateY(0)';
+      }, 10);
+
+      // Set the popover position at bottom left of the trigger button
+      const popoverBtnRect = popoverBtn.getBoundingClientRect();
+      popover.style.top = `${popoverBtnRect.bottom}px`;
+      popover.style.left = `${popoverBtnRect.left}px`;
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!popoverBtn.contains(e.target) && !popover.contains(e.target)) {
+      popover.style.display = 'none';
+    }
+  });
 </script>
 {{end}}
