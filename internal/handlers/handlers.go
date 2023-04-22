@@ -610,7 +610,12 @@ func (m *Repository) PostAdminSingleReservation(w http.ResponseWriter, r *http.R
 	}
 
 	m.App.Session.Put(r.Context(), "flash", "Reservation Updated")
-	http.Redirect(w, r, fmt.Sprintf("/admin/%s-reservations", src), http.StatusSeeOther)
+
+	if src == "cal" {
+		http.Redirect(w, r, "/admin/reservations-calendar", http.StatusSeeOther)
+	} else {
+		http.Redirect(w, r, fmt.Sprintf("/admin/%s-reservations", src), http.StatusSeeOther)
+	}
 }
 
 // Handles the processing of revervation
