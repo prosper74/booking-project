@@ -734,7 +734,17 @@ func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Re
 
 // Handles the reservation calendar POST route
 func (m *Repository) AdminPostReservationsCalendar(w http.ResponseWriter, r *http.Request) {
-	log.Println("works")
+	err := r.ParseForm()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	year, _ := strconv.Atoi(r.Form.Get("year"))
+	month, _ := strconv.Atoi(r.Form.Get("month"))
+
+	m.App.Session.Put(r.Context(), "flash", "Reservation Updated")
+	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-calendar?y=%d&m=%d", year, month), http.StatusSeeOther)
 }
 
 // Handles the admin todo list route
