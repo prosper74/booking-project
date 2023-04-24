@@ -538,6 +538,11 @@ func (m *Repository) AdminSingleReservation(w http.ResponseWriter, r *http.Reque
 	stringMap := make(map[string]string)
 	stringMap["src"] = src
 
+	year := r.URL.Query().Get("y")
+	month := r.URL.Query().Get("m")
+	stringMap["year"] = year
+	stringMap["month"] = month
+
 	reservation, err := m.DB.GetReservationByID(id)
 	if err != nil {
 		helpers.ServerError(w, err)
@@ -609,12 +614,15 @@ func (m *Repository) PostAdminSingleReservation(w http.ResponseWriter, r *http.R
 		return
 	}
 
+	year := r.Form.Get("year")
+	month := r.Form.Get("month")
+
 	m.App.Session.Put(r.Context(), "flash", "Reservation Updated")
 
-	if src == "cal" {
-		http.Redirect(w, r, "/admin/reservations-calendar", http.StatusSeeOther)
-	} else {
+	if year == "" {
 		http.Redirect(w, r, fmt.Sprintf("/admin/%s-reservations", src), http.StatusSeeOther)
+	} else {
+		http.Redirect(w, r, fmt.Sprintf("/admin/reservations-calendar?y=%s&m=%s", year, month), http.StatusSeeOther)
 	}
 }
 

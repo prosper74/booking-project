@@ -89,6 +89,8 @@
 <!-- partial -->
 <div class="main-panel">
   {{$src := index .StringMap "src"}}
+  {{$year := index .StringMap "year"}}
+  {{$month := index .StringMap "month"}}
   {{$reservation := index .Data "reservation"}}
   <div class="content-wrapper">
     <div class="row">
@@ -180,7 +182,9 @@
           </div>
 
           <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
-
+          <input type="hidden" name="year" value="{{$year}}" />
+          <input type="hidden" name="month" value="{{$month}}" />
+          
           <div class="button-container mt-3">
             <button class="btn btn-primary call-to-action-button" type="submit">
               Save

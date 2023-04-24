@@ -70,7 +70,7 @@
                 <td class="text-center">
                   {{if gt (index $reservations (printf "%s-%s-%d" $currentYear $currentMonth (add $index 1))) 0}}
                   <a href="/admin/reservations/cal/{{index $reservations (printf "%s-%s-%d" $currentYear $currentMonth
-                    (add $index 1))}}" class="text-decoration-none">
+                    (add $index 1))}}/show?y={{$currentYear}}&m={{$currentMonth}}" class="text-decoration-none">
                     <span class="text-danger">R</span>
                   </a>
                   {{else}}
