@@ -1,5 +1,6 @@
 {{template "admin" .}}
 {{define "css"}}
+{{$reservation := index .Data "reservation"}}
 <style>
   .main-form {
     margin-top: 1rem;
@@ -65,7 +66,7 @@
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
-    margin-left: -6rem;
+    margin-left: {{if eq $reservation.Processed 0}} -6rem {{else}} -8.2rem {{end}};
   }
 
   .popover ul {
@@ -105,10 +106,12 @@
                   Delete
                 </button>
               </li>
-              <li><button class="btn-icon-text processed-btn" onclick="processReservation({{$reservation.ID}})">
-                <i class="ti-check-box btn-icon-prepend"></i>
-                Processed?
-              </button></li>
+              <li>                 
+                <button class="btn-icon-text processed-btn" onclick="processReservation({{$reservation.ID}})">
+                  <i class="{{if eq $reservation.Processed 0}}ti-check-box{{else}}ti-back-left{{end}} btn-icon-prepend"></i>
+                  {{if eq $reservation.Processed 1}}Not{{end}} Processed?
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -201,11 +204,12 @@
 {{end}}
 {{define "js"}}
 {{$src := index .StringMap "src"}}
+{{$reservation := index .Data "reservation"}}
 <script>
   function processReservation(id) {
     Prompt().customModal({
-      title: "Are you sure you want to mark this Reservation as Processed?",
-      message: "",
+      title: "Are you sure you want to mark this Reservation as {{if eq $reservation.Processed 1}} Not {{end}} Processed?",
+      message: "{{if eq $reservation.Processed 1}} This will make the reservation appear as new reservation {{end}}",
       icon: "warning",
       callback: function (result) {
         if (result !== false) {
@@ -214,6 +218,19 @@
       }
     })
   }
+
+  // function unprocessReservation(id) {
+  //     Prompt().customModal({
+  //       title: "Are you sure you want to mark this Reservation as Not Processed?",
+  //       message: "This will make the reservation appear as new reservation",
+  //       icon: "warning",
+  //       callback: function (result) {
+  //         if (result !== false) {
+  //           window.location.href = "/admin/process-reservation/{{$src}}/" + id
+  //         }
+  //       }
+  //     })
+  //   }
 
   function deleteReservation(id) {
     Prompt().customModal({
