@@ -217,24 +217,11 @@
       icon: "warning",
       callback: function (result) {
         if (result !== false) {
-          window.location.href = "/admin/process-reservation/{{$src}}/" + id
+          window.location.href = "/admin/process-reservation/{{$src}}/" + id + "/do?y={{index .StringMap "year"}}&m={{index .StringMap "month"}}"
         }
       }
     })
   }
-
-  // function unprocessReservation(id) {
-  //     Prompt().customModal({
-  //       title: "Are you sure you want to mark this Reservation as Not Processed?",
-  //       message: "This will make the reservation appear as new reservation",
-  //       icon: "warning",
-  //       callback: function (result) {
-  //         if (result !== false) {
-  //           window.location.href = "/admin/process-reservation/{{$src}}/" + id
-  //         }
-  //       }
-  //     })
-  //   }
 
   function deleteReservation(id) {
     Prompt().customModal({
