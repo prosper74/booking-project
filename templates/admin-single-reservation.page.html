@@ -209,6 +209,9 @@
 {{define "js"}}
 {{$src := index .StringMap "src"}}
 {{$reservation := index .Data "reservation"}}
+{{$year := index .StringMap "year"}}
+{{$month := index .StringMap "month"}}
+
 <script>
   function processReservation(id) {
     Prompt().customModal({
@@ -217,7 +220,7 @@
       icon: "warning",
       callback: function (result) {
         if (result !== false) {
-          window.location.href = "/admin/process-reservation/{{$src}}/" + id + "/do?y={{index .StringMap "year"}}&m={{index .StringMap "month"}}"
+          window.location.href = "/admin/process-reservation/{{$src}}/" + id + "/do?y={{$year}}&m={{$month}}"
         }
       }
     })
@@ -230,7 +233,7 @@
       icon: "warning",
       callback: function (result) {
         if (result !== false) {
-          window.location.href = "/admin/delete-reservation/{{$src}}/" + id
+          window.location.href = "/admin/delete-reservation/{{$src}}/" + id + "/do?y={{$year}}&m={{$month}}"
         }
       }
     })

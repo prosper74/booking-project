@@ -661,8 +661,16 @@ func (m *Repository) AdminDeleteReservation(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	year := r.URL.Query().Get("y")
+	month := r.URL.Query().Get("m")
+
 	m.App.Session.Put(r.Context(), "flash", "<strong>Successful!!!</strong><br><br> <p>Reservation Deleted</p>")
-	http.Redirect(w, r, fmt.Sprintf("/admin/%s-reservations", src), http.StatusSeeOther)
+
+	if year == "" {
+		http.Redirect(w, r, fmt.Sprintf("/admin/%s-reservations", src), http.StatusSeeOther)
+	} else {
+		http.Redirect(w, r, fmt.Sprintf("/admin/reservations-calendar?y=%s&m=%s", year, month), http.StatusSeeOther)
+	}	
 }
 
 // Handles the reservations-calendar route
