@@ -631,16 +631,36 @@ func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Requ
 	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
 	src := chi.URLParam(r, "src")
 
-	err := m.DB.UpdateProcessedForReservation(id, 1)
+	reservation, err := m.DB.GetReservationByID(id)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
+	if reservation.Processed == 0 {
+		err = m.DB.UpdateProcessedForReservation(id, 1)
+		if err != nil {
+			helpers.ServerError(w, err)
+			return
+		}
+		m.App.Session.Put(r.Context(), "flash", "<strong>Successful!!!</strong><br><br> <p>Reservation is now marked as Processed</p>")
+	} else {
+		err = m.DB.UpdateProcessedForReservation(id, 0)
+		if err != nil {
+			helpers.ServerError(w, err)
+			return
+		}
+		m.App.Session.Put(r.Context(), "flash", "<strong>Successful!!!</strong><br><br> <p>Reservation is now marked as Not Processed</p>")
+	}
+
+	// err = m.DB.UpdateProcessedForReservation(id, 1)
+	// if err != nil {
+	// 	helpers.ServerError(w, err)
+	// 	return
+	// }
+
 	year := r.URL.Query().Get("y")
 	month := r.URL.Query().Get("m")
-
-	m.App.Session.Put(r.Context(), "flash", "<strong>Successful!!!</strong><br><br> <p>Reservation is now marked as Processed</p>")
 
 	if year == "" {
 		http.Redirect(w, r, fmt.Sprintf("/admin/%s-reservations", src), http.StatusSeeOther)
@@ -670,7 +690,7 @@ func (m *Repository) AdminDeleteReservation(w http.ResponseWriter, r *http.Reque
 		http.Redirect(w, r, fmt.Sprintf("/admin/%s-reservations", src), http.StatusSeeOther)
 	} else {
 		http.Redirect(w, r, fmt.Sprintf("/admin/reservations-calendar?y=%s&m=%s", year, month), http.StatusSeeOther)
-	}	
+	}
 }
 
 // Handles the reservations-calendar route
