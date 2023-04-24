@@ -26,7 +26,7 @@ define "css" }}
             name="start"
             class="form-control"
             id="start"
-            placeholder="dd/mm/yyyy"
+            placeholder="yyyy/mm/dd"
             autocomplete="off"
             required
           />
@@ -39,7 +39,7 @@ define "css" }}
             name="end"
             class="form-control"
             id="end"
-            placeholder="dd/mm/yyyy"
+            placeholder="yyyy/mm/dd"
             autocomplete="off"
             required
           />
@@ -66,7 +66,7 @@ define "css" }}
   // date picker
   const elem = document.getElementById("availability-form");
   const datepicker = new DateRangePicker(elem, {
-    format: "dd-mm-yyyy",
+    format: "yyyy-mm-dd",
     minDate: new Date(),
   });
 </script>

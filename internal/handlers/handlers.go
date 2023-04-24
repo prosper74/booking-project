@@ -82,13 +82,13 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 // This function handles the search page and displays the available rooms template
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
-	startDate, err := time.Parse("02-01-2006", r.Form.Get("start"))
+	startDate, err := time.Parse("2006-01-02", r.Form.Get("start"))
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
-	endDate, err := time.Parse("02-01-2006", r.Form.Get("end"))
+	endDate, err := time.Parse("2006-01-02", r.Form.Get("end"))
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
