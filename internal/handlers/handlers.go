@@ -149,13 +149,13 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	startDate, err := time.Parse("02-01-2006", r.Form.Get("start"))
+	startDate, err := time.Parse("2006-01-02", r.Form.Get("start"))
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
-	endDate, err := time.Parse("02-01-2006", r.Form.Get("end"))
+	endDate, err := time.Parse("2006-01-02", r.Form.Get("end"))
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -364,12 +364,12 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 	var reservation models.Reservation
 	roomID, _ := strconv.Atoi(r.URL.Query().Get("id"))
-	startDate, err := time.Parse("02-01-2006", r.URL.Query().Get("sd"))
+	startDate, err := time.Parse("2006-01-02", r.URL.Query().Get("sd"))
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	endDate, err := time.Parse("02-01-2006", r.URL.Query().Get("ed"))
+	endDate, err := time.Parse("2006-01-02", r.URL.Query().Get("ed"))
 	if err != nil {
 		helpers.ServerError(w, err)
 		return

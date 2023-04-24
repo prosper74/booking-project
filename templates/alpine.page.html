@@ -82,7 +82,7 @@ you {{ end }} {{ define "css" }}
         willOpen: () => {
           const elem = document.getElementById("reservation-dates-modal");
           const datepicker = new DateRangePicker(elem, {
-            format: "dd-mm-yyyy",
+            format: "yyyy-mm-dd",
             minDate: new Date(),
             showOnFocus: true,
           });
@@ -125,7 +125,7 @@ you {{ end }} {{ define "css" }}
                     showConfirmButton: false,
                   })
                 : Prompt().toast({
-                    title: "Room is not available!<br /> Try another date",
+                    title: "Room is not available!<br /> Try another date or checkout other amazing rooms",
                     icon: "error",
                     timer: 5000,
                     showConfirmButton: true,
