@@ -59,7 +59,7 @@
               <tr class="table-dark">
                 {{range $index := iterate $daysInMonth}}
                 <td class="text-center">
-                  {{$index}}
+                  {{add $index 1}}
                 </td>
 
                 {{end}}
