@@ -16,8 +16,8 @@ define "css" }}
   </h4>
   <p class="text-center">
     Room name: {{$reservation.Room.RoomName}}<br />
-    Arrival date: {{index .StringMap "start_date"}}<br />
-    Departure date: {{index .StringMap "end_date"}}
+    Arrival date: {{humanDate $reservation.StartDate}}<br />
+    Departure date: {{humanDate $reservation.EndDate}}
   </p>
 
   <div class="row">
