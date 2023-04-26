@@ -283,8 +283,6 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 		RestrictionID: 1,
 	}
 
-	log.Println(reservation.StartDate)
-
 	err = m.DB.InsertRoomRestriction(restriction)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't insert room restriction!")

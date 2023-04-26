@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/gob"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -52,7 +53,6 @@ func main() {
 }
 
 func run() (*driver.DB, error) {
-	app.InProduction = false
 
 	// Things to be stored in the session
 	// gob, is a built in library used for storing sessions
@@ -61,6 +61,23 @@ func run() (*driver.DB, error) {
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
 	gob.Register(make(map[string]int))
+
+	// Read flags
+	inProduction := flag.Bool("production", true, "App is in production")
+	useCache := flag.Bool("cache", true, "Use template cache")
+	dbHost := flag.String("dbhost", "localhost", "Database host")
+	dbName := flag.String("dbname", "bookings", "Database name")
+	dbUser := flag.String("dbuser", "postgres", "Database user")
+	dbPassword := flag.String("dbpassword", "brokaarea24", "Database password")
+	dbPort := flag.String("dbport", "5432", "Database port")
+	dbSSL := flag.String("dbssl", "disable", "Database ssl settings (disable, prefer, require)")
+
+	// connectionString := fmt.Sprintf("host=%s port=%s dbname=bookings user=postgres password=brokaarea24 sslmode=")
+
+	flag.Parse()
+
+	app.InProduction = *inProduction
+	app.UseCache = *useCache
 
 	mailChannel := make(chan models.MailData)
 	app.MailChannel = mailChannel
@@ -81,7 +98,8 @@ func run() (*driver.DB, error) {
 
 	// Connect to database
 	log.Println("Connecting to database...")
-	connectedDB, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=postgres password=brokaarea24")
+	connectionString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=%s", *dbHost, *dbPort, *dbName, *dbUser, *dbPassword, *dbSSL)
+	connectedDB, err := driver.ConnectSQL(connectionString)
 	if err != nil {
 		log.Fatal("Cannot connect to database. Closing application")
 	}
@@ -94,8 +112,7 @@ func run() (*driver.DB, error) {
 		return nil, err
 	}
 
-	app.TemplateCache = tc
-	app.UseCache = false
+	app.TemplateCache = tc	
 
 	// Variable to reference our app
 	repo := handlers.NewRepo(&app, connectedDB)
