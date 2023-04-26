@@ -33,21 +33,23 @@ This project is a simple hotel booking and reservation project with key features
 ### Run the server
 
 - Manual: `go run cmd/web/main.go cmd/web/middleware.go cmd/web/routes.go cmd/web/sendMail.go`
-- Batch: On Windows - create a `run.bat` file in the root directory of the project and paste the below code
+- Batch:  
+**On Windows** - create a `run.bat` file in the root directory of the project and paste the below code
 
   ```
-  go build -o booking-project cmd/web/*.go
-  booking-project
+  go build -o bookings cmd/web/*.go
+  ./bookings.exe
   ```
 
   Then run `run.bat` in the terminal
 
-  On linux - create a `run.sh` file in the root directory of the project and paste the below code
+  **On linux** - create a `run.sh` file in the root directory of the project and paste the below code
 
   ```
   #!/bin/bash
-  go build -o booking-project cmd/web/*.go
-  booking-project
+
+  go build -o booking cmd/web/*.go
+  ./bookings
   ```
 
   Run `chmod +x run.sh` then run `run.bat` in the terminal

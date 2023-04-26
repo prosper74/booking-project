@@ -66,15 +66,18 @@ func run() (*driver.DB, error) {
 	inProduction := flag.Bool("production", true, "App is in production")
 	useCache := flag.Bool("cache", true, "Use template cache")
 	dbHost := flag.String("dbhost", "localhost", "Database host")
-	dbName := flag.String("dbname", "bookings", "Database name")
-	dbUser := flag.String("dbuser", "postgres", "Database user")
-	dbPassword := flag.String("dbpassword", "brokaarea24", "Database password")
+	dbName := flag.String("dbname", "", "Database name")
+	dbUser := flag.String("dbuser", "", "Database user")
+	dbPassword := flag.String("dbpassword", "", "Database password")
 	dbPort := flag.String("dbport", "5432", "Database port")
 	dbSSL := flag.String("dbssl", "disable", "Database ssl settings (disable, prefer, require)")
 
-	// connectionString := fmt.Sprintf("host=%s port=%s dbname=bookings user=postgres password=brokaarea24 sslmode=")
-
 	flag.Parse()
+
+	if *dbName == "" || *dbUser == "" {
+		fmt.Println("Missing flag dependencies, attach the flag dependencies in your batch file")
+		os.Exit(1)
+	}
 
 	app.InProduction = *inProduction
 	app.UseCache = *useCache

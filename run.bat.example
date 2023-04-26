@@ -1,0 +1,2 @@
+go build -o bookings cmd/web/*.go
+./bookings.exe -dbname=your_db_name -dbuser=your_db_user -dbpassword=your_db_password -cache=false -production=false
