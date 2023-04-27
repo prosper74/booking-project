@@ -1,0 +1,3 @@
+drop_column("rooms", "price")
+drop_column("rooms", "image_src")
+drop_column("rooms", "description")
