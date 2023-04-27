@@ -15,27 +15,14 @@
   <div class="row">
     <!--Grid column-->
     <div class="col-md-9 mb-md-0 mb-5">
-      <form
-        id="contact-form"
-        name="contact-form"
-        action=""
-        method=""
-        class="needs-validation"
-        novalidate
-      >
+      <form id="contact-form" name="contact-form" action="" method="" class="needs-validation" novalidate>
         <!--Grid row-->
         <div class="row">
           <!--Grid column-->
           <div class="col-md-6">
             <div class="md-form mb-0">
               <label for="name" class="">Your name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                class="form-control"
-                required
-              />
+              <input type="text" id="name" name="name" class="form-control" required />
               <div class="invalid-feedback">Your full name is required</div>
             </div>
           </div>
@@ -45,13 +32,7 @@
           <div class="col-md-6">
             <div class="md-form mb-0">
               <label for="email" class="">Your email</label>
-              <input
-                type="text"
-                id="email"
-                name="email"
-                class="form-control"
-                required
-              />
+              <input type="text" id="email" name="email" class="form-control" required />
               <div class="invalid-feedback">Email is required</div>
             </div>
           </div>
@@ -64,12 +45,7 @@
           <div class="col-md-12">
             <div class="md-form mb-0">
               <label for="subject" class="">Subject</label>
-              <input
-                type="text"
-                id="subject"
-                name="subject"
-                class="form-control"
-              />
+              <input type="text" id="subject" name="subject" class="form-control" />
             </div>
           </div>
         </div>
@@ -81,24 +57,15 @@
           <div class="col-md-12">
             <div class="md-form">
               <label for="message">Your message</label>
-              <textarea
-                type="text"
-                id="message"
-                name="message"
-                rows="2"
-                class="form-control md-textarea"
-                required
-              ></textarea>
+              <textarea type="text" id="message" name="message" rows="2" class="form-control md-textarea"
+                required></textarea>
               <div class="invalid-feedback">Message is required</div>
             </div>
           </div>
         </div>
         <!--Grid row-->
         <div class="text-md-left">
-          <button
-            type="submit"
-            class="btn btn-primary call-to-action-button mt-3"
-          >
+          <button type="submit" class="btn btn-primary call-to-action-button mt-3">
             Send
           </button>
         </div>
@@ -111,37 +78,29 @@
     <div class="col-md-3 text-center">
       <ul class="list-unstyled mb-0">
         <li>
-          <img
-            src="/static/images/icons/map_icon.svg"
-            alt="map icon"
-            width="30px"
-            height="30px"
-          />
+          <img src="/static/images/icons/map_icon.svg" alt="map icon" width="30px" height="30px" />
           <p>Lorem ipson, LA 94126, Nigeria</p>
         </li>
 
         <li>
-          <img
-            src="/static/images/icons/phone_icon.svg"
-            alt="map icon"
-            width="30px"
-            height="30px"
-          />
+          <img src="/static/images/icons/phone_icon.svg" alt="map icon" width="30px" height="30px" />
           <p>+ 01 234 567 89</p>
         </li>
 
         <li>
-          <img
-            src="/static/images/icons/email_icon.svg"
-            alt="map icon"
-            width="30px"
-            height="30px"
-          />
+          <img src="/static/images/icons/email_icon.svg" alt="map icon" width="30px" height="30px" />
           <p>contact@ourhotel.com</p>
         </li>
       </ul>
     </div>
     <!--Grid column-->
+  </div>
+
+  <div class="col-md-12 mt-5">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d507365.3245583991!2d3.0051366005722757!3d6.547977480168738!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b2ae68280c1%3A0xdc9e87a367c3d9cb!2sLagos!5e0!3m2!1sen!2sng!4v1682595303469!5m2!1sen!2sng"
+      width="100%" height="400" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
+      tabindex="0"></iframe>
   </div>
 </section>
 {{ end }}
