@@ -117,6 +117,45 @@ func (repo *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) 
 	return rooms, nil
 }
 
+// Get all rooms
+func (m *postgresDBRepo) AllRooms() ([]models.Room, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var rooms []models.Room
+
+	query := `select id, room_name, price, image_src, description, created_at, updated_at from rooms order by room_name`
+
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		return rooms, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var room models.Room
+		err := rows.Scan(
+			&room.ID,
+			&room.RoomName,
+			&room.Price,
+			&room.ImageSource,
+			&room.Description,
+			&room.CreatedAt,
+			&room.UpdatedAt,
+		)
+		if err != nil {
+			return rooms, err
+		}
+		rooms = append(rooms, room)
+	}
+
+	if err = rows.Err(); err != nil {
+		return rooms, err
+	}
+
+	return rooms, nil
+}
+
 // GetRoomByID gets a room by id
 func (repo *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -182,6 +221,22 @@ func (repo *postgresDBRepo) InsertRoom(room models.Room) error {
 	_, err := repo.DB.ExecContext(context, query, room.RoomName, room.Price, room.ImageSource, room.Description, time.Now(), time.Now())
 
 	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// DeleteRoom deletes a room
+func (m *postgresDBRepo) DeleteRoom(id int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `delete from rooms where id = $1`
+
+	_, err := m.DB.ExecContext(ctx, query, id)
+	if err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -466,45 +521,6 @@ func (m *postgresDBRepo) UpdateProcessedForReservation(id, processed int) error 
 	}
 
 	return nil
-}
-
-// Get all rooms
-func (m *postgresDBRepo) AllRooms() ([]models.Room, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-
-	var rooms []models.Room
-
-	query := `select id, room_name, price, image_src, description, created_at, updated_at from rooms order by room_name`
-
-	rows, err := m.DB.QueryContext(ctx, query)
-	if err != nil {
-		return rooms, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var room models.Room
-		err := rows.Scan(
-			&room.ID,
-			&room.RoomName,
-			&room.Price,
-			&room.ImageSource,
-			&room.Description,
-			&room.CreatedAt,
-			&room.UpdatedAt,
-		)
-		if err != nil {
-			return rooms, err
-		}
-		rooms = append(rooms, room)
-	}
-
-	if err = rows.Err(); err != nil {
-		return rooms, err
-	}
-
-	return rooms, nil
 }
 
 // GetRestrictionsForCurrentRoom returns restrictions for a room by date range

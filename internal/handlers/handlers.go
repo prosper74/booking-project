@@ -976,6 +976,19 @@ func (m *Repository) PostAdminNewRoom(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/admin/rooms", http.StatusSeeOther)
 }
 
+func (m *Repository) AdminDeleteRoom(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
+
+	err := m.DB.DeleteRoom(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	m.App.Session.Put(r.Context(), "flash", "<strong>Successful!!!</strong><br><br> <p>Room Deleted</p>")
+	http.Redirect(w, r, "/admin/rooms", http.StatusSeeOther)
+}
+
 // Handles the admin todo list route
 func (m *Repository) AdminTodoList(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{})

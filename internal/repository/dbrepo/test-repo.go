@@ -130,3 +130,8 @@ func (m *testDBRepo) UpdateRoom(room models.Room) error {
 func (repo *testDBRepo) InsertRoom(room models.Room) error {
 	return nil
 }
+
+// DeleteRoom deletes a room
+func (m *testDBRepo) DeleteRoom(id int) error {
+	return nil
+}
