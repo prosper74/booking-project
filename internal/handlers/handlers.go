@@ -523,7 +523,7 @@ func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request
 	})
 }
 
-// Handles the single-reservation route 
+// Handles the single-reservation route
 func (m *Repository) AdminSingleReservation(w http.ResponseWriter, r *http.Request) {
 	urlParams := strings.Split(r.RequestURI, "/")
 	id, err := strconv.Atoi(urlParams[4])
@@ -871,9 +871,9 @@ func (m *Repository) AdminSingleRoom(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 	data["room"] = room
 
-	render.Template(w, r, "admin-single-reservation.page.html", &models.TemplateData{
-		Data:      data,
-		Form:      forms.New(nil),
+	render.Template(w, r, "admin-single-room.page.html", &models.TemplateData{
+		Data: data,
+		Form: forms.New(nil),
 	})
 }
 
