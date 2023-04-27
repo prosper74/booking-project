@@ -66,7 +66,7 @@
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
-    margin-left: {{if eq $reservation.Processed 0}} -6rem {{else}} -8.2rem {{end}};
+    margin-left: -6rem;
   }
 
   .popover ul {
@@ -91,27 +91,21 @@
   {{$src := index .StringMap "src"}}
   {{$year := index .StringMap "year"}}
   {{$month := index .StringMap "month"}}
-  {{$reservation := index .Data "reservation"}}
+  {{$room := index .Data "room"}}
   <div class="content-wrapper">
     <div class="row">
       <div class="col-md-12 grid-margin headingContainer">
         <div>
-          <h3 class="font-weight-bold mb-0">Reservation Details</h3>
+          <h3 class="font-weight-bold mb-0">{{$room.RoomName}}</h3>
         </div>
         <div>
           <button id="popover-btn" class="btn"><i class="ti-more-alt"></i></button>
           <div class="popover">
             <ul>
               <li>
-                <button class="btn-icon-text delete-btn" onclick="deleteReservation({{$reservation.ID}})">
+                <button class="btn-icon-text delete-btn" onclick="deleteReservation({{$room.ID}})">
                   <i class="ti-trash btn-icon-prepend"></i>
                   Delete
-                </button>
-              </li>
-              <li>                 
-                <button class="btn-icon-text processed-btn" onclick="processReservation({{$reservation.ID}})">
-                  <i class="{{if eq $reservation.Processed 0}}ti-check-box{{else}}ti-back-left{{end}} btn-icon-prepend"></i>
-                  {{if eq $reservation.Processed 1}}Not{{end}} Processed?
                 </button>
               </li>
             </ul>
@@ -121,83 +115,59 @@
     </div>
 
     <div class="row">
-      <div class="grid-margin">
-        <p>
-          <strong>Arrival Date: </strong> {{humanDate $reservation.StartDate}} <br>
-          <strong>Departure Date: </strong> {{humanDate $reservation.EndDate}} <br>
-          <strong>Room Name: </strong> {{$reservation.Room.RoomName}} <br>
-          <strong>Created At: </strong> {{humanDate $reservation.CreatedAt}} <br>
-          {{if eq $reservation.Processed 1}}
-          <strong>Status: </strong> Processed <br>
-          {{end}}
-        </p>
-
-        <hr class="hr-top">
-
-        <form action="/admin/reservations/{{$src}}/{{$reservation.ID}}" method="post" class="row g-3 main-form"
+      <div class="grid-margin">        
+        <form action="/admin/rooms/{{$room.ID}}" method="post" class="row g-3 main-form"
           novalidate>
           <!-- needs-validation -->
           <div class="col-md-6">
-            <label for="first-name" class="form-label">First name</label>
+            <label for="room-name" class="form-label">Room Name</label>
             <input type="text" class='form-control {{with .Form.Errors.Get
-                  "first_name"}} is-invalid {{end}}' id="first-name" name="first_name"
-              value="{{$reservation.FirstName}}" required />
+                  "room_name"}} is-invalid {{end}}' id="room-name" name="room_name"
+              value="{{$room.RoomName}}" required />
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">
-              {{with .Form.Errors.Get "first_name"}} {{.}} {{end}}
+              {{with .Form.Errors.Get "room_name"}} {{.}} {{end}}
             </div>
           </div>
 
           <div class="col-md-6">
-            <label for="last-name" class="form-label">Last name</label>
+            <label for="price" class="form-label">Amount</label>
+            <input type="number" class='form-control {{with .Form.Errors.Get
+              "price"}} is-invalid {{end}}' id="price" name="price" value="{{$room.Price}}" required />
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "price"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <label for="image_src" class="form-label">Image Source</label>
             <input type="text" class='form-control {{with .Form.Errors.Get
-                  "last_name"}} is-invalid {{end}}' id="last-name" name="last_name" value="{{$reservation.LastName}}"
+              "image_src"}} is-invalid {{end}}' id="image_src" name="image_src" value="{{$room.ImageSource}}"
               required />
             <div class="valid-feedback">Looks good!</div>
             <div class="invalid-feedback">
-              {{with .Form.Errors.Get "last_name"}} {{.}} {{end}}
+              {{with .Form.Errors.Get "image_src"}} {{.}} {{end}}
             </div>
           </div>
 
-          <div class="col-md-6">
-            <label for="email" class="form-label">Email</label>
-            <div class="input-group has-validation">
-              <span class="input-group-text" id="inputGroupPrepend">📧</span>
-              <input type="email" class='form-control {{with .Form.Errors.Get
-                    "email"}} is-invalid {{end}}' id="email" name="email" value="{{$reservation.Email}}"
-                aria-describedby="inputGroupPrepend" required />
-              <div class="invalid-feedback">
-                {{with .Form.Errors.Get "email"}} {{.}} {{end}}
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Phone number</label>
-            <input type="number" class='form-control {{with .Form.Errors.Get
-                  "phone"}} is-invalid {{end}}' id="phone" name="phone" value="{{$reservation.Phone}}" required />
+          <div class="col-md-12">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" id="description" cols="30" rows="10" class='form-control {{with .Form.Errors.Get
+              "email"}} is-invalid {{end}}' value="{{$room.Description}}"></textarea>
             <div class="invalid-feedback">
-              {{with .Form.Errors.Get "phone"}} {{.}} {{end}}
+              {{with .Form.Errors.Get "description"}} {{.}} {{end}}
             </div>
-          </div>
+          </div>          
 
           <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
-          <input type="hidden" name="year" value="{{$year}}" />
-          <input type="hidden" name="month" value="{{$month}}" />
           
           <div class="button-container mt-3">
             <button class="btn btn-primary call-to-action-button" type="submit">
               Save
             </button>
-            {{if eq $src "cal"}}
             <a href="#!" class="btn btn-warning call-to-action-button" onclick="window.history.go(-1)">
               Back
             </a>
-            {{else}}
-            <a href="/admin/{{$src}}-reservations" class="btn btn-warning call-to-action-button">
-              Cancel
-            </a>
-            {{end}}
           </div>
         </form>
       </div>
@@ -207,25 +177,8 @@
 <!-- main-panel ends -->
 {{end}}
 {{define "js"}}
-{{$src := index .StringMap "src"}}
-{{$reservation := index .Data "reservation"}}
-{{$year := index .StringMap "year"}}
-{{$month := index .StringMap "month"}}
 
 <script>
-  function processReservation(id) {
-    Prompt().customModal({
-      title: "Are you sure you want to mark this Reservation as {{if eq $reservation.Processed 1}} Not {{end}} Processed?",
-      message: "{{if eq $reservation.Processed 1}} This will make the reservation appear as new reservation {{end}}",
-      icon: "warning",
-      callback: function (result) {
-        if (result !== false) {
-          window.location.href = "/admin/process-reservation/{{$src}}/" + id + "/do?y={{$year}}&m={{$month}}"
-        }
-      }
-    })
-  }
-
   function deleteReservation(id) {
     Prompt().customModal({
       title: "Are you sure you want to delete this Reservation?",
@@ -233,7 +186,7 @@
       icon: "warning",
       callback: function (result) {
         if (result !== false) {
-          window.location.href = "/admin/delete-reservation/{{$src}}/" + id + "/do?y={{$year}}&m={{$month}}"
+          window.location.href = "/admin/rooms"
         }
       }
     })
