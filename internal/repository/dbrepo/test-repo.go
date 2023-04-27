@@ -125,3 +125,8 @@ func (m *testDBRepo) DeleteBlockByID(id int) error {
 func (m *testDBRepo) UpdateRoom(room models.Room) error {
 	return nil
 }
+
+// Inserts a room into the database
+func (repo *testDBRepo) InsertRoom(room models.Room) error {
+	return nil
+}

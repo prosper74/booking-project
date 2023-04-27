@@ -964,6 +964,13 @@ func (m *Repository) PostAdminNewRoom(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Insert new room here
+	err = m.DB.InsertRoom(room)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Can't insert into database")
+		helpers.ServerError(w, err)
+		http.Redirect(w, r, "/admin/rooms", http.StatusTemporaryRedirect)
+		return
+	}
 
 	m.App.Session.Put(r.Context(), "flash", "Room Created Successfully!!!")
 	http.Redirect(w, r, "/admin/rooms", http.StatusSeeOther)

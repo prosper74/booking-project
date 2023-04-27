@@ -172,6 +172,22 @@ func (m *postgresDBRepo) UpdateRoom(room models.Room) error {
 	return nil
 }
 
+// Inserts a room into the database
+func (repo *postgresDBRepo) InsertRoom(room models.Room) error {
+	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `insert into rooms (room_name, price, image_src, description, created_at, updated_at) values ($1, $2, $3, $4, $5, $6)`
+
+	_, err := repo.DB.ExecContext(context, query, room.RoomName, room.Price, room.ImageSource, room.Description, time.Now(), time.Now())
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // GetUserByID returns a user by id
 func (repo *postgresDBRepo) GetUserByID(id int) (models.User, error) {
 	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -539,7 +555,7 @@ func (m *postgresDBRepo) InsertBlockForRoom(id int, startDate time.Time) error {
 	defer cancel()
 
 	query := `insert into room_restrictions (start_date, end_date, room_id, restriction_id,
-			created_at, updated_at) values ($1, $2, $3, $4, $5, $6)`
+		created_at, updated_at) values ($1, $2, $3, $4, $5, $6)`
 
 	_, err := m.DB.ExecContext(ctx, query, startDate, startDate, id, 2, time.Now(), time.Now())
 	if err != nil {
