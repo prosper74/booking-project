@@ -906,9 +906,9 @@ func (m *Repository) PostAdminSingleRoom(w http.ResponseWriter, r *http.Request)
 		data := make(map[string]interface{})
 		data["room"] = room
 		m.App.Session.Put(r.Context(), "error", "Invalid inputs")
-		render.Template(w, r, "admin-single-reservation.page.html", &models.TemplateData{
-			Form:      form,
-			Data:      data,
+		render.Template(w, r, "admin-single-room.page.html", &models.TemplateData{
+			Form: form,
+			Data: data,
 		})
 
 		return

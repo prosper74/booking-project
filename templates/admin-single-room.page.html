@@ -149,7 +149,7 @@
           <div class="col-md-12">
             <label for="description" class="form-label">Description</label>
             <textarea name="description" id="description" cols="30" rows="10" class='form-control {{with .Form.Errors.Get
-              "email"}} is-invalid {{end}}' value="{{$room.Description}}"></textarea>
+              "description"}} is-invalid {{end}}' value="{{$room.Description}}"></textarea>
             <div class="invalid-feedback">
               {{with .Form.Errors.Get "description"}} {{.}} {{end}}
             </div>
