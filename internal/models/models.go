@@ -20,7 +20,7 @@ type User struct {
 type Room struct {
 	ID          int
 	RoomName    string
-	Price       int
+	Price       string
 	ImageSource string
 	Description string
 	CreatedAt   time.Time

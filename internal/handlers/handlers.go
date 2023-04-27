@@ -651,12 +651,6 @@ func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Requ
 		m.App.Session.Put(r.Context(), "flash", "<strong>Successful!!!</strong><br><br> <p>Reservation is now marked as Not Processed</p>")
 	}
 
-	// err = m.DB.UpdateProcessedForReservation(id, 1)
-	// if err != nil {
-	// 	helpers.ServerError(w, err)
-	// 	return
-	// }
-
 	year := r.URL.Query().Get("y")
 	month := r.URL.Query().Get("m")
 
@@ -875,6 +869,53 @@ func (m *Repository) AdminSingleRoom(w http.ResponseWriter, r *http.Request) {
 		Data: data,
 		Form: forms.New(nil),
 	})
+}
+
+// Handles the single-room route for POST
+func (m *Repository) PostAdminSingleRoom(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	urlParams := strings.Split(r.RequestURI, "/")
+	id, err := strconv.Atoi(urlParams[3])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	room, err := m.DB.GetRoomByID(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	room.RoomName = r.Form.Get("room_name")
+	room.Price = r.Form.Get("price")
+	room.ImageSource = r.Form.Get("image_src")
+	room.Description = r.Form.Get("description")
+
+	form := forms.New(r.PostForm)
+	form.Required("room_name", "price", "image_src", "description")
+	form.MinLength("room_name", 5, 30)
+	form.MinLength("description", 5, 20000)
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["room"] = room
+		m.App.Session.Put(r.Context(), "error", "Invalid inputs")
+		render.Template(w, r, "admin-single-reservation.page.html", &models.TemplateData{
+			Form:      form,
+			Data:      data,
+		})
+
+		return
+	}
+
+	m.App.Session.Put(r.Context(), "flash", "Reservation Updated")
+	http.Redirect(w, r, "/admin/rooms", http.StatusSeeOther)
 }
 
 // Handles the admin todo list route
