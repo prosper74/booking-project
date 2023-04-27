@@ -1,0 +1,96 @@
+{{template "admin" .}}
+{{define "css"}}
+<style>
+  .main-form {
+    margin-top: 1rem;
+  }
+
+  .main-form label {
+    font-weight: bold;
+  }
+
+  .main-form .form-control {
+    border-radius: 5px;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+{{end}} {{define "admin_content"}}
+
+<!-- partial -->
+<div class="main-panel">
+  {{$room := index .Data "room"}}
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-12 grid-margin">
+        <h3 class="font-weight-bold mb-0">Create Room</h3>        
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="grid-margin">
+        <form action="/admin/rooms/new" method="post" class="row g-3 main-form" novalidate>
+          <!-- needs-validation -->
+          <div class="col-md-6">
+            <label for="room-name" class="form-label">Room Name</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+                  "room_name"}} is-invalid {{end}}' id="room-name" name="room_name" value="{{$room.RoomName}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "room_name"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="price" class="form-label">Amount</label>
+            <input type="number" class='form-control {{with .Form.Errors.Get
+              "price"}} is-invalid {{end}}' id="price" name="price" value="{{$room.Price}}" required />
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "price"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <label for="image_src" class="form-label">Image Source</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "image_src"}} is-invalid {{end}}' id="image_src" name="image_src" value="{{$room.ImageSource}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "image_src"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" id="description" cols="30" rows="10" class='form-control {{with .Form.Errors.Get
+              "description"}} is-invalid {{end}}'>{{$room.Description}}</textarea>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "description"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+
+          <div class="button-container mt-3">
+            <button class="btn btn-primary call-to-action-button" type="submit">
+              Save
+            </button>
+            <a href="/admin/rooms" class="btn btn-warning call-to-action-button">
+              Back
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- main-panel ends -->
+{{end}}
+{{define "js"}}
+{{end}}
