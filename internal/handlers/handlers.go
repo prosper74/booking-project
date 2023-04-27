@@ -931,6 +931,44 @@ func (m *Repository) AdminNewRoom(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// This function POST the new room form and store them in the database
+func (m *Repository) PostAdminNewRoom(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	var room models.Room
+
+	room.RoomName = r.Form.Get("room_name")
+	room.Price = r.Form.Get("price")
+	room.ImageSource = r.Form.Get("image_src")
+	room.Description = r.Form.Get("description")
+
+	// Form validations
+	form := forms.New(r.PostForm)
+	form.Required("room_name", "price", "image_src", "description")
+	form.MinLength("room_name", 5, 30)
+	form.MinLength("description", 5, 20000)
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["room"] = room
+		m.App.Session.Put(r.Context(), "error", "Invalid form input")
+		render.Template(w, r, "admin-new-room.page.html", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return
+	}
+
+	// Insert new room here
+
+	m.App.Session.Put(r.Context(), "flash", "Room Created Successfully!!!")
+	http.Redirect(w, r, "/admin/rooms", http.StatusSeeOther)
+}
+
 // Handles the admin todo list route
 func (m *Repository) AdminTodoList(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{})
