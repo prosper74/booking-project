@@ -924,6 +924,13 @@ func (m *Repository) PostAdminSingleRoom(w http.ResponseWriter, r *http.Request)
 	http.Redirect(w, r, "/admin/rooms", http.StatusSeeOther)
 }
 
+// Handles the new-room route to create a new room
+func (m *Repository) AdminNewRoom(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "admin-new-room.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
 // Handles the admin todo list route
 func (m *Repository) AdminTodoList(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{})
