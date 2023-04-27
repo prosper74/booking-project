@@ -523,7 +523,7 @@ func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request
 	})
 }
 
-// Handles the single-reservation route for POST
+// Handles the single-reservation route 
 func (m *Repository) AdminSingleReservation(w http.ResponseWriter, r *http.Request) {
 	urlParams := strings.Split(r.RequestURI, "/")
 	id, err := strconv.Atoi(urlParams[4])
@@ -557,7 +557,7 @@ func (m *Repository) AdminSingleReservation(w http.ResponseWriter, r *http.Reque
 	})
 }
 
-// Handles the single-reservation route
+// Handles the single-reservation route for POST
 func (m *Repository) PostAdminSingleReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -837,7 +837,7 @@ func (m *Repository) AdminPostReservationsCalendar(w http.ResponseWriter, r *htt
 	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-calendar?y=%d&m=%d", year, month), http.StatusSeeOther)
 }
 
-// Handles the all-reservations route
+// Handles the all-rooms route
 func (m *Repository) AdminAllRooms(w http.ResponseWriter, r *http.Request) {
 	rooms, err := m.DB.AllRooms()
 	if err != nil {
@@ -850,6 +850,30 @@ func (m *Repository) AdminAllRooms(w http.ResponseWriter, r *http.Request) {
 
 	render.Template(w, r, "admin-all-rooms.page.html", &models.TemplateData{
 		Data: data,
+	})
+}
+
+// Handles the single-room route
+func (m *Repository) AdminSingleRoom(w http.ResponseWriter, r *http.Request) {
+	urlParams := strings.Split(r.RequestURI, "/")
+	id, err := strconv.Atoi(urlParams[3])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	room, err := m.DB.GetRoomByID(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["room"] = room
+
+	render.Template(w, r, "admin-single-reservation.page.html", &models.TemplateData{
+		Data:      data,
+		Form:      forms.New(nil),
 	})
 }
 
