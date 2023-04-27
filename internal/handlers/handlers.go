@@ -837,6 +837,22 @@ func (m *Repository) AdminPostReservationsCalendar(w http.ResponseWriter, r *htt
 	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-calendar?y=%d&m=%d", year, month), http.StatusSeeOther)
 }
 
+// Handles the all-reservations route
+func (m *Repository) AdminAllRooms(w http.ResponseWriter, r *http.Request) {
+	rooms, err := m.DB.AllRooms()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["rooms"] = rooms
+
+	render.Template(w, r, "admin-all-rooms.page.html", &models.TemplateData{
+		Data: data,
+	})
+}
+
 // Handles the admin todo list route
 func (m *Repository) AdminTodoList(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{})

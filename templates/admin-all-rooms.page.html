@@ -1,0 +1,65 @@
+{{template "admin" .}}
+{{define "css"}}
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+<style>
+  .datatable-container {
+    overflow-x: auto;
+  }
+</style>
+{{end}} {{define "admin_content"}}
+
+<!-- partial -->
+<div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-12 grid-margin">
+        <div>
+          <h4 class="font-weight-bold mb-0">All Rooms</h4>
+        </div>
+      </div>
+    </div>
+
+    {{$rooms := index .Data "rooms"}}
+
+    <div class="row">
+      <div class="grid-margin">
+        <table id="all-rooms" class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Room Name</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {{range $rooms}}
+            <tr>
+              <td>{{.ID}}</td>
+              <td>
+                <a href="/admin/rooms/{{.ID}}">{{.RoomName}}</a>
+              </td>
+              <td>{{humanDate .CreatedAt}}</td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- main-panel ends -->
+
+{{end}} {{define "js"}}
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+
+<script>
+  // defer script - run when all content is loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    const dataTable = new simpleDatatables.DataTable("#all-rooms", {
+      select: 2,
+      sort: "desc"
+    })
+  })
+</script>
+{{end}}
