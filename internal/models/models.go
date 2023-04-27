@@ -18,10 +18,13 @@ type User struct {
 
 // Room is the room model
 type Room struct {
-	ID        int
-	RoomName  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID          int
+	RoomName    string
+	Price       int
+	ImageSource string
+	Description string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 // Restriction is the restriction model

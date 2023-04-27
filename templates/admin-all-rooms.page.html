@@ -28,6 +28,7 @@
             <tr>
               <th>ID</th>
               <th>Room Name</th>
+              <th>Amount</th>
               <th>Created</th>
             </tr>
           </thead>
@@ -39,7 +40,8 @@
               <td>
                 <a href="/admin/rooms/{{.ID}}">{{.RoomName}}</a>
               </td>
-              <td>{{humanDate .CreatedAt}}</td>
+              <td>${{.Price}}</td>
+              <td>{{humanDate .CreatedAt}}</td>              
             </tr>
             {{end}}
           </tbody>

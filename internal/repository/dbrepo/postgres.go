@@ -430,7 +430,7 @@ func (m *postgresDBRepo) AllRooms() ([]models.Room, error) {
 
 	var rooms []models.Room
 
-	query := `select id, room_name, created_at, updated_at from rooms order by room_name`
+	query := `select id, room_name, price, image_src, description, created_at, updated_at from rooms order by room_name`
 
 	rows, err := m.DB.QueryContext(ctx, query)
 	if err != nil {
@@ -443,6 +443,9 @@ func (m *postgresDBRepo) AllRooms() ([]models.Room, error) {
 		err := rows.Scan(
 			&room.ID,
 			&room.RoomName,
+			&room.Price,
+			&room.ImageSource,
+			&room.Description,
 			&room.CreatedAt,
 			&room.UpdatedAt,
 		)
