@@ -30,5 +30,6 @@ type DatabaseRepo interface {
 	DeleteBlockByID(id int) error
 
 	AllRooms() ([]models.Room, error)
+	UpdateRoom(room models.Room) error
 	GetRestrictionsForCurrentRoom(roomID int, start, end time.Time) ([]models.RoomRestriction, error)
 }

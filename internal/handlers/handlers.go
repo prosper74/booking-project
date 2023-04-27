@@ -914,6 +914,12 @@ func (m *Repository) PostAdminSingleRoom(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	err = m.DB.UpdateRoom(room)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
 	m.App.Session.Put(r.Context(), "flash", "Reservation Updated")
 	http.Redirect(w, r, "/admin/rooms", http.StatusSeeOther)
 }

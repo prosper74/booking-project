@@ -146,6 +146,32 @@ func (repo *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 	return room, nil
 }
 
+// UpdateRoom updates a room in the database
+func (m *postgresDBRepo) UpdateRoom(room models.Room) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `
+		update rooms set room_name = $1, price = $2, image_src = $3, description = $4, updated_at = $5
+		where id = $6
+	`
+
+	_, err := m.DB.ExecContext(ctx, query,
+		room.RoomName,
+		room.Price,
+		room.ImageSource,
+		room.Description,
+		time.Now(),
+		room.ID,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // GetUserByID returns a user by id
 func (repo *postgresDBRepo) GetUserByID(id int) (models.User, error) {
 	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)

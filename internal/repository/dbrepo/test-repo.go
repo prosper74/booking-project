@@ -97,7 +97,7 @@ func (m *testDBRepo) UpdateProcessedForReservation(id, processed int) error {
 	return nil
 }
 
-// Get all rooms 
+// Get all rooms
 func (m *testDBRepo) AllRooms() ([]models.Room, error) {
 	var rooms []models.Room
 
@@ -106,7 +106,7 @@ func (m *testDBRepo) AllRooms() ([]models.Room, error) {
 
 // Get the restrictions for a room
 func (m *testDBRepo) GetRestrictionsForCurrentRoom(roomID int, start, end time.Time) ([]models.RoomRestriction, error) {
-	var restrictions []models.RoomRestriction	
+	var restrictions []models.RoomRestriction
 
 	return restrictions, nil
 }
@@ -118,5 +118,10 @@ func (m *testDBRepo) InsertBlockForRoom(id int, startDate time.Time) error {
 
 // DeleteBlockByID deletes a room restriction
 func (m *testDBRepo) DeleteBlockByID(id int) error {
+	return nil
+}
+
+// UpdateRoom updates a room in the database
+func (m *testDBRepo) UpdateRoom(room models.Room) error {
 	return nil
 }

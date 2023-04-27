@@ -5,6 +5,14 @@
   .datatable-container {
     overflow-x: auto;
   }
+
+  .description-text {
+    display: block;
+    width: 50ch;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 </style>
 {{end}} {{define "admin_content"}}
 
@@ -29,6 +37,7 @@
               <th>ID</th>
               <th>Room Name</th>
               <th>Amount</th>
+              <th>Description</th>
               <th>Created</th>
             </tr>
           </thead>
@@ -41,6 +50,7 @@
                 <a href="/admin/rooms/{{.ID}}">{{.RoomName}}</a>
               </td>
               <td>${{.Price}}</td>
+              <td><span class="description-text">{{.Description}} ...</span></td>
               <td>{{humanDate .CreatedAt}}</td>              
             </tr>
             {{end}}
