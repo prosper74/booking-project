@@ -51,7 +51,17 @@ func NewHandlers(r *Repository) {
 
 // This function handles the Home page and renders the template
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "home.page.html", &models.TemplateData{})
+	rooms, err := m.DB.AllRooms()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["rooms"] = rooms
+	render.Template(w, r, "home.page.html", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // This function handles the About page and renders the template
