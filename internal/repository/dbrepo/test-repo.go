@@ -140,3 +140,9 @@ func (m *testDBRepo) DeleteRoom(id int) error {
 func (repo *testDBRepo) InsertTodoList(todo models.TodoList) error {
 	return nil
 }
+
+// GetTodoListByUserID gets all todo for a user by user_id
+func (repo *testDBRepo) GetTodoListByUserID(id int) (models.TodoList, error) {
+	var todoList models.TodoList
+	return todoList, nil
+}
