@@ -34,5 +34,7 @@ type DatabaseRepo interface {
 	InsertRoom(room models.Room) error
 	DeleteRoom(id int) error
 
+	InsertTodoList(todo models.TodoList) error
+
 	GetRestrictionsForCurrentRoom(roomID int, start, end time.Time) ([]models.RoomRestriction, error)
 }

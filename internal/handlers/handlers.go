@@ -1032,6 +1032,7 @@ func (m *Repository) PostAdminTodoList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	todoList.Todo = r.Form.Get("todo_list")
+	todoList.UserID = userID
 
 	form := forms.New(r.PostForm)
 	form.Required("todo_list")
@@ -1049,8 +1050,13 @@ func (m *Repository) PostAdminTodoList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Insert new todo here
-
-	log.Println("User Id:", userID)
+	err = m.DB.InsertTodoList(todoList)
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Can't insert into database")
+		helpers.ServerError(w, err)
+		http.Redirect(w, r, "/admin/todo-list", http.StatusTemporaryRedirect)
+		return
+	}
 	
 	m.App.Session.Put(r.Context(), "flash", "Todo Created Successfully!!!")
 	http.Redirect(w, r, "/admin/todo-list", http.StatusSeeOther)

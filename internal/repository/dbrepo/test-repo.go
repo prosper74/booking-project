@@ -135,3 +135,8 @@ func (repo *testDBRepo) InsertRoom(room models.Room) error {
 func (m *testDBRepo) DeleteRoom(id int) error {
 	return nil
 }
+
+// InsertTodoList inserts a new todo list into the database
+func (repo *testDBRepo) InsertTodoList(todo models.TodoList) error {
+	return nil
+}

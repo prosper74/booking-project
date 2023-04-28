@@ -595,3 +595,19 @@ func (m *postgresDBRepo) DeleteBlockByID(id int) error {
 	}
 	return nil
 }
+
+// InsertTodoList inserts a new todo list into the database
+func (repo *postgresDBRepo) InsertTodoList(todo models.TodoList) error {
+	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `insert into todo_list (todo, user_id, created_at, updated_at) values($1, $2, $3, $4)`
+
+	_, err := repo.DB.ExecContext(context, query, todo.Todo, todo.UserID, time.Now(), time.Now())
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
