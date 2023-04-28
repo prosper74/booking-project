@@ -611,3 +611,30 @@ func (repo *postgresDBRepo) InsertTodoList(todo models.TodoList) error {
 
 	return nil
 }
+
+// GetTodoListByUserID gets all todo for a user by user_id
+func (repo *postgresDBRepo) GetTodoListByUserID(id int) (models.TodoList, error) {
+	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var todoList models.TodoList
+
+	query := `
+		select id, todo, user_id, created_at, updated_at from todo_list where user_id = $1
+	`
+
+	row := repo.DB.QueryRowContext(context, query, id)
+	err := row.Scan(
+		&todoList.ID,
+		&todoList.Todo,
+		&todoList.UserID,
+		&todoList.CreatedAt,
+		&todoList.UpdatedAt,
+	)
+
+	if err != nil {
+		return todoList, err
+	}
+
+	return todoList, nil
+}
