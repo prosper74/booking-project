@@ -22,13 +22,19 @@
       <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
-            
-            <div class="add-items d-flex my-4">
-              <input type="text" class="form-control todo-list-input me-2" placeholder="Add new task">
-              <button class="add btn btn-icon text-primary todo-list-add-btn bg-transparent"><i
-                  class="ti-location-arrow"></i></button>
-            </div>
-            
+            <form action="/admin/todo-list" method="post" class="row g-3 main-form" novalidate>
+              <div class="add-items d-flex my-4">
+                <input type="text" name="todo_list" class='form-control {{with .Form.Errors.Get
+                  "todo_list"}} is-invalid {{end}}' placeholder="Add new task" />                
+
+                <button type="submit" class="btn btn-icon text-primary bg-transparent">
+                  <i class="ti-location-arrow"></i>
+                </button>
+              </div>
+
+              <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+            </form>
+
             <div class="list-wrapper pt-2">
               <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
                 <li>

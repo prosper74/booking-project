@@ -1014,7 +1014,9 @@ func (m *Repository) AdminDeleteRoom(w http.ResponseWriter, r *http.Request) {
 
 // Handles the admin todo list route
 func (m *Repository) AdminTodoList(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{})
+	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+	})
 }
 
 // Handles the Post for todo list route
@@ -1029,16 +1031,16 @@ func (m *Repository) PostAdminTodoList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	todoList.Todo = r.Form.Get("todo")
+	todoList.Todo = r.Form.Get("todo_list")
 
 	form := forms.New(r.PostForm)
-	form.Required("todo")
-	form.MinLength("todo", 5, 255)
+	form.Required("todo_list")
+	form.MinLength("todo_list", 5, 255)
 
 	if !form.Valid() {
 		data := make(map[string]interface{})
 		data["todo_list"] = todoList
-		m.App.Session.Put(r.Context(), "error", "Invalid form input")
+		m.App.Session.Put(r.Context(), "error", "Invalid form input. <br> must be less than 250 and more than 5 characters")
 		render.Template(w, r, "admin-todo.page.html", &models.TemplateData{
 			Form: form,
 			Data: data,
@@ -1051,5 +1053,5 @@ func (m *Repository) PostAdminTodoList(w http.ResponseWriter, r *http.Request) {
 	log.Println("User Id:", userID)
 	
 	m.App.Session.Put(r.Context(), "flash", "Todo Created Successfully!!!")
-	http.Redirect(w, r, "admin-todo.page.html", http.StatusSeeOther)
+	http.Redirect(w, r, "/admin/todo-list", http.StatusSeeOther)
 }
