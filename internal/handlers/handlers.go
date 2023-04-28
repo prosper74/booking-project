@@ -75,6 +75,29 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 }
 
 // This function handles the single room(Luxery) page and renders the template
+func (m *Repository) SingleRoom(w http.ResponseWriter, r *http.Request) {
+	urlParams := strings.Split(r.RequestURI, "/")
+	id, err := strconv.Atoi(urlParams[2])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	room, err := m.DB.GetRoomByID(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["room"] = room
+	
+	render.Template(w, r, "single-room.page.html", &models.TemplateData{
+		Data: data,
+	})
+}
+
+// This function handles the single room(Luxery) page and renders the template
 func (m *Repository) Alpine(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "alpine.page.html", &models.TemplateData{})
 }

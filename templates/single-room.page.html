@@ -1,0 +1,162 @@
+{{template "base" .}} {{define "title"}} Alpine Suit | Let comfort be with
+you {{end}} {{define "css"}}
+<link href="/static/css/rooms.css" rel="stylesheet" type="text/css" />
+<style>
+  .swal2-actions {
+    z-index: 0 !important;
+  }
+
+  .img-fluid {
+    width: 100%;
+  }
+
+  .description-text {
+    columns: 1;
+    column-gap: 20px;
+  }
+
+  .gif-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+
+  @media screen and (min-width: 760px) {
+    .description-text {
+      columns: 2;
+    }
+  }
+</style>
+{{end}} {{define "content"}}
+{{$room := index .Data "room"}}
+<!-- About section  -->
+<section class="container about-us">
+  <img src={{$room.ImageSource}} class="img-fluid shadow rounded" alt="Generals Room" />
+  <h2 class="text-center font-weight-bold my-4">{{$room.RoomName}} | ${{$room.Price}} </h2>
+  <div class="description-text my-3">
+    <p>
+      {{$room.Description}}
+    </p>
+  </div>
+
+  <div class="text-center my-3">
+    <button id="availability" class="btn call-to-action-button">
+      Check Availability
+    </button>
+  </div>
+
+  <div>
+    <img class="gif-img mt-5 shadow rounded"
+      src="https://res.cloudinary.com/prosper-dev/image/upload/v1682637665/image_processing20210217-16671-11ezcsw_uv84xh.gif"
+      alt="animation">
+  </div>
+</section>
+
+{{end}} {{define "js"}}
+{{$room := index .Data "room"}}
+<script>
+  document
+    .getElementById("availability")
+    .addEventListener("click", function () {
+      const message = `
+        <form
+          id="availability-form"
+          action=""
+          method="POST"
+          class="needs-validation"
+          novalidate
+        >
+          <div class="form-row">
+            <div class="col">
+              <div class="form-row" id="reservation-dates-modal">
+                <div class="col mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="start"
+                    id="start"
+                    placeholder="Arrival date"
+                    autocomplete="off"
+                    required
+                    disabled
+                  />
+                </div>
+                <div class="col">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="end"
+                    id="end"
+                    placeholder="Depature date"
+                    autocomplete="off"
+                    required
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      `;
+      Prompt().customModal({
+        title: "Check Availability",
+        message,
+        willOpen: () => {
+          const elem = document.getElementById("reservation-dates-modal");
+          const datepicker = new DateRangePicker(elem, {
+            format: "yyyy-mm-dd",
+            minDate: new Date(),
+            showOnFocus: true,
+          });
+        },
+        didOpen: () => {
+          document.getElementById("start").removeAttribute("disabled");
+          document.getElementById("end").removeAttribute("disabled");
+        },
+        preConfirm: () => {
+          return [
+            document.getElementById("start").value,
+            document.getElementById("end").value,
+          ];
+        },
+        callback: () => {
+          const availabilityForm = document.getElementById("availability-form");
+          // Get the form inputs data
+          const formData = new FormData(availabilityForm);
+          // Add the CSRFToken to the form data
+          formData.append("csrf_token", "{{.CSRFToken}}");
+          formData.append("room_id", "{{$room.ID}}");
+
+          fetch("/reservation-json", {
+            method: "post",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              data.ok
+                ? Prompt().customModal({
+                  message:
+                    `<h3>Room is available!</h3> <p>Would you like to proceed to making a reservation on the selected date?</p> <a class="btn btn-primary" href="/book-room?id=` +
+                    data.room_id +
+                    `&sd=` +
+                    data.start_date +
+                    `&ed=` +
+                    data.end_date +
+                    `">Book Now</a>`,
+                  icon: "success",
+                  showConfirmButton: false,
+                })
+                : Prompt().toast({
+                  title: "Room is not available!<br /> Try another date or checkout other amazing rooms",
+                  icon: "error",
+                  timer: 5000,
+                  showConfirmButton: true,
+                  confirmButtonText: "Close",
+                });
+            })
+            .catch((err) => console.log(err));
+        },
+      });
+    });
+</script>
+{{end}}
