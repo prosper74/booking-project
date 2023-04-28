@@ -1020,7 +1020,36 @@ func (m *Repository) AdminTodoList(w http.ResponseWriter, r *http.Request) {
 // Handles the Post for todo list route
 func (m *Repository) PostAdminTodoList(w http.ResponseWriter, r *http.Request) {
 	userID := m.App.Session.GetInt(r.Context(), "user_id")
+
+	var todoList models.TodoList
+
+	err := r.ParseForm()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	todoList.Todo = r.Form.Get("todo")
+
+	form := forms.New(r.PostForm)
+	form.Required("todo")
+	form.MinLength("todo", 5, 255)
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["todo_list"] = todoList
+		m.App.Session.Put(r.Context(), "error", "Invalid form input")
+		render.Template(w, r, "admin-todo.page.html", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return
+	}
+
+	// Insert new todo here
+
 	log.Println("User Id:", userID)
 	
-	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{})
+	m.App.Session.Put(r.Context(), "flash", "Todo Created Successfully!!!")
+	http.Redirect(w, r, "admin-todo.page.html", http.StatusSeeOther)
 }
