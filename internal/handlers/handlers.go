@@ -1016,3 +1016,11 @@ func (m *Repository) AdminDeleteRoom(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) AdminTodoList(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{})
 }
+
+// Handles the Post for todo list route
+func (m *Repository) PostAdminTodoList(w http.ResponseWriter, r *http.Request) {
+	userID := m.App.Session.GetInt(r.Context(), "user_id")
+	log.Println("User Id:", userID)
+	
+	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{})
+}
