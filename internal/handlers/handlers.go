@@ -97,16 +97,6 @@ func (m *Repository) SingleRoom(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// This function handles the single room(Luxery) page and renders the template
-func (m *Repository) Alpine(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "alpine.page.html", &models.TemplateData{})
-}
-
-// This function handles the single room(Generals) page and renders the template
-func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "generals.page.html", &models.TemplateData{})
-}
-
 // This function handles the reservation page and renders the template
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "reservation.page.html", &models.TemplateData{})
