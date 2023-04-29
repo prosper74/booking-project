@@ -613,26 +613,40 @@ func (repo *postgresDBRepo) InsertTodoList(todo models.TodoList) error {
 }
 
 // GetTodoListByUserID gets all todo for a user by user_id
-func (repo *postgresDBRepo) GetTodoListByUserID(id int) (models.TodoList, error) {
+func (m *postgresDBRepo) GetTodoListByUserID(id int) ([]models.TodoList, error) {
 	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	var todoList models.TodoList
+	var todoList []models.TodoList
 
 	query := `
-		select id, todo, user_id, created_at, updated_at from todo_list where user_id = $1
+		select id, todo, user_id, created_at, updated_at from todo_list where user_id = $1 
+		order by created_at desc
 	`
 
-	row := repo.DB.QueryRowContext(context, query, id)
-	err := row.Scan(
-		&todoList.ID,
-		&todoList.Todo,
-		&todoList.UserID,
-		&todoList.CreatedAt,
-		&todoList.UpdatedAt,
-	)
-
+	rows, err := m.DB.QueryContext(context, query, id)
 	if err != nil {
+		return todoList, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var i models.TodoList
+		err := rows.Scan(
+			&i.ID,
+			&i.Todo,
+			&i.UserID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		)
+
+		if err != nil {
+			return todoList, err
+		}
+		todoList = append(todoList, i)
+	}
+
+	if err = rows.Err(); err != nil {
 		return todoList, err
 	}
 

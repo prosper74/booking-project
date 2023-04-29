@@ -1014,8 +1014,20 @@ func (m *Repository) AdminDeleteRoom(w http.ResponseWriter, r *http.Request) {
 
 // Handles the admin todo list route
 func (m *Repository) AdminTodoList(w http.ResponseWriter, r *http.Request) {
+	userID := m.App.Session.GetInt(r.Context(), "user_id")
+
+	todoList, err := m.DB.GetTodoListByUserID(userID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["todo_list"] = todoList
+
 	render.Template(w, r, "admin-todo.page.html", &models.TemplateData{
 		Form: forms.New(nil),
+		Data: data,
 	})
 }
 

@@ -142,7 +142,7 @@ func (repo *testDBRepo) InsertTodoList(todo models.TodoList) error {
 }
 
 // GetTodoListByUserID gets all todo for a user by user_id
-func (repo *testDBRepo) GetTodoListByUserID(id int) (models.TodoList, error) {
-	var todoList models.TodoList
+func (repo *testDBRepo) GetTodoListByUserID(id int) ([]models.TodoList, error) {
+	var todoList []models.TodoList
 	return todoList, nil
 }
