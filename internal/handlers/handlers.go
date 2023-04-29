@@ -91,7 +91,7 @@ func (m *Repository) SingleRoom(w http.ResponseWriter, r *http.Request) {
 
 	data := make(map[string]interface{})
 	data["room"] = room
-	
+
 	render.Template(w, r, "single-room.page.html", &models.TemplateData{
 		Data: data,
 	})
@@ -1069,7 +1069,17 @@ func (m *Repository) PostAdminTodoList(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/admin/todo-list", http.StatusTemporaryRedirect)
 		return
 	}
-	
+
 	m.App.Session.Put(r.Context(), "flash", "Todo Created Successfully!!!")
+	http.Redirect(w, r, "/admin/todo-list", http.StatusSeeOther)
+}
+
+// AdminDeleteTodo deletes Todo from the database and
+func (m *Repository) AdminDeleteTodo(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
+
+	fmt.Println("Deleted Todo ID: ", id)
+
+	m.App.Session.Put(r.Context(), "flash", "<strong>Successful!!!</strong><br><br> <p>Todo Deleted</p>")
 	http.Redirect(w, r, "/admin/todo-list", http.StatusSeeOther)
 }

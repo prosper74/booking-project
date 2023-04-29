@@ -64,6 +64,7 @@ func routes(app *config.AppConfig) http.Handler {
 
 		mux.Get("/todo-list", handlers.Repo.AdminTodoList)
 		mux.Post("/todo-list", handlers.Repo.PostAdminTodoList)
+		mux.Get("/delete-todo/{id}", handlers.Repo.AdminDeleteTodo)
 	})
 
 	return mux
