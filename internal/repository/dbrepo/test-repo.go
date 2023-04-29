@@ -146,3 +146,8 @@ func (repo *testDBRepo) GetTodoListByUserID(id int) ([]models.TodoList, error) {
 	var todoList []models.TodoList
 	return todoList, nil
 }
+
+// DeleteTodo deletes a todo
+func (m *testDBRepo) DeleteTodo(id int) error {
+	return nil
+}

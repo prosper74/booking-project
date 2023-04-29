@@ -1078,7 +1078,11 @@ func (m *Repository) PostAdminTodoList(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) AdminDeleteTodo(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
 
-	fmt.Println("Deleted Todo ID: ", id)
+	err := m.DB.DeleteTodo(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 
 	m.App.Session.Put(r.Context(), "flash", "<strong>Successful!!!</strong><br><br> <p>Todo Deleted</p>")
 	http.Redirect(w, r, "/admin/todo-list", http.StatusSeeOther)

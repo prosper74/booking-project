@@ -652,3 +652,19 @@ func (m *postgresDBRepo) GetTodoListByUserID(id int) ([]models.TodoList, error) 
 
 	return todoList, nil
 }
+
+// DeleteTodo deletes a todo
+func (m *postgresDBRepo) DeleteTodo(id int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `delete from todo_list where id = $1`
+
+	_, err := m.DB.ExecContext(ctx, query, id)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
