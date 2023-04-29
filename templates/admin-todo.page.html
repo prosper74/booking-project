@@ -4,6 +4,16 @@
   .list-wrapper {
     overflow: auto;
   }
+
+  .remove-todo {
+    margin-left: auto;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+  .remove-todo:hover {
+    color: red;
+  }
 </style>
 {{end}} {{define "admin_content"}}
 {{$todoList := index .Data "todo_list"}}
@@ -45,7 +55,7 @@
                       {{.Todo}}
                     </label>
                   </div>
-                  <i class="remove ti-trash"></i>
+                  <i class="remove-todo ti-trash" onclick="deleteTodo({{.ID}})"></i>
                 </li>
                 {{end}}
               </ul>
@@ -59,4 +69,19 @@
 </div>
 <!-- main-panel ends -->
 
-{{end}} {{define "js"}} {{end}}
+{{end}} {{define "js"}}
+<script>
+  function deleteTodo(id) {
+    Prompt().customModal({
+      title: "Are you sure you want to delete this Todo?",
+      message: "",
+      icon: "warning",
+      callback: function (result) {
+        if (result !== false) {
+          window.location.href = "/admin/delete-todo" + id
+        }
+      }
+    })
+  }
+</script>
+{{end}}
