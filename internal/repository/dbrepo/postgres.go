@@ -621,7 +621,7 @@ func (m *postgresDBRepo) GetTodoListByUserID(id int) ([]models.TodoList, error) 
 
 	query := `
 		select id, todo, user_id, created_at, updated_at from todo_list where user_id = $1 
-		order by created_at desc
+		order by created_at asc
 	`
 
 	rows, err := m.DB.QueryContext(context, query, id)

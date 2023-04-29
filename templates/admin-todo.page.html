@@ -6,7 +6,7 @@
   }
 </style>
 {{end}} {{define "admin_content"}}
-
+{{$todoList := index .Data "todo_list"}}
 <!-- partial -->
 <div class="main-panel">
   <div class="content-wrapper">
@@ -25,7 +25,7 @@
             <form action="/admin/todo-list" method="post" class="row g-3 main-form" novalidate>
               <div class="add-items d-flex my-4">
                 <input type="text" name="todo_list" class='form-control {{with .Form.Errors.Get
-                  "todo_list"}} is-invalid {{end}}' placeholder="Add new task" />                
+                  "todo_list"}} is-invalid {{end}}' placeholder="Add new task" />
 
                 <button type="submit" class="btn btn-icon text-primary bg-transparent">
                   <i class="ti-location-arrow"></i>
@@ -37,15 +37,17 @@
 
             <div class="list-wrapper pt-2">
               <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+                {{range $todoList}}
                 <li>
                   <div class="form-check form-check-flat">
                     <label class="form-check-label">
                       <input class="checkbox" type="checkbox">
-                      Become A Travel Pro In One Easy Lesson
+                      {{.Todo}}
                     </label>
                   </div>
                   <i class="remove ti-trash"></i>
                 </li>
+                {{end}}
               </ul>
             </div>
 
