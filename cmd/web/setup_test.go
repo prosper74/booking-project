@@ -9,7 +9,6 @@ import (
 )
 
 func TestMain(mainTest *testing.M) {
-
 	// Before the test starts running, do something inside the `Run()` function, then exit
 	os.Exit(mainTest.Run())
 }
@@ -17,6 +16,4 @@ func TestMain(mainTest *testing.M) {
 // `myHandler` holds objects that will satisfy http handler interface
 type myHandler struct{}
 
-func (handlerObject *myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
-}
+func (handlerObject *myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {}
