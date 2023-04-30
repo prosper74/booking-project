@@ -35,7 +35,7 @@
             <form action="/admin/todo-list" method="post" class="row g-3 main-form" novalidate>
               <div class="add-items d-flex my-4">
                 <input type="text" name="todo_list" class='form-control {{with .Form.Errors.Get
-                  "todo_list"}} is-invalid {{end}}' placeholder="Add new task" />
+                  "todo_list"}} is-invalid {{end}}' placeholder="Add new task" autofocus />
 
                 <button type="submit" class="btn btn-icon text-primary bg-transparent">
                   <i class="ti-location-arrow"></i>
