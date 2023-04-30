@@ -97,16 +97,45 @@ func getRoutes() http.Handler {
 	mux.Get("/", Repo.Home)
 	mux.Get("/about", Repo.About)
 	mux.Get("/contact", Repo.Contact)
-	mux.Get("/alpine", Repo.Alpine)
-	mux.Get("/generals", Repo.Generals)
+	mux.Get("/rooms/{id}", Repo.SingleRoom)
 
 	mux.Get("/reservation", Repo.Reservation)
 	mux.Post("/reservation", Repo.PostReservation)
 	mux.Post("/reservation-json", Repo.AvailabilityJSON)
+	mux.Get("/choose-room/{id}", Repo.ChooseRoom)
+	mux.Get("/book-room", Repo.BookRoom)
 
 	mux.Get("/make-reservation", Repo.MakeReservation)
 	mux.Post("/make-reservation", Repo.PostMakeReservation)
 	mux.Get("/reservation-summary", Repo.ReservationSummary)
+
+	mux.Get("/user/login", Repo.Login)
+	mux.Post("/user/login", Repo.PostLogin)
+	mux.Get("/user/logout", Repo.Logout)
+
+	mux.Get("/dashboard", Repo.AdminDashboard)
+
+	mux.Get("/new-reservations", Repo.AdminNewReservations)
+	mux.Get("/all-reservations", Repo.AdminAllReservations)
+	mux.Get("/reservations-calendar", Repo.AdminReservationsCalendar)
+	mux.Post("/reservations-calendar", Repo.AdminPostReservationsCalendar)
+
+	mux.Get("/reservations/{src}/{id}/show", Repo.AdminSingleReservation)
+	mux.Post("/reservations/{src}/{id}", Repo.PostAdminSingleReservation)
+
+	mux.Get("/admin/rooms", Repo.AdminAllRooms)
+	mux.Get("/admin/rooms/{id}", Repo.AdminSingleRoom)
+	mux.Post("/admin/rooms/{id}", Repo.PostAdminSingleRoom)
+	mux.Get("/admin/rooms/new-room", Repo.AdminNewRoom)
+	mux.Post("/admin/rooms/new-room", Repo.PostAdminNewRoom)
+	mux.Get("/admin/delete-room/{id}", Repo.AdminDeleteRoom)
+
+	mux.Get("/admin/process-reservation/{src}/{id}/do", Repo.AdminProcessReservation)
+	mux.Get("/admin/delete-reservation/{src}/{id}/do", Repo.AdminDeleteReservation)
+
+	mux.Get("/admin/todo-list", Repo.AdminTodoList)
+	mux.Post("/admin/todo-list", Repo.PostAdminTodoList)
+	mux.Get("/admin/delete-todo/{id}", Repo.AdminDeleteTodo)
 
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
