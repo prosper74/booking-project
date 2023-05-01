@@ -30,7 +30,7 @@ func main() {
 
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Error loading .env file")
 	}
 
 	host := os.Getenv("HOST")
@@ -53,7 +53,7 @@ func main() {
 	fmt.Println(fmt.Sprintf("Server started at host %s and port %s", host, port))
 	// Create a variable to serve the routes
 	srv := &http.Server{
-		Addr:   host + ":" + port,
+		Addr:    host + ":" + port,
 		Handler: routes(&app),
 	}
 
