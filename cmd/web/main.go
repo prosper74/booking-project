@@ -16,9 +16,10 @@ import (
 	"github.com/atuprosper/booking-project/internal/helpers"
 	"github.com/atuprosper/booking-project/internal/models"
 	"github.com/atuprosper/booking-project/internal/render"
+	"github.com/joho/godotenv"
 )
 
-const port = ":8080"
+// const port = ":8080"
 
 var app config.AppConfig
 var session *scs.SessionManager
@@ -26,6 +27,14 @@ var infoLog *log.Logger
 var errorLog *log.Logger
 
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	host := os.Getenv("HOST")
+	port := os.Getenv("PORT")
 
 	connectedDB, err := run()
 
@@ -41,10 +50,10 @@ func main() {
 	fmt.Println("Listening for mail...")
 	listenForMail()
 
-	fmt.Println(fmt.Sprintf("Server started at port %s", port))
+	fmt.Println(fmt.Sprintf("Server started at host %s and port %s", host, port))
 	// Create a variable to serve the routes
 	srv := &http.Server{
-		Addr:    "0.0.0.0" + port,
+		Addr:   host + ":" + port,
 		Handler: routes(&app),
 	}
 
