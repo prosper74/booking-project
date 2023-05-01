@@ -5,7 +5,8 @@ This is my first fullstack Go project. Built with Go version 1.19
 This project is a simple hotel booking and reservation project with key features like;
 
 - Authentication
-- Showcase the properties
+- Create and manage rooms
+- Showcase the rooms
 - Check for rooms availability
 - Allow booking of one room
 - Notify guest and owner
@@ -13,6 +14,13 @@ This project is a simple hotel booking and reservation project with key features
 - Review existing bookings
 - Show a calendar of bookings
 - Change or cancel a booking
+- Todo
+
+### Live Website and login details
+
+- url - https://bookings-p.up.railway.app/
+- username/email: test@admin.com
+- password: password
 
 ### Packages used
 
