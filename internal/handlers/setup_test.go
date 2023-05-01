@@ -152,6 +152,7 @@ func NoSurf(next http.Handler) http.Handler {
 		Secure:   app.InProduction,
 		SameSite: http.SameSiteLaxMode,
 	})
+	
 	return csrfHandler
 }
 

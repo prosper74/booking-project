@@ -66,11 +66,11 @@ func run() (*driver.DB, error) {
 	// Read flags
 	inProduction := flag.Bool("production", true, "App is in production")
 	useCache := flag.Bool("cache", true, "Use template cache")
-	dbHost := flag.String("dbhost", "localhost", "Database host")
+	dbHost := flag.String("dbhost", "containers-us-west-124.railway.app", "Database host")
 	dbName := flag.String("dbname", "", "Database name")
 	dbUser := flag.String("dbuser", "", "Database user")
 	dbPassword := flag.String("dbpassword", "", "Database password")
-	dbPort := flag.String("dbport", "5432", "Database port")
+	dbPort := flag.String("dbport", "6000", "Database port")
 	dbSSL := flag.String("dbssl", "disable", "Database ssl settings (disable, prefer, require)")
 
 	flag.Parse()
