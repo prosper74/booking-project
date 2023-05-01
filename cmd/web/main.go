@@ -44,7 +44,7 @@ func main() {
 	fmt.Println(fmt.Sprintf("Server started at port %s", port))
 	// Create a variable to serve the routes
 	srv := &http.Server{
-		Addr:    fmt.Sprintf("0.0.0.0:%s", port),
+		Addr:    "0.0.0.0:" + port,
 		Handler: routes(&app),
 	}
 
@@ -116,7 +116,7 @@ func run() (*driver.DB, error) {
 		return nil, err
 	}
 
-	app.TemplateCache = tc	
+	app.TemplateCache = tc
 
 	// Variable to reference our app
 	repo := handlers.NewRepo(&app, connectedDB)
