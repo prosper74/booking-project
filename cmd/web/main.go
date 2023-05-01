@@ -18,7 +18,7 @@ import (
 	"github.com/atuprosper/booking-project/internal/render"
 )
 
-const port = ":8080"
+const port = "8080"
 
 var app config.AppConfig
 var session *scs.SessionManager
@@ -44,7 +44,7 @@ func main() {
 	fmt.Println(fmt.Sprintf("Server started at port %s", port))
 	// Create a variable to serve the routes
 	srv := &http.Server{
-		Addr:    port,
+		Addr:    fmt.Sprintf("0.0.0.0:%s", port),
 		Handler: routes(&app),
 	}
 
