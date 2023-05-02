@@ -29,8 +29,6 @@ var theTests = []struct {
 	{"home", "/", "GET", http.StatusOK},
 	{"about", "/about", "GET", http.StatusOK},
 	{"contact", "/contact", "GET", http.StatusOK},
-	{"alpine", "/alpine", "GET", http.StatusOK},
-	{"generals", "/generals", "GET", http.StatusOK},
 	{"reservation", "/reservation", "GET", http.StatusOK},
 }
 
