@@ -50,6 +50,7 @@ var theTests = []struct {
 	{"new room", "/admin/rooms/new-room", "GET", http.StatusOK},
 	{"single room", "/admin/rooms/1", "GET", http.StatusOK},
 	{"new room", "/admin/rooms/new-room", "GET", http.StatusOK},
+	{"todo", "/admin/todo-list", "GET", http.StatusOK},
 }
 
 // TestHandlers tests all routes that don't require extra tests (gets)
