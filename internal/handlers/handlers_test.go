@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -322,107 +321,46 @@ func TestNewRepo(t *testing.T) {
 	}
 }
 
-func TestRepository_AvailabilityJSON(t *testing.T) {
-	// first case -- rooms are not available
-	postedData := url.Values{}
-	postedData.Add("start", "2050-01-01")
-	postedData.Add("end", "2050-01-02")
-	postedData.Add("room_id", "1")
-
-	request, _ := http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
-	ctx := getContext(request)
-	request = request.WithContext(ctx)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder := httptest.NewRecorder()
-
-	handler := http.HandlerFunc(Repo.AvailabilityJSON)
-	handler.ServeHTTP(responseRecorder, request)
-
-	// since we have no rooms available, we expect to get status http.StatusSeeOther
-	// this time we want to parse JSON and get the expected response
-	var j jsonResponse
-	err := json.Unmarshal([]byte(responseRecorder.Body.String()), &j)
-	if err != nil {
-		t.Error("failed to parse json!")
-	}
-
-	// since we specified a start date > 2049-12-31, we expect no availability
-	if j.Ok {
-		t.Error("Got availability when none was expected in AvailabilityJSON")
-	}
-
-	// second case -- rooms not available
-	postedData = url.Values{}
-	postedData.Add("start", "2040-01-01")
-	postedData.Add("end", "2040-01-02")
-	postedData.Add("room_id", "1")
-
-	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
-	ctx = getContext(request)
-	request = request.WithContext(ctx)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder = httptest.NewRecorder()
-
-	handler = http.HandlerFunc(Repo.AvailabilityJSON)
-	handler.ServeHTTP(responseRecorder, request)
-
-	// this time we want to parse JSON and get the expected response
-	err = json.Unmarshal([]byte(responseRecorder.Body.String()), &j)
-	if err != nil {
-		t.Error("failed to parse json!")
-	}
-
-	// since we specified a start date < 2049-12-31, we expect availability
-	if !j.Ok {
-		t.Error("Got no availability when some was expected in AvailabilityJSON")
-	}
-
-	// third case -- no request body
-	request, _ = http.NewRequest("POST", "/make-reservation", nil)
-	ctx = getContext(request)
-	request = request.WithContext(ctx)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder = httptest.NewRecorder()
-
-	handler = http.HandlerFunc(Repo.AvailabilityJSON)
-	handler.ServeHTTP(responseRecorder, request)
-
-	// this time we want to parse JSON and get the expected response
-	err = json.Unmarshal([]byte(responseRecorder.Body.String()), &j)
-	if err != nil {
-		t.Error("failed to parse json!")
-	}
-
-	// since we specified a start date < 2049-12-31, we expect availability
-	if j.Ok || j.Message != "Internal server error" {
-		t.Error("Got availability when request body was empty")
-	}
-
-	// fourth case -- database error
-	postedData = url.Values{}
-	postedData.Add("start", "2040-01-01")
-	postedData.Add("end", "2040-01-02")
-	postedData.Add("room_id", "1")
-
-	request, _ = http.NewRequest("POST", "/make-reservation", strings.NewReader(postedData.Encode()))
-	ctx = getContext(request)
-	request = request.WithContext(ctx)
-	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	responseRecorder = httptest.NewRecorder()
-
-	handler = http.HandlerFunc(Repo.AvailabilityJSON)
-	handler.ServeHTTP(responseRecorder, request)
-
-	// this time we want to parse JSON and get the expected response
-	err = json.Unmarshal([]byte(responseRecorder.Body.String()), &j)
-	if err != nil {
-		t.Error("failed to parse json!")
-	}
-
-	// since we specified a start date < 2049-12-31, we expect availability
-	if j.Ok || j.Message != "Error querying database" {
-		t.Error("Got availability when simulating database error")
-	}
+// testAvailabilityJSONData is data for the AvailabilityJSON handler, /search-availability-json route
+var testAvailabilityJSONData = []struct {
+	name            string
+	postedData      url.Values
+	expectedOK      bool
+	expectedMessage string
+}{
+	{
+		name: "rooms not available",
+		postedData: url.Values{
+			"start":   {"2050-01-01"},
+			"end":     {"2050-01-02"},
+			"room_id": {"1"},
+		},
+		expectedOK: false,
+	}, {
+		name: "rooms are available",
+		postedData: url.Values{
+			"start":   {"2040-01-01"},
+			"end":     {"2040-01-02"},
+			"room_id": {"1"},
+		},
+		expectedOK: true,
+	},
+	{
+		name:            "empty post body",
+		postedData:      nil,
+		expectedOK:      false,
+		expectedMessage: "Internal Server Error",
+	},
+	{
+		name: "database query fails",
+		postedData: url.Values{
+			"start":   {"2060-01-01"},
+			"end":     {"2060-01-02"},
+			"room_id": {"1"},
+		},
+		expectedOK:      false,
+		expectedMessage: "Error querying database",
+	},
 }
 
 func TestRepository_ReservationSummary(t *testing.T) {
