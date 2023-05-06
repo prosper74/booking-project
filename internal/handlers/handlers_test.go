@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -361,6 +362,37 @@ var testAvailabilityJSONData = []struct {
 		expectedOK:      false,
 		expectedMessage: "Error querying database",
 	},
+}
+
+// TestAvailabilityJSON tests the AvailabilityJSON handler
+func TestAvailabilityJSON(t *testing.T) {
+	for _, e := range testAvailabilityJSONData {
+		// create request, get the context with session, set header, create recorder
+		var req *http.Request
+		if e.postedData != nil {
+			req, _ = http.NewRequest("POST", "/reservation-json", strings.NewReader(e.postedData.Encode()))
+		} else {
+			req, _ = http.NewRequest("POST", "/reservation-json", nil)
+		}
+		ctx := getContext(req)
+		req = req.WithContext(ctx)
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		rr := httptest.NewRecorder()
+
+		// make our handler a http.HandlerFunc and call
+		handler := http.HandlerFunc(Repo.AvailabilityJSON)
+		handler.ServeHTTP(rr, req)
+
+		var j jsonResponse
+		err := json.Unmarshal([]byte(rr.Body.String()), &j)
+		if err != nil {
+			t.Error("failed to parse json!")
+		}
+
+		if j.Ok != e.expectedOK {
+			t.Errorf("%s: expected %v but got %v", e.name, e.expectedOK, j.Ok)
+		}
+	}
 }
 
 func TestRepository_ReservationSummary(t *testing.T) {
