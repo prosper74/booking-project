@@ -395,7 +395,7 @@ func TestAvailabilityJSON(t *testing.T) {
 	}
 }
 
-// testPostAvailabilityData is data for the PostAvailability handler test, /reservation-json
+// testPostAvailabilityData is data for the PostAvailability handler test, /make-reservation
 var testPostAvailabilityData = []struct {
 	name               string
 	postedData         url.Values
@@ -449,6 +449,29 @@ var testPostAvailabilityData = []struct {
 		},
 		expectedStatusCode: http.StatusSeeOther,
 	},
+}
+
+// TestPostAvailability tests the PostAvailabilityHandler
+func TestPostAvailability(t *testing.T) {
+	for _, e := range testPostAvailabilityData {
+		req, _ := http.NewRequest("POST", "/make-reservation", strings.NewReader(e.postedData.Encode()))
+
+		// get the context with session
+		ctx := getContext(req)
+		req = req.WithContext(ctx)
+
+		// set the request header
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		rr := httptest.NewRecorder()
+
+		// make our handler a http.HandlerFunc and call
+		handler := http.HandlerFunc(Repo.PostMakeReservation)
+		handler.ServeHTTP(rr, req)
+
+		if rr.Code != e.expectedStatusCode {
+			t.Errorf("%s gave wrong status code: got %d, wanted %d", e.name, rr.Code, e.expectedStatusCode)
+		}
+	}
 }
 
 func TestRepository_ReservationSummary(t *testing.T) {
