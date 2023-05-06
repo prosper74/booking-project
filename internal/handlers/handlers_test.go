@@ -504,41 +504,32 @@ var reservationSummaryTests = []struct {
 	},
 }
 
-func TestRepository_ReservationSummary(t *testing.T) {
-	// first case -- reservation in session
-	reservation := models.Reservation{
-		RoomID: 1,
-		Room: models.Room{
-			ID:       1,
-			RoomName: "Generals Quarters",
-		},
-	}
+// TestReservationSummary tests the ReservationSummaryHandler
+func TestReservationSummary(t *testing.T) {
+	for _, e := range reservationSummaryTests {
+		req, _ := http.NewRequest("GET", e.url, nil)
+		ctx := getContext(req)
+		req = req.WithContext(ctx)
 
-	request, _ := http.NewRequest("POST", "/make-reservation", nil)
-	ctx := getContext(request)
-	request = request.WithContext(ctx)
-	responseRecorder := httptest.NewRecorder()
+		rr := httptest.NewRecorder()
+		if e.reservation.RoomID > 0 {
+			session.Put(ctx, "reservation", e.reservation)
+		}
 
-	session.Put(ctx, "reservation", reservation)
+		handler := http.HandlerFunc(Repo.ReservationSummary)
 
-	handler := http.HandlerFunc(Repo.ReservationSummary)
-	handler.ServeHTTP(responseRecorder, request)
+		handler.ServeHTTP(rr, req)
 
-	if responseRecorder.Code != http.StatusOK {
-		t.Errorf("ReservationSummary handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusOK)
-	}
+		if rr.Code != e.expectedStatusCode {
+			t.Errorf("%s returned wrong response code: got %d, wanted %d", e.name, rr.Code, e.expectedStatusCode)
+		}
 
-	// second case -- reservation not in session
-	request, _ = http.NewRequest("POST", "/make-reservation", nil)
-	ctx = getContext(request)
-	request = request.WithContext(ctx)
-	responseRecorder = httptest.NewRecorder()
-
-	handler = http.HandlerFunc(Repo.ReservationSummary)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusTemporaryRedirect {
-		t.Errorf("ReservationSummary handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusOK)
+		if e.expectedLocation != "" {
+			actualLoc, _ := rr.Result().Location()
+			if actualLoc.String() != e.expectedLocation {
+				t.Errorf("failed %s: expected location %s, but got location %s", e.name, e.expectedLocation, actualLoc.String())
+			}
+		}
 	}
 }
 
