@@ -322,7 +322,7 @@ func TestNewRepo(t *testing.T) {
 	}
 }
 
-// testAvailabilityJSONData is data for the AvailabilityJSON handler, /search-availability-json route
+// testAvailabilityJSONData is data for the AvailabilityJSON handler, /reservation-json route
 var testAvailabilityJSONData = []struct {
 	name            string
 	postedData      url.Values
@@ -393,6 +393,62 @@ func TestAvailabilityJSON(t *testing.T) {
 			t.Errorf("%s: expected %v but got %v", e.name, e.expectedOK, j.Ok)
 		}
 	}
+}
+
+// testPostAvailabilityData is data for the PostAvailability handler test, /reservation-json
+var testPostAvailabilityData = []struct {
+	name               string
+	postedData         url.Values
+	expectedStatusCode int
+	expectedLocation   string
+}{
+	{
+		name: "rooms not available",
+		postedData: url.Values{
+			"start": {"2050-01-01"},
+			"end":   {"2050-01-02"},
+		},
+		expectedStatusCode: http.StatusSeeOther,
+	},
+	{
+		name: "rooms are available",
+		postedData: url.Values{
+			"start":   {"2040-01-01"},
+			"end":     {"2040-01-02"},
+			"room_id": {"1"},
+		},
+		expectedStatusCode: http.StatusOK,
+	},
+	{
+		name:               "empty post body",
+		postedData:         url.Values{},
+		expectedStatusCode: http.StatusSeeOther,
+	},
+	{
+		name: "start date wrong format",
+		postedData: url.Values{
+			"start":   {"invalid"},
+			"end":     {"2040-01-02"},
+			"room_id": {"1"},
+		},
+		expectedStatusCode: http.StatusSeeOther,
+	},
+	{
+		name: "end date wrong format",
+		postedData: url.Values{
+			"start": {"2040-01-01"},
+			"end":   {"invalid"},
+		},
+		expectedStatusCode: http.StatusSeeOther,
+	},
+	{
+		name: "database query fails",
+		postedData: url.Values{
+			"start": {"2060-01-01"},
+			"end":   {"2060-01-02"},
+		},
+		expectedStatusCode: http.StatusSeeOther,
+	},
 }
 
 func TestRepository_ReservationSummary(t *testing.T) {
