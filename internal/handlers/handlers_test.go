@@ -474,6 +474,36 @@ func TestPostAvailability(t *testing.T) {
 	}
 }
 
+// reservationSummaryTests is the data to test ReservationSummary handler
+var reservationSummaryTests = []struct {
+	name               string
+	reservation        models.Reservation
+	url                string
+	expectedStatusCode int
+	expectedLocation   string
+}{
+	{
+		name: "res-in-session",
+		reservation: models.Reservation{
+			RoomID: 1,
+			Room: models.Room{
+				ID:       1,
+				RoomName: "Generals Suit",
+			},
+		},
+		url:                "/reservation-summary",
+		expectedStatusCode: http.StatusOK,
+		expectedLocation:   "",
+	},
+	{
+		name:               "res-not-in-session",
+		reservation:        models.Reservation{},
+		url:                "/reservation-summary",
+		expectedStatusCode: http.StatusSeeOther,
+		expectedLocation:   "/",
+	},
+}
+
 func TestRepository_ReservationSummary(t *testing.T) {
 	// first case -- reservation in session
 	reservation := models.Reservation{
