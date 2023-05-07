@@ -52,6 +52,7 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.20 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
+	github.com/sendinblue/APIv3-go-library/v2 v2.1.2 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/sourcegraph/annotate v0.0.0-20160123013949-f4cad6c6324d // indirect
