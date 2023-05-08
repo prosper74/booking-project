@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/atuprosper/booking-project/internal/models"
 	"github.com/joho/godotenv"
@@ -44,6 +46,26 @@ func sendMessage(m models.MailData) {
 	}
 	fmt.Println("GetAccount Object:", result, " GetAccount Response: ", resp)
 
+	var emailContent string
+
+	if m.Template == "" {
+		emailContent = m.Content
+	} else {
+		// ioutil is used to read files
+		data, err := ioutil.ReadFile(fmt.Sprintf("./email-template/%s", m.Template))
+
+		if err != nil {
+			app.ErrorLog.Println(err)
+		}
+
+		// convert the []byte returned to string
+		mailTemplate := string(data)
+
+		// Replace the template litrals [%body%] with the content passed
+		messageToSend := strings.Replace(mailTemplate, "[%body%]", m.Content, 1)
+		emailContent = messageToSend
+	}
+
 	// Create an email message
 	message := sendinblue.SendSmtpEmail{
 		Sender: &sendinblue.SendSmtpEmailSender{
@@ -57,7 +79,7 @@ func sendMessage(m models.MailData) {
 			},
 		},
 		Subject:     m.Subject,
-		TextContent: m.Content,
+		TextContent: emailContent,
 	}
 
 	// Send the email using the Sendinblue API
