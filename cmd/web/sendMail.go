@@ -83,14 +83,11 @@ func sendMessage(m models.MailData) {
 	}
 
 	// Send the email using the Sendinblue API
-	created, response, err := sib.TransactionalEmailsApi.SendTransacEmail(ctx, message)
+	_, _, err = sib.TransactionalEmailsApi.SendTransacEmail(ctx, message)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-
-	fmt.Println("created:", created)
-	fmt.Println("response:", response)
 
 	// Print a message indicating that the email was sent successfully
 	fmt.Println("Email sent successfully!")
