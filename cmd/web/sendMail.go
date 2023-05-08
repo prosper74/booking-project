@@ -4,8 +4,10 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/atuprosper/booking-project/internal/models"
+	"github.com/joho/godotenv"
 	sendinblue "github.com/sendinblue/APIv3-go-library/v2/lib"
 )
 
@@ -20,12 +22,19 @@ func listenForMail() {
 }
 
 func sendMessage(m models.MailData) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file")
+	}
+
+	SENDINBLUE_API_KEY := os.Getenv("SENDINBLUE_API_KEY")
+
 	var ctx context.Context
 	cfg := sendinblue.NewConfiguration()
 	//Configure API key authorization: api-key
-	cfg.AddDefaultHeader("api-key", "your-api-key")
+	cfg.AddDefaultHeader("api-key", SENDINBLUE_API_KEY)
 	//Configure API key authorization: partner-key
-	cfg.AddDefaultHeader("partner-key", "your-api-key")
+	cfg.AddDefaultHeader("partner-key", SENDINBLUE_API_KEY)
 
 	sib := sendinblue.NewAPIClient(cfg)
 	result, resp, err := sib.AccountApi.GetAccount(ctx)
