@@ -1,14 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"strings"
-	"time"
 
 	"github.com/atuprosper/booking-project/internal/models"
-	mail "github.com/xhit/go-simple-mail/v2"
+	sendinblue "github.com/sendinblue/APIv3-go-library/v2/lib"
 )
 
 func listenForMail() {
@@ -22,44 +20,48 @@ func listenForMail() {
 }
 
 func sendMessage(m models.MailData) {
-	server := mail.NewSMTPClient()
-	server.Host = "localhost"
-	server.Port = 1025
-	server.KeepAlive = false
-	server.ConnectTimeout = 10 * time.Second
-	server.SendTimeout = 10 * time.Second
+	var ctx context.Context
+	cfg := sendinblue.NewConfiguration()
+	//Configure API key authorization: api-key
+	cfg.AddDefaultHeader("api-key", "your-api-key")
+	//Configure API key authorization: partner-key
+	cfg.AddDefaultHeader("partner-key", "your-api-key")
 
-	client, err := server.Connect()
+	sib := sendinblue.NewAPIClient(cfg)
+	result, resp, err := sib.AccountApi.GetAccount(ctx)
 	if err != nil {
-		errorLog.Println(err)
+		fmt.Println("Error when calling AccountApi->get_account: ", err.Error())
+		return
+	}
+	fmt.Println("GetAccount Object:", result, " GetAccount Response: ", resp)
+
+	// Create an email message
+	message := sendinblue.SendSmtpEmail{
+		Sender: &sendinblue.SendSmtpEmailSender{
+			Name:  "Hotel Bookings",
+			Email: m.From,
+		},
+		To: []sendinblue.SendSmtpEmailTo{
+			{
+				Email: m.To,
+				Name:  "",
+			},
+		},
+		Subject:     m.Subject,
+		TextContent: m.Content,
 	}
 
-	email := mail.NewMSG()
-	email.SetFrom(m.From).AddTo(m.To).SetSubject(m.Subject)
-
-	if m.Template == "" {
-		email.SetBody(mail.TextHTML, m.Content)
-	} else {
-		// ioutil is used to read files
-		data, err := ioutil.ReadFile(fmt.Sprintf("./email-template/%s", m.Template))
-
-		if err != nil {
-			app.ErrorLog.Println(err)
-		}
-
-		// convert the []byte returned to string
-		mailTemplate := string(data)
-
-		// Replace the template litrals [%body%] with the content passed
-		messageToSend := strings.Replace(mailTemplate, "[%body%]", m.Content, 1)
-		email.SetBody(mail.TextHTML, messageToSend)
-	}
-
-	err = email.Send(client)
+	// Send the email using the Sendinblue API
+	created, response, err := sib.TransactionalEmailsApi.SendTransacEmail(ctx, message)
 	if err != nil {
 		log.Println(err)
-	} else {
-		log.Println("Email Sent")
+		return
 	}
+
+	fmt.Println("created:", created)
+	fmt.Println("response:", response)
+
+	// Print a message indicating that the email was sent successfully
+	fmt.Println("Email sent successfully!")
 
 }

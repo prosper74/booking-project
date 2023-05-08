@@ -323,7 +323,7 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 
 	message := models.MailData{
 		To:       reservation.Email,
-		From:     "me@prosper.com",
+		From:     "prosperdevstack@gmail.com",
 		Subject:  "Reservation Confirmation",
 		Content:  htmlBody,
 		Template: "basic.html",
@@ -341,8 +341,8 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 	`, reservation.FirstName, reservation.LastName, reservation.StartDate.Format("2006-01-02"), reservation.EndDate.Format("2006-01-02"), reservation.Room.RoomName, reservation.Email)
 
 	message = models.MailData{
-		To:      "Admin@email.com",
-		From:    "Admin@server.com",
+		To:      "atu.prosper@gmail.com",
+		From:    "prosperdevstack@gmail.com",
 		Subject: "New Reservation",
 		Content: htmlBody,
 	}
