@@ -600,6 +600,24 @@ func TestChooseRoom(t *testing.T) {
 	}
 }
 
+// bookRoomTests is the data for the BookRoom handler tests
+var bookRoomTests = []struct {
+	name               string
+	url                string
+	expectedStatusCode int
+}{
+	{
+		name:               "database-works",
+		url:                "/book-room?s=2050-01-01&e=2050-01-02&id=1",
+		expectedStatusCode: http.StatusSeeOther,
+	},
+	{
+		name:               "database-fails",
+		url:                "/book-room?s=2040-01-01&e=2040-01-02&id=4",
+		expectedStatusCode: http.StatusSeeOther,
+	},
+}
+
 func TestRepository_BookRoom(t *testing.T) {
 	// first case -- reservation in session
 	reservation := models.Reservation{
