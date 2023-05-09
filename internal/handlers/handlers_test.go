@@ -570,61 +570,33 @@ var chooseRoomTests = []struct {
 	},
 }
 
-func TestRepository_ChooseRoom(t *testing.T) {
-	// first case -- reservation in session
-	reservation := models.Reservation{
-		RoomID: 1,
-		Room: models.Room{
-			ID:       1,
-			RoomName: "Generals Suit",
-		},
-	}
+// TestChooseRoom tests the ChooseRoom handler
+func TestChooseRoom(t *testing.T) {
+	for _, e := range chooseRoomTests {
+		req, _ := http.NewRequest("GET", e.url, nil)
+		ctx := getContext(req)
+		req = req.WithContext(ctx)
+		// set the RequestURI on the request so that we can grab the ID from the URL
+		req.RequestURI = e.url
 
-	request, _ := http.NewRequest("GET", "/choose-room/1", nil)
-	ctx := getContext(request)
-	request = request.WithContext(ctx)
-	request.RequestURI = "/choose-room/1"
+		rr := httptest.NewRecorder()
+		if e.reservation.RoomID > 0 {
+			session.Put(ctx, "reservation", e.reservation)
+		}
 
-	responseRecorder := httptest.NewRecorder()
-	session.Put(ctx, "reservation", reservation)
+		handler := http.HandlerFunc(Repo.ChooseRoom)
+		handler.ServeHTTP(rr, req)
 
-	handler := http.HandlerFunc(Repo.ChooseRoom)
-	handler.ServeHTTP(responseRecorder, request)
+		if rr.Code != e.expectedStatusCode {
+			t.Errorf("%s returned wrong response code: got %d, wanted %d", e.name, rr.Code, e.expectedStatusCode)
+		}
 
-	if responseRecorder.Code != http.StatusSeeOther {
-		t.Errorf("ChooseRoom handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusTemporaryRedirect)
-	}
-
-	// second case -- reservation not in session
-	request, _ = http.NewRequest("GET", "/choose-room/1", nil)
-	ctx = getContext(request)
-	request = request.WithContext(ctx)
-	request.RequestURI = "/choose-room/1"
-
-	responseRecorder = httptest.NewRecorder()
-	session.Put(ctx, "reservation", reservation)
-
-	handler = http.HandlerFunc(Repo.ChooseRoom)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusSeeOther {
-		t.Errorf("ChooseRoom handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusSeeOther)
-	}
-
-	// third case -- missing url parameter, or malformed parameter
-	request, _ = http.NewRequest("GET", "/choose-room/goat", nil)
-	ctx = getContext(request)
-	request = request.WithContext(ctx)
-	request.RequestURI = "/choose-room/goat"
-
-	responseRecorder = httptest.NewRecorder()
-	session.Put(ctx, "reservation", reservation)
-
-	handler = http.HandlerFunc(Repo.ChooseRoom)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusSeeOther {
-		t.Errorf("ChooseRoom handler returned wrong response code for missing parameter: got %d, wanted %d", responseRecorder.Code, http.StatusSeeOther)
+		if e.expectedLocation != "" {
+			actualLoc, _ := rr.Result().Location()
+			if actualLoc.String() != e.expectedLocation {
+				t.Errorf("failed %s: expected location %s, but got location %s", e.name, e.expectedLocation, actualLoc.String())
+			}
+		}
 	}
 }
 
