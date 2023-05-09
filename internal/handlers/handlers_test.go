@@ -618,8 +618,8 @@ var bookRoomTests = []struct {
 	},
 }
 
-func TestRepository_BookRoom(t *testing.T) {
-	// first case -- reservation in session
+// TestBookRoom tests the BookRoom handler
+func TestBookRoom(t *testing.T) {
 	reservation := models.Reservation{
 		RoomID: 1,
 		Room: models.Room{
@@ -628,33 +628,21 @@ func TestRepository_BookRoom(t *testing.T) {
 		},
 	}
 
-	request, _ := http.NewRequest("GET", "/book-room?sd=2050-01-01&ed=2050-01-02&id=1", nil)
-	ctx := getContext(request)
-	request = request.WithContext(ctx)
+	for _, e := range bookRoomTests {
+		req, _ := http.NewRequest("GET", e.url, nil)
+		ctx := getContext(req)
+		req = req.WithContext(ctx)
 
-	responseRecorder := httptest.NewRecorder()
-	session.Put(ctx, "reservation", reservation)
+		rr := httptest.NewRecorder()
+		session.Put(ctx, "reservation", reservation)
 
-	handler := http.HandlerFunc(Repo.BookRoom)
-	handler.ServeHTTP(responseRecorder, request)
+		handler := http.HandlerFunc(Repo.BookRoom)
 
-	if responseRecorder.Code != http.StatusSeeOther {
-		t.Errorf("BookRoom handler returned wrong response code: got %d, wanted %d", responseRecorder.Code, http.StatusSeeOther)
-	}
+		handler.ServeHTTP(rr, req)
 
-	// second case -- database failed
-	request, _ = http.NewRequest("GET", "/book-room?sd=2050-01-01&ed=2050-01-02&id=4", nil)
-	ctx = getContext(request)
-	request = request.WithContext(ctx)
-
-	responseRecorder = httptest.NewRecorder()
-	session.Put(ctx, "reservation", reservation)
-
-	handler = http.HandlerFunc(Repo.BookRoom)
-	handler.ServeHTTP(responseRecorder, request)
-
-	if responseRecorder.Code != http.StatusSeeOther {
-		t.Errorf("BookRoom handler returned wrong response code trying to connect to access database: got %d, wanted %d", responseRecorder.Code, http.StatusSeeOther)
+		if rr.Code != http.StatusOK {
+			t.Errorf("%s failed: returned wrong response code: got %d, wanted %d", e.name, rr.Code, e.expectedStatusCode)
+		}
 	}
 }
 
