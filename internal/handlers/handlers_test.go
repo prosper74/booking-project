@@ -533,6 +533,43 @@ func TestReservationSummary(t *testing.T) {
 	}
 }
 
+// chooseRoomTests is the data for ChooseRoom handler tests, /choose-room/{id}
+var chooseRoomTests = []struct {
+	name               string
+	reservation        models.Reservation
+	url                string
+	expectedStatusCode int
+	expectedLocation   string
+}{
+	{
+		name: "reservation-in-session",
+		reservation: models.Reservation{
+			RoomID: 1,
+			Room: models.Room{
+				ID:       1,
+				RoomName: "Generals Suit",
+			},
+		},
+		url:                "/choose-room/1",
+		expectedStatusCode: http.StatusSeeOther,
+		expectedLocation:   "/make-reservation",
+	},
+	{
+		name:               "reservation-not-in-session",
+		reservation:        models.Reservation{},
+		url:                "/choose-room/1",
+		expectedStatusCode: http.StatusSeeOther,
+		expectedLocation:   "/",
+	},
+	{
+		name:               "malformed-url",
+		reservation:        models.Reservation{},
+		url:                "/choose-room/fish",
+		expectedStatusCode: http.StatusSeeOther,
+		expectedLocation:   "/",
+	},
+}
+
 func TestRepository_ChooseRoom(t *testing.T) {
 	// first case -- reservation in session
 	reservation := models.Reservation{
