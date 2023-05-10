@@ -938,6 +938,44 @@ func TestAdminProcessReservation(t *testing.T) {
 	}
 }
 
+var adminDeleteReservationTests = []struct {
+	name                 string
+	queryParams          string
+	expectedResponseCode int
+	expectedLocation     string
+}{
+	{
+		name:                 "delete-reservation",
+		queryParams:          "",
+		expectedResponseCode: http.StatusSeeOther,
+		expectedLocation:     "",
+	},
+	{
+		name:                 "delete-reservation-back-to-cal",
+		queryParams:          "?y=2021&m=12",
+		expectedResponseCode: http.StatusSeeOther,
+		expectedLocation:     "",
+	},
+}
+
+func TestAdminDeleteReservation(t *testing.T) {
+	for _, e := range adminDeleteReservationTests {
+		req, _ := http.NewRequest("GET", fmt.Sprintf("/admin/delete-reservation/cal/1/do%s", e.queryParams), nil)
+		ctx := getContext(req)
+		req = req.WithContext(ctx)
+
+		rr := httptest.NewRecorder()
+
+		handler := http.HandlerFunc(Repo.AdminDeleteReservation)
+		handler.ServeHTTP(rr, req)
+
+		if rr.Code != http.StatusSeeOther {
+			t.Errorf("failed %s: expected code %d, but got %d", e.name, e.expectedResponseCode, rr.Code)
+		}
+	}
+}
+
+
 func getContext(request *http.Request) context.Context {
 	ctx, err := session.Load(request.Context(), request.Header.Get("X-Session"))
 	if err != nil {
