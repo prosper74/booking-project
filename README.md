@@ -37,6 +37,12 @@ This project is a simple hotel booking and reservation project with key features
 - your-project-name is usually your github link and the name of your project, example "github.com/prosper74/go-project". This is not a must, but a recommendation.
 - Change the name of every import to your current go mod name. Example, open the main.go file, in the `required imports` section, replace these "github.com/atuprosper/go-project/pkg/config" to "github.com/atuprosper/your-project-name/pkg/config". Go through all files and make this replacement
 - After all the necessary changes, run the app `go run cmd/web/*.go` this will install all the third party packages and run the server on the selected port.
+- Create your postgres db
+- Setup the flags in main.go file - `cmd/web/main.go`
+- Setup the flags in run.sh file
+- Do not use the rub.bat file as it encounters errors sometimes from windows. run.sh will work for both windows and linux
+- Setup the .env file, rename the `.env.example` to `.env`. Create your sendinBlue account and add the api
+- Setup the `database.yml`, rename the `database.yml.example` to `database.yml`. This will enable you to run `soda migrate`
 
 ### Run the server
 
