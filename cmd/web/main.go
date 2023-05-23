@@ -19,8 +19,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// const port = ":8080"
-
 var app config.AppConfig
 var session *scs.SessionManager
 var infoLog *log.Logger
@@ -37,7 +35,6 @@ func main() {
 	port := os.Getenv("PORT")
 
 	connectedDB, err := run()
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -75,16 +72,16 @@ func run() (*driver.DB, error) {
 	// Read flags
 	inProduction := flag.Bool("production", true, "App is in production")
 	useCache := flag.Bool("cache", true, "Use template cache")
-	dbHost := flag.String("dbhost", "containers-us-west-124.railway.app", "Database host")
+	dbHost := flag.String("dbhost", "", "Database host")
 	dbName := flag.String("dbname", "", "Database name")
 	dbUser := flag.String("dbuser", "", "Database user")
 	dbPassword := flag.String("dbpassword", "", "Database password")
-	dbPort := flag.String("dbport", "6000", "Database port")
+	dbPort := flag.String("dbport", "", "Database port")
 	dbSSL := flag.String("dbssl", "disable", "Database ssl settings (disable, prefer, require)")
 
 	flag.Parse()
 
-	if *dbName == "" || *dbUser == "" {
+	if *dbName == "" || *dbUser == "" || *dbHost == "" {
 		fmt.Println("Missing flag dependencies, attach the flag dependencies in your batch file")
 		os.Exit(1)
 	}
