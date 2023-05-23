@@ -47,7 +47,7 @@ func main() {
 	fmt.Println("Listening for mail...")
 	listenForMail()
 
-	fmt.Println(fmt.Sprintf("Server started at host %s and port %s", host, port))
+	fmt.Printf("Server started at host %s and port %s", host, port)
 	// Create a variable to serve the routes
 	srv := &http.Server{
 		Addr:    host + ":" + port,
