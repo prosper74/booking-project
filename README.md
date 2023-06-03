@@ -66,7 +66,7 @@ This project is a simple hotel booking and reservation project with key features
   ./bookings
   ```
 
-  Run `chmod +x run.sh` then run `run.sh` in the terminal
+  Run `chmod +x run.sh` then run `./run.sh` in the terminal
 
 ### The test file
 
@@ -77,6 +77,7 @@ This project is a simple hotel booking and reservation project with key features
 ### Soda migration
 
 - install `soda`, run `go install github.com/gobuffalo/pop/v6/soda@latest`
+- `soda g config` to generate a database.yml file in the current directory for a PostgreSQL database. Then setup your database
 - run `soda generate fizz migration-name` in the terminal, to create the migration folder and files. Run this code to create migration files for each table
 - We can also run sql version `soda generate sql migration-name`
 - The up file is used to create or update while the down file is used to delete or downgrade

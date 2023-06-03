@@ -348,6 +348,7 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 	}
 
 	m.App.MailChannel <- message
+	// End of emails
 
 	m.App.Session.Put(r.Context(), "reservation", reservation)
 
