@@ -30,6 +30,7 @@ This project is a simple hotel booking and reservation project with key features
 - [JackC PGX](https://github.com/jackc/pgx/v5) pgx is a pure Go driver and toolkit for PostgreSQL.
 - [Go Simple Mail](https://github.com/xhit/go-simple-mail) Used for sending mails.
 - [Simple DataTable](https://github.com/fiduswriter/Simple-DataTables) Used for tables.
+- [Buffalo Soda](https://gobuffalo.io/pt/documentation/database/soda/) Used for tables.
 
 ### Note:
 
@@ -84,6 +85,7 @@ This project is a simple hotel booking and reservation project with key features
 - run `soda migrate` to run the migration files
 - run `soda migrate down` to run the down migration files
 - run `soda reset` to drop everything in the database and create the migration again
+- Read the documentation to know more about [Buffalo](https://gobuffalo.io/documentation/database/migrations/) or the [Fizz Github page](https://github.com/gobuffalo/fizz)
 
 ### The main.go file
 
