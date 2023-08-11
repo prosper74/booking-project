@@ -69,19 +69,31 @@ func run() (*driver.DB, error) {
 	gob.Register(models.TodoList{})
 	gob.Register(make(map[string]int))
 
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file")
+	}
+
+	dbURI := os.Getenv("DBURI")
+
 	// Read flags
 	inProduction := flag.Bool("production", true, "App is in production")
 	useCache := flag.Bool("cache", true, "Use template cache")
-	dbHost := flag.String("dbhost", "", "Database host")
-	dbName := flag.String("dbname", "", "Database name")
-	dbUser := flag.String("dbuser", "", "Database user")
-	dbPassword := flag.String("dbpassword", "", "Database password")
-	dbPort := flag.String("dbport", "", "Database port")
-	dbSSL := flag.String("dbssl", "disable", "Database ssl settings (disable, prefer, require)")
+	// dbHost := flag.String("dbhost", "", "Database host")
+	// dbName := flag.String("dbname", "", "Database name")
+	// dbUser := flag.String("dbuser", "", "Database user")
+	// dbPassword := flag.String("dbpassword", "", "Database password")
+	// dbPort := flag.String("dbport", "", "Database port")
+	// dbSSL := flag.String("dbssl", "disable", "Database ssl settings (disable, prefer, require)")
 
 	flag.Parse()
 
-	if *dbName == "" || *dbUser == "" || *dbHost == "" {
+	// if *dbName == "" || *dbUser == "" || *dbHost == "" {
+	// 	fmt.Println("Missing flag dependencies, attach the flag dependencies in your batch file")
+	// 	os.Exit(1)
+	// }
+
+	if dbURI == "" {
 		fmt.Println("Missing flag dependencies, attach the flag dependencies in your batch file")
 		os.Exit(1)
 	}
@@ -108,8 +120,8 @@ func run() (*driver.DB, error) {
 
 	// Connect to database
 	log.Println("Connecting to database...")
-	connectionString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=%s", *dbHost, *dbPort, *dbName, *dbUser, *dbPassword, *dbSSL)
-	connectedDB, err := driver.ConnectSQL(connectionString)
+	// connectionString := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=%s", *dbHost, *dbPort, *dbName, *dbUser, *dbPassword, *dbSSL)
+	connectedDB, err := driver.ConnectSQL(dbURI)
 	if err != nil {
 		log.Fatal("Cannot connect to database. Closing application")
 	}
