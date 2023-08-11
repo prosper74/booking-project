@@ -18,8 +18,8 @@ This project is a simple hotel booking and reservation project with key features
 
 ### Live Website and login details
 
-- url - https://bookings-p.up.railway.app/
-- username/email: test@admin.com
+- url - https://go-booking.onrender.com
+- username/email: atu@prosper.com
 - password: password
 
 ### Packages used
