@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -51,7 +50,7 @@ func sendMessage(m models.MailData) {
 		emailContent = m.Content
 	} else {
 		// ioutil is used to read files
-		data, err := ioutil.ReadFile(fmt.Sprintf("./email-template/%s", m.Template))
+		data, err := os.ReadFile(fmt.Sprintf("./email-template/%s", m.Template))
 
 		if err != nil {
 			app.ErrorLog.Println(err)
